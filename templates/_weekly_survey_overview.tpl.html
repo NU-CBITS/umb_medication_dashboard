@@ -1,0 +1,16 @@
+<tr>
+  <td colspan="10" class="heading"><h3><%= surveyName %></h3></td>
+</tr>
+<tr id="sent-messages"></tr>
+<% _.each(survey.pages, function(page, name) { %>
+  <% if (page.summary) { %>
+<tr>
+  <td colspan="3">
+    <h3 class="tableLabel"><%= page.summary %></h3>
+  </td>
+  <% _.each(dates, function(date) { %>
+  <td><%= statusIndicator(name, date) %></td>
+  <% }); %>
+</tr>
+  <% } %>
+<% }); %>

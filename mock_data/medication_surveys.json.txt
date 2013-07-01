@@ -1,0 +1,14 @@
+[
+  {
+    "feature_value_dt_index": true,
+    "feature_value_dt_date": "2013-06-27"
+  },
+  {
+    "feature_value_dt_index": false,
+    "feature_value_dt_date": "2013-06-28"
+  },
+  {
+    "feature_value_dt_index": true,
+    "feature_value_dt_date": "2013-06-29"
+  }
+]

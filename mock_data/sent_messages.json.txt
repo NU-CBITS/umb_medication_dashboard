@@ -1,0 +1,22 @@
+[
+  {
+    "feature_value_dt_context": "contact_page",
+    "feature_value_dt_date": "2013-07-01"
+  },
+  {
+    "feature_value_dt_context": "medication",
+    "feature_value_dt_date": "2013-07-01"
+  },
+  {
+    "feature_value_dt_context": "side_effects",
+    "feature_value_dt_date": "2013-06-29"
+  },
+  {
+    "feature_value_dt_context": "side_effects",
+    "feature_value_dt_date": "2013-06-29"
+  },
+  {
+    "feature_value_dt_context": "side_effects",
+    "feature_value_dt_date": "2013-07-01"
+  }
+]

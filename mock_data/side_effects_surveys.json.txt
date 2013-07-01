@@ -1,0 +1,14 @@
+[
+  {
+    "feature_value_dt_index": true,
+    "feature_value_dt_sexual_problems": true,
+    "feature_value_dt_insomnia": true,
+    "feature_value_dt_restlessness": false,
+    "feature_value_dt_low_energy": true,
+    "feature_value_dt_not_like_self": false,
+    "feature_value_dt_excess_sedation": true,
+    "feature_value_dt_poor_concentration": true,
+    "feature_value_dt_trembling": true,
+    "feature_value_dt_timestarted": "2013-06-27T16:12Z"
+  }
+]

@@ -1,0 +1,11 @@
+<table class="table table-striped table-bordered" id="participant-overview">
+  <tbody>
+    <tr>
+      <td></td>
+      <td colspan="2"></td>
+      <% _.each(dates, function(date) { %>
+      <td><%= DateFormatter.monthSlashDate(date) %></td>
+      <% }); %>
+    </tr>
+  </tbody>
+</table>
