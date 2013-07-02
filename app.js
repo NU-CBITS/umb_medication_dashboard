@@ -16,6 +16,7 @@ requirejs.config({
 
 define([
   "lodash",
+  "jquery",
   "lib/calendar",
   "lib/date_formatter",
   "survey_definitions/ma/side_effects_survey",
@@ -23,18 +24,21 @@ define([
   "survey_definitions/ma/med_prompt",
   "models/user",
   "collections/completed_surveys",
+  "collections/completed_med_prompts",
   "collections/sent_messages",
-  "views/weekly_participant_overview_view",
-  "views/weekly_survey_overview_view"
-], function(_, Calendar, DateFormatter, SIDE_EFFECTS_SURVEY, SYMPTOMS_SURVEY,
-            MED_PROMPT_SURVEY, User, CompletedSurveys, SentMessages,
-            WeeklyParticipantOverviewView, WeeklySurveyOverviewView) {
+  "views/weekly_participant_summary_view",
+  "views/weekly_med_prompt_summary_view",
+  "views/weekly_survey_summary_view"
+], function(_, $, Calendar, DateFormatter, SIDE_EFFECTS_SURVEY, SYMPTOMS_SURVEY,
+            MED_PROMPT_SURVEY, User, CompletedSurveys, CompletedMedPrompts,
+            SentMessages, WeeklyParticipantSummaryView,
+            WeeklyMedPromptSummaryView, WeeklySurveySummaryView) {
   var UID = "ericcf@gmail.com";
 
   var rawDates = (new Calendar()).previousDays(7);
   var dates = _.map(rawDates, function(d) { return DateFormatter.iso8601(d); });
 
-  var participantView = new WeeklyParticipantOverviewView({
+  var participantView = new WeeklyParticipantSummaryView({
     el: "#main",
     dates: rawDates
   }).render();
@@ -43,22 +47,31 @@ define([
     url: "mock_data/user_config.json.txt"
     //url: "http://165.124.171.88:8080/output_files/H2H/ericcf@gmail.com.userCfg.json.txt"
   });
-  user.fetch();
   var sentMessages = new SentMessages({
     url: "mock_data/ma/sent_messages.json.txt"
     //url: "messages.cfm?uid=" + UID
   });
 
-  var completedMedPrompts = new CompletedSurveys({
-    url: "mock_data/medication_surveys.json.txt"
+  var completedMedPrompts = new CompletedMedPrompts({
+    url: "mock_data/medication_surveys.json.txt",
+    survey: MED_PROMPT_SURVEY,
+    user: user
   });
-  var surveysView = (new WeeklySurveyOverviewView({
+  var medPromptView = (new WeeklyMedPromptSummaryView({
     collection: completedMedPrompts,
-    name: "medication",
     survey: MED_PROMPT_SURVEY,
     dates: dates,
-    sentMessages: sentMessages
-  }));
+    sentMessages: sentMessages,
+    user: user
+  })).render();
+  participantView.$el.find("#participant-summary").append(medPromptView.$el);
+
+  user.fetch({
+    success: function() {
+      $("#header").text("Summary for " + user.patientName());
+      completedMedPrompts.fetch({ parse: true });
+    }
+  });
 
   var surveys = [
     {
@@ -76,8 +89,11 @@ define([
   ];
 
   _.each(surveys, function(survey) {
-    var completedSurveys = new CompletedSurveys({ url: survey.url });
-    var surveysView = (new WeeklySurveyOverviewView({
+    var completedSurveys = new CompletedSurveys({
+      url: survey.url,
+      survey: survey.definition
+    });
+    var surveysView = (new WeeklySurveySummaryView({
       collection: completedSurveys,
       name: survey.name,
       survey: survey.definition,
@@ -85,7 +101,7 @@ define([
       sentMessages: sentMessages
     })).render();
 
-    participantView.$el.find("#participant-overview").append(surveysView.$el);
+    participantView.$el.find("#participant-summary").append(surveysView.$el);
     completedSurveys.fetch({ parse: true });
   });
   sentMessages.fetch({ parse: true });

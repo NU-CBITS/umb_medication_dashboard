@@ -1,0 +1,14 @@
+<tr>
+  <td colspan="10" class="heading"><h3>Medication Adherence</h3></td>
+</tr>
+<tr id="sent-messages"></tr>
+<% _.each(doses, function(dose) { %>
+<tr>
+  <td colspan="3">
+    <h3 class="tableLabel"><%= dose.medication + ", " + dose.strength + " " + dose.dispensationUnit + " " + DateFormatter.timeStringToMeridian(dose.time) %></h3>
+  </td>
+  <% _.each(dates, function(date) { %>
+  <td><%= statusIndicator(dose, date) %></td>
+  <% }); %>
+</tr>
+<% }); %>

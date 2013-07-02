@@ -9,7 +9,7 @@ define(["backbone"], function(Backbone) {
       _.each(data, function(v, k) {
         var attr = k.substr(self.COLUMN_PREFIX_LENGTH);
 
-        parsed[attr] = v;
+        parsed[attr] = v === true ? "Yes" : (v === false ? "No" : v);
       });
 
       return parsed;

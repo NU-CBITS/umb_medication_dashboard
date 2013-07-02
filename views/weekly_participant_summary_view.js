@@ -1,9 +1,9 @@
 define([
   "backbone",
   "lib/date_formatter",
-  "text!templates/weekly_participant_overview.tpl.html",
+  "text!templates/weekly_participant_summary.tpl.html",
 ], function(Backbone, DateFormatter, template) {
-  var WeeklyParticipantOverviewView = Backbone.View.extend({
+  var WeeklyParticipantSummaryView = Backbone.View.extend({
     template: _.template(template),
 
     render: function() {
@@ -16,5 +16,5 @@ define([
     }
   });
 
-  return WeeklyParticipantOverviewView;
+  return WeeklyParticipantSummaryView;
 });
