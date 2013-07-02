@@ -1,11 +1,15 @@
 define(["backbone"], function(Backbone) {
   var CompletedSurvey = Backbone.Model.extend({
+    COLUMN_PREFIX_LENGTH: "feature_value_dt_".length,
+
     parse: function(data, options) {
-      var parsed = {};
+      var self = this,
+          parsed = {};
 
       _.each(data, function(v, k) {
-        var attr = k.substr("feature_value_dt_".length);
-        parsed[attr] = typeof v === "string" && attr === "timestarted" ? v.substr(0, 10) : v;
+        var attr = k.substr(self.COLUMN_PREFIX_LENGTH);
+
+        parsed[attr] = v;
       });
 
       return parsed;

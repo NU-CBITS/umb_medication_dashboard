@@ -356,7 +356,7 @@ define(["lib/hash"], function(Hash) {
                 { excess_sedation_distress: "Always" },
                 { poor_concentration_distress: "Always" }
               ],
-              then: "offer_to_contact",
+              then: "ask_to_notify",
               else: "pre_incentive"
             }
           },
@@ -407,7 +407,7 @@ define(["lib/hash"], function(Hash) {
             { poor_concentration_distress: "Always" },
             { trembling_distress: "Always" }
           ],
-          then: "offer_to_contact",
+          then: "ask_to_notify",
           else: "offer_information"
         }
       },
@@ -424,7 +424,7 @@ define(["lib/hash"], function(Hash) {
           }
         ]
       },
-      offer_to_contact: {
+      ask_to_notify: {
         question: "Would you like to let your doctor know that you are always bothered by some side effects so you can discuss it at your next appointment?",
         responses: [
           {

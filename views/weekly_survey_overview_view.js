@@ -39,10 +39,13 @@ define([
     },
 
     _statusIndicator: function(question, date) {
-      var filter = { timestarted: date };
-      var surveysOnDate = this.collection.where(filter);
+      var self = this;
+      var surveysOnDate = this.collection.where({ date: date });
       var negative = _.any(surveysOnDate, function(response) {
-        return response.get(question);
+        var responseLabel = response.get(question) ? "Yes" : "No";
+        return !_.find(self.options.survey.pages[question].responses, {
+          label: responseLabel
+        }).is_positive;
       });
       var elClass = surveysOnDate.length === 0 ? "na" : (negative && "bad");
 

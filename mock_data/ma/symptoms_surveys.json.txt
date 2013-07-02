@@ -9,6 +9,6 @@
     "feature_value_dt_confused": true,
     "feature_value_dt_thought_disorders": true,
     "feature_value_dt_level_of_distress": true,
-    "feature_value_dt_timestarted": "2013-06-27T16:12Z"
+    "feature_value_dt_date": "2013-06-27"
   }
 ]

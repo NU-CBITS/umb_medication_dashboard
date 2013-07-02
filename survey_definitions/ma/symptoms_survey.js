@@ -205,7 +205,8 @@ define(["lib/hash"], function(Hash) {
           {
             label: "No",
             next_page: "pre_incentive",
-            is_positive: true
+            is_positive: true,
+            completes_survey: true
           },
           {
             label: "Yes",

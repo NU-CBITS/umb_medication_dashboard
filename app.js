@@ -18,16 +18,17 @@ define([
   "lodash",
   "lib/calendar",
   "lib/date_formatter",
-  "survey_definitions/side_effects_survey",
-  "survey_definitions/symptoms_survey",
+  "survey_definitions/ma/side_effects_survey",
+  "survey_definitions/ma/symptoms_survey",
+  "survey_definitions/ma/med_prompt",
   "models/user",
   "collections/completed_surveys",
   "collections/sent_messages",
   "views/weekly_participant_overview_view",
   "views/weekly_survey_overview_view"
 ], function(_, Calendar, DateFormatter, SIDE_EFFECTS_SURVEY, SYMPTOMS_SURVEY,
-            User, CompletedSurveys, SentMessages, WeeklyParticipantOverviewView,
-            WeeklySurveyOverviewView) {
+            MED_PROMPT_SURVEY, User, CompletedSurveys, SentMessages,
+            WeeklyParticipantOverviewView, WeeklySurveyOverviewView) {
   var UID = "ericcf@gmail.com";
 
   var rawDates = (new Calendar()).previousDays(7);
@@ -38,30 +39,42 @@ define([
     dates: rawDates
   }).render();
 
-  var user = new User({ url: "http://165.124.171.88:8080/output_files/H2H/ericcf@gmail.com.userCfg.json.txt" });
+  var user = new User({
+    url: "mock_data/user_config.json.txt"
+    //url: "http://165.124.171.88:8080/output_files/H2H/ericcf@gmail.com.userCfg.json.txt"
+  });
   user.fetch();
+  var sentMessages = new SentMessages({
+    url: "mock_data/ma/sent_messages.json.txt"
+    //url: "messages.cfm?uid=" + UID
+  });
 
-  var completedMedPrompts = new CompletedMedPrompts({ url: "mock_data/medication_surveys.json.txt "})
+  var completedMedPrompts = new CompletedSurveys({
+    url: "mock_data/medication_surveys.json.txt"
+  });
+  var surveysView = (new WeeklySurveyOverviewView({
+    collection: completedMedPrompts,
+    name: "medication",
+    survey: MED_PROMPT_SURVEY,
+    dates: dates,
+    sentMessages: sentMessages
+  }));
 
   var surveys = [
     {
       name: "Side Effects",
-      url: "mock_data/side_effects_surveys.json.txt",
+      url: "mock_data/ma/side_effects_surveys.json.txt",
       //url: "surveys.cfm?uid=" + UID + "&survey=side_effects",
       definition: SIDE_EFFECTS_SURVEY
     },
     {
       name: "Symptoms",
-      url: "mock_data/symptoms_surveys.json.txt",
+      url: "mock_data/ma/symptoms_surveys.json.txt",
       //url: "surveys.cfm?uid=" + UID + "&survey=symptoms",
       definition: SYMPTOMS_SURVEY
     }
   ];
 
-  var sentMessages = new SentMessages({
-    url: "mock_data/sent_messages.json.txt"
-    //url: "messages.cfm?uid=" + UID
-  });
   _.each(surveys, function(survey) {
     var completedSurveys = new CompletedSurveys({ url: survey.url });
     var surveysView = (new WeeklySurveyOverviewView({
