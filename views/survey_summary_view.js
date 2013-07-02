@@ -4,37 +4,45 @@ define([
 ], function(statusTpl, sentMsgsTpl) {
   var SurveySummaryView = {
     initialize: function(options) {
-      _.bindAll(this, "render", "_renderSentMessages", "_statusIndicator");
-      this.collection.on("sync", this.render);
-      options.sentMessages.on("sync", this.render);
+      _.bindAll(this, "_render", "_renderSentMessages", "_statusIndicator");
+      this.collection.on("sync", this._render);
+      options.sentMessages.on("sync", this._render);
     },
-
-    sentMessagesTemplate: _.template(sentMsgsTpl),
 
     tagName: "tbody",
 
-    render: function() {
-      this.$el.html(this.template({
-        surveyName: this.options.name,
-        survey: this.options.survey,
-        dates: this.options.dates,
-        statusIndicator: this._statusIndicator
-      }));
-      this._renderSentMessages();
+    _resourceStatuses: {
+      surveys: { ready: false },
+      messages: { ready: false }
+    },
 
-      return this;
+    _render: function(resource) {
+      var resourceType = resource === this.collection ? "surveys" : "messages";
+      this._resourceStatuses[resourceType].ready = true;
+
+      if (_.every(this._resourceStatuses, "ready")) {
+        this.$el.html(this.template({
+          surveyName: this.options.name,
+          survey: this.options.survey,
+          dates: this.options.dates,
+          statusIndicator: this._statusIndicator
+        }));
+        this._renderSentMessages();
+      }
     },
 
     _renderSentMessages: function() {
       var surveyKey = this.options.survey.name,
           self = this;
 
-      this.$el.find("#sent-messages").html(this.sentMessagesTemplate({
+      this.$el.find("#sent-messages").html(this._sentMessagesTemplate({
         messageCounts: _.map(this.options.dates, function(date) {
           return self.options.sentMessages.countByContextAndDate(surveyKey, date);
         })
       }));
     },
+
+    _sentMessagesTemplate: _.template(sentMsgsTpl),
 
     _statusIndicator: function(question, date) {
       var responseStatus = this.collection.responseStatus(question, date);

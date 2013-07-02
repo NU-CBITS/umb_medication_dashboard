@@ -63,7 +63,7 @@ define([
     dates: dates,
     sentMessages: sentMessages,
     user: user
-  })).render();
+  }));
   participantView.$el.find("#participant-summary").append(medPromptView.$el);
 
   user.fetch({
@@ -99,7 +99,7 @@ define([
       survey: survey.definition,
       dates: dates,
       sentMessages: sentMessages
-    })).render();
+    }));
 
     participantView.$el.find("#participant-summary").append(surveysView.$el);
     completedSurveys.fetch({ parse: true });
