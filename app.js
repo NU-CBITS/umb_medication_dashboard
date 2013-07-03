@@ -15,10 +15,8 @@ requirejs.config({
 });
 
 define([
-  "lodash",
   "jquery",
-  "lib/calendar",
-  "lib/date_formatter",
+  "models/calendar",
   "survey_definitions/ma/side_effects_survey",
   "survey_definitions/ma/symptoms_survey",
   "survey_definitions/ma/med_prompt",
@@ -29,18 +27,17 @@ define([
   "views/weekly_participant_summary_view",
   "views/weekly_med_prompt_summary_view",
   "views/weekly_survey_summary_view"
-], function(_, $, Calendar, DateFormatter, SIDE_EFFECTS_SURVEY, SYMPTOMS_SURVEY,
+], function($, Calendar, SIDE_EFFECTS_SURVEY, SYMPTOMS_SURVEY,
             MED_PROMPT_SURVEY, User, CompletedSurveys, CompletedMedPrompts,
             SentMessages, WeeklyParticipantSummaryView,
             WeeklyMedPromptSummaryView, WeeklySurveySummaryView) {
   var UID = "ericcf@gmail.com";
 
-  var rawDates = (new Calendar()).previousDays(7);
-  var dates = _.map(rawDates, function(d) { return DateFormatter.iso8601(d); });
+  var calendar = new Calendar();
 
   var participantView = new WeeklyParticipantSummaryView({
     el: "#main",
-    dates: rawDates
+    calendar: calendar
   }).render();
 
   var user = new User({
@@ -60,7 +57,7 @@ define([
   var medPromptView = (new WeeklyMedPromptSummaryView({
     collection: completedMedPrompts,
     survey: MED_PROMPT_SURVEY,
-    dates: dates,
+    calendar: calendar,
     sentMessages: sentMessages,
     user: user
   }));
@@ -97,7 +94,7 @@ define([
       collection: completedSurveys,
       name: survey.name,
       survey: survey.definition,
-      dates: dates,
+      calendar: calendar,
       sentMessages: sentMessages
     }));
 

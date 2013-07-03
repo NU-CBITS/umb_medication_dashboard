@@ -20,7 +20,7 @@ define([
         if (_.every(this._resourceStatuses, "ready")) {
           this.$el.html(this.template({
             doses: this.options.user.doses(),
-            dates: this.options.dates,
+            dates: this.options.calendar.dates("iso8601"),
             statusIndicator: this._statusIndicator,
             DateFormatter: DateFormatter
           }));

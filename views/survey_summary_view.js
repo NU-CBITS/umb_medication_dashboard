@@ -7,6 +7,7 @@ define([
       _.bindAll(this, "_render", "_renderSentMessages", "_statusIndicator");
       this.collection.on("sync", this._render);
       options.sentMessages.on("sync", this._render);
+      options.calendar.on("periodChanged", this._render);
     },
 
     tagName: "tbody",
@@ -24,7 +25,7 @@ define([
         this.$el.html(this.template({
           surveyName: this.options.name,
           survey: this.options.survey,
-          dates: this.options.dates,
+          dates: this.options.calendar.dates("iso8601"),
           statusIndicator: this._statusIndicator
         }));
         this._renderSentMessages();
@@ -36,7 +37,7 @@ define([
           self = this;
 
       this.$el.find("#sent-messages").html(this._sentMessagesTemplate({
-        messageCounts: _.map(this.options.dates, function(date) {
+        messageCounts: _.map(this.options.calendar.dates("iso8601"), function(date) {
           return self.options.sentMessages.countByContextAndDate(surveyKey, date);
         })
       }));
