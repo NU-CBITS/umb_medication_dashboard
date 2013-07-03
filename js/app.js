@@ -1,5 +1,5 @@
 requirejs.config({
-  baseUrl: "",
+  baseUrl: "js",
   shim: {
     "backbone": {
       deps: ["lodash", "jquery"],
@@ -17,9 +17,9 @@ requirejs.config({
 define([
   "jquery",
   "models/calendar",
-  "survey_definitions/ma/side_effects_survey",
-  "survey_definitions/ma/symptoms_survey",
-  "survey_definitions/ma/med_prompt",
+  "../survey_definitions/ma/side_effects_survey",
+  "../survey_definitions/ma/symptoms_survey",
+  "../survey_definitions/ma/med_prompt",
   "models/user",
   "collections/completed_surveys",
   "collections/completed_med_prompts",
