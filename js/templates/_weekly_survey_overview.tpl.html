@@ -5,7 +5,7 @@
 <% _.each(survey.pages, function(page, name) { %>
   <% if (page.summary) { %>
 <tr>
-  <td colspan="3">
+  <td colspan="3" class="subheader">
     <h3 class="tableLabel"><%= page.summary %></h3>
   </td>
   <% _.each(dates, function(date) { %>

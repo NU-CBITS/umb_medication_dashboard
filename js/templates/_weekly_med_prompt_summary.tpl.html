@@ -5,7 +5,7 @@
 <% _.each(doses, function(dose) { %>
 <tr>
   <td colspan="3">
-    <h3 class="tableLabel"><%= dose.medication + ", " + dose.strength + " " + dose.dispensationUnit + " " + DateFormatter.timeStringToMeridian(dose.time) %></h3>
+    <h3 class="tableLabel"><%= dose.summary() + " " + dose.time() %></h3>
   </td>
   <% _.each(dates, function(date) { %>
   <td><%= statusIndicator(dose, date) %></td>

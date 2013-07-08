@@ -20,12 +20,11 @@ define([
     initialize: function(options) {
       _.bindAll(this, "_renderHeader");
       options.calendar.on("periodChanged", this._renderHeader);
-      this.render();
       var self = this;
 
       var UID = "ericcf@gmail.com";
 
-      var user = new User({
+      this.model = new User({
         url: "mock_data/user_config.json.txt"
         //url: "http://165.124.171.88:8080/output_files/H2H/ericcf@gmail.com.userCfg.json.txt"
       });
@@ -37,56 +36,56 @@ define([
       var completedMedPrompts = new CompletedMedPrompts({
         url: "mock_data/medication_surveys.json.txt",
         survey: MA_MED_PROMPT,
-        user: user
+        user: this.model
       });
       var medPromptView = (new WeeklyMedPromptSummaryView({
         collection: completedMedPrompts,
         survey: MA_MED_PROMPT,
         calendar: options.calendar,
         sentMessages: sentMessages,
-        user: user
+        user: this.model
       }));
-      this.$el.find("#participant-summary").append(medPromptView.$el);
 
-      user.fetch({
+      this.model.fetch({
         success: function() {
-          $("#header").text("Summary for " + user.patientName());
+          self.render();
+          self.$el.find("#participant-summary").append(medPromptView.$el);
           completedMedPrompts.fetch({ parse: true });
+
+          var surveys = [
+            {
+              name: "Side Effects",
+              url: "mock_data/ma/side_effects_surveys.json.txt",
+              //url: "surveys.cfm?uid=" + UID + "&survey=side_effects",
+              definition: MA_SIDE_EFFECTS
+            },
+            {
+              name: "Symptoms",
+              url: "mock_data/ma/symptoms_surveys.json.txt",
+              //url: "surveys.cfm?uid=" + UID + "&survey=symptoms",
+              definition: MA_SYMPTOMS
+            }
+          ];
+
+          _.each(surveys, function(survey) {
+            var completedSurveys = new CompletedSurveys({
+              url: survey.url,
+              survey: survey.definition
+            });
+            var surveysView = (new WeeklySurveySummaryView({
+              collection: completedSurveys,
+              name: survey.name,
+              survey: survey.definition,
+              calendar: options.calendar,
+              sentMessages: sentMessages
+            }));
+
+            self.$el.find("#participant-summary").append(surveysView.$el);
+            completedSurveys.fetch({ parse: true });
+          });
+          sentMessages.fetch({ parse: true });
         }
       });
-
-      var surveys = [
-        {
-          name: "Side Effects",
-          url: "mock_data/ma/side_effects_surveys.json.txt",
-          //url: "surveys.cfm?uid=" + UID + "&survey=side_effects",
-          definition: MA_SIDE_EFFECTS
-        },
-        {
-          name: "Symptoms",
-          url: "mock_data/ma/symptoms_surveys.json.txt",
-          //url: "surveys.cfm?uid=" + UID + "&survey=symptoms",
-          definition: MA_SYMPTOMS
-        }
-      ];
-
-      _.each(surveys, function(survey) {
-        var completedSurveys = new CompletedSurveys({
-          url: survey.url,
-          survey: survey.definition
-        });
-        var surveysView = (new WeeklySurveySummaryView({
-          collection: completedSurveys,
-          name: survey.name,
-          survey: survey.definition,
-          calendar: options.calendar,
-          sentMessages: sentMessages
-        }));
-
-        self.$el.find("#participant-summary").append(surveysView.$el);
-        completedSurveys.fetch({ parse: true });
-      });
-      sentMessages.fetch({ parse: true });
     },
 
     events: {
@@ -99,7 +98,9 @@ define([
     headerTemplate: _.template(headerTpl),
 
     render: function() {
-      this.$el.html(this.template());
+      this.$el.html(this.template({
+        participant: this.model
+      }));
       this._renderHeader();
 
       return this;
