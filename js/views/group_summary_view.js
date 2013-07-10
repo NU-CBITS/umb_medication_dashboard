@@ -5,18 +5,15 @@ define([
 ], function(Backbone, Participants, template) {
   var GroupSummaryView = Backbone.View.extend({
     initialize: function(options) {
-      _.bindAll(this, "render");
-      this.collection = new Participants({ url: "mock_data/participants.json.txt" });
-      this.collection.fetch({
-        success: this.render
-      });
+      this.render();
     },
 
     template: _.template(template),
 
     render: function() {
       this.$el.html(this.template({
-        participants: this.collection
+        participants: this.collection,
+        nonadherenceDueToSideEffects: function() {}
       }));
 
       return this;

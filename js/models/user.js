@@ -1,7 +1,7 @@
 define(["backbone", "models/dose"], function(Backbone, Dose) {
   var User = Backbone.Model.extend({
-    initialize: function(options) {
-      this.url = options.url;
+    url: function() {
+      return "mock_data/user_config_" + this.id + ".json.txt";
     },
 
     doses: function() {

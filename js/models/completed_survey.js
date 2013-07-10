@@ -6,13 +6,17 @@ define(["backbone"], function(Backbone) {
       var self = this,
           parsed = {};
 
-      _.each(data, function(v, k) {
+      _.each(data.fields, function(v, k) {
         var attr = k.substr(self.COLUMN_PREFIX_LENGTH);
 
-        parsed[attr] = v === true ? "Yes" : (v === false ? "No" : v);
+        parsed[attr] = v;
       });
 
       return parsed;
+    },
+
+    doseTime: function() {
+      return this.get("doseTime");
     }
   });
 

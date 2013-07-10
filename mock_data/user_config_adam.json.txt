@@ -1,9 +1,9 @@
 {
   "people":[
     {
-      "id":"ericcf@gmail.com",
+      "id":"adam",
       "type":"patient",
-      "name":"TODO"
+      "name":"Adam"
     }
   ],
   "doses":[

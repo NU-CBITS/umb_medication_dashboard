@@ -13,7 +13,8 @@ define([
     function createViews() {
       var calendar = new Calendar();
       groupView = new GroupSummaryView({
-        calendar: calendar
+        calendar: calendar,
+        collection: options.participants
       });
       participantView = new WeeklyParticipantSummaryView({
         calendar: calendar
@@ -26,19 +27,14 @@ define([
     }
 
     function participantWeeklySummary(participantId) {
-      //groupView.undelegateEvents();
       groupView.$el.detach();
-      $("#main")
-      //.empty()
-      .append(participantView.$el);
+      participantView.setParticipant(options.participants.get(participantId));
+      $("#main").append(participantView.$el);
     }
 
     function groupSummary() {
-      //participantView.undelegateEvents();
       participantView.$el.detach();
-      $("#main")
-      //.empty()
-      .append(groupView.$el);
+      $("#main").append(groupView.$el);
     }
 
     function setupDocumentListeners() {

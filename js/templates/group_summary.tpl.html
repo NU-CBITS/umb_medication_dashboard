@@ -18,7 +18,7 @@
         <td><%= participant.patientName() %> <a href="/weekly_summaries/<%= participant.patientId() %>" class="btn view-details">Details</a></td>
         <td><%= participant.doses()[0].summary() %></td>
         <td><%= _.map(participant.doses(), function(dose) { return dose.time(); }).join(", ") %></td>
-        <td></td>
+        <td><%= nonadherenceDueToSideEffects(participant) %></td>
         <td></td>
         <td></td>
         <td></td>

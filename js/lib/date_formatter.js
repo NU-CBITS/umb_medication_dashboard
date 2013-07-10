@@ -9,17 +9,25 @@ define(function() {
       return (date.getMonth() + 1) + "/" + date.getDate();
     },
 
+    // convert either HH:MM or YYYY-MM-DDTHH:MM:SSZ to HH:MM[AM|PM]
     timeStringToMeridian: function(timeStr) {
-      var hours, minutes, ampm;
+      var date, hours, minutes, ampm;
 
-      hours = timeStr.match(/\d+/)[0];
-      minutes = timeStr.match(/:(\d+):/)[1];
-      hours = parseInt(hours, 10);
+      date = Date.parse(timeStr);
+      if (isNaN(date)) {
+        hours = timeStr.match(/[^:\d]?(\d+):/)[1];
+        minutes = timeStr.match(/:(\d+)[^\d]/)[1];
+        hours = parseInt(hours, 10);
+      } else {
+        date = new Date(date);
+        hours = date.getHours();
+        minutes = date.getMinutes();
+      }
       ampm = hours > 11 ? "PM" : "AM";
       hours = hours % 12;
       hours = hours === 0 ? 12 : hours;
 
-      return hours + ":" + minutes + ampm;
+      return hours + ":" + padLeft2(minutes, "0") + ampm;
     }
   };
 

@@ -1,0 +1,23 @@
+{
+  "people":[
+    {
+      "id":"emmitt",
+      "type":"patient",
+      "name":"Emmitt"
+    }
+  ],
+  "doses":[
+    {
+      "time": "04:00:00",
+      "medication":"Med1",
+      "strength":"50",
+      "dispensationUnit":"mg"
+    },
+    {
+      "time":"18:15:00",
+      "medication":"Med1",
+      "strength":"50",
+      "dispensationUnit":"mg"
+    }
+  ]
+}

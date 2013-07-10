@@ -10,7 +10,7 @@ define([
   var SurveySummaryView = {
     initialize: function(options) {
       _.bindAll(this, "_render", "_renderSentMessages", "_statusIndicator");
-      this.collection.on("sync", this._render);
+      this._render(this.collection);
       options.sentMessages.on("sync", this._render);
       options.calendar.on("periodChanged", this._render);
     },

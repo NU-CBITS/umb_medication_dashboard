@@ -5,9 +5,15 @@ define([
   var CompletedSurveys = Backbone.Collection.extend({
     model: CompletedSurvey,
 
-    initialize: function(options) {
-      this.url = options.url;
+    initialize: function(models, options) {
+      this.appCode = options.appCode;
       this.surveyPages = options.survey.pages;
+      this.surveyName = options.survey.name;
+      this.user = options.user;
+    },
+
+    url: function() {
+      return "http://10.0.1.11/" + this.appCode + "/participants/" + this.user.id + "/" + this.surveyName + "_survey_responses.json";
     },
 
     responseStatus: function(pageName, date) {
