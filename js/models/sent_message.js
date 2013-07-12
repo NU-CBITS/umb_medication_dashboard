@@ -1,10 +1,13 @@
 define(["backbone"], function(Backbone) {
   var SentMessage = Backbone.Model.extend({
-    parse: function(data, options) {
-      var parsed = {};
+    COLUMN_PREFIX_LENGTH: "FEATURE_VALUE_DT_".length,
 
-      _.each(data, function(v, k) {
-        var attr = k.substr("feature_value_dt_".length);
+    parse: function(data, options) {
+      var self = this,
+          parsed = {};
+
+      _.each(data.fields, function(v, k) {
+        var attr = k.substr(self.COLUMN_PREFIX_LENGTH);
 
         parsed[attr] = v;
       });

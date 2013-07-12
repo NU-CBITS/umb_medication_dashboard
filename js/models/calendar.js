@@ -1,12 +1,12 @@
 define(["backbone", "lib/date_formatter"], function(Backbone, DateFormatter) {
   var Calendar = function(date) {
-    var self = this,
-        WEEK = 7;
+    var self = this;
 
-    this.referenceDate = date || new Date();
+    this.referenceDate = date || Calendar.addDays(new Date(), -1);
 
-    this.dates = function(format) {
-      var dates = _.map(_.range(-(WEEK-1), 1), function(day) {
+    this.dates = function(format, options) {
+      var days = (options || {}).days || Calendar.WEEK;
+      var dates = _.map(_.range(-(days-1), 1), function(day) {
         return Calendar.addDays(self.referenceDate, day);
       });
 
@@ -18,15 +18,23 @@ define(["backbone", "lib/date_formatter"], function(Backbone, DateFormatter) {
     };
 
     this.goToPreviousPeriod = function() {
-      self.referenceDate = Calendar.addDays(self.referenceDate, -WEEK);
+      self.referenceDate = Calendar.addDays(self.referenceDate, -Calendar.WEEK);
       self.trigger("periodChanged");
     };
 
     this.goToNextPeriod = function() {
-      self.referenceDate = Calendar.addDays(self.referenceDate, WEEK);
+      if (!this.canGoToNextPeriod()) return;
+      self.referenceDate = Calendar.addDays(self.referenceDate, Calendar.WEEK);
       self.trigger("periodChanged");
     };
+
+    this.canGoToNextPeriod = function() {
+      return self.referenceDate <= Calendar.addDays(new Date(), -2);
+    };
   };
+    
+  Calendar.WEEK = 7;
+  Calendar.MONTH = 28;
 
   Calendar.addDays = function(date, days) {
     return new Date(date.getFullYear(), date.getMonth(), date.getDate() + days, 12);

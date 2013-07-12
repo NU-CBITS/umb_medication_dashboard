@@ -1,5 +1,4 @@
-var F = require("./Faker"),
-    _ = require("../js/vendor/lodash-1.3.1.min"),
+var _ = require("../js/vendor/lodash-1.3.1.min"),
     Cal = require("./calendar"),
     fs = require("fs");
 
@@ -23,25 +22,25 @@ _.each(dates, function(d) {
     if (Math.random() > CHANCE_DIDNT_RESPOND) {
       var didTake = Math.random() > CHANCE_DIDNT_TAKE;
       var response = {
-        feature_value_dt_index: didTake,
+        feature_value_dt_index: didTake ? "Yes" : "No",
         feature_value_dt_date: fdate,
-        feature_value_dt_dosetime: fdate + "T" + t + "Z"
+        feature_value_dt_doseTime: fdate + "T" + t + "Z"
       };
       if (!didTake) {
         response.feature_value_dt_reason_for_missing = pickOne(REASONS_FOR_MISSING);
       }
-      surveys.push(response);
+      surveys.push({ fields: response });
     }
   });
 });
 
 function pickOne(set) {
-  var i = Math.round(Math.random() * set.length);
+  var i = Math.round(Math.random() * (set.length-1));
 
   return set[i];
 }
 
-//fs.writeFileSync("medication_survey_responses_" + participantId + ".json", JSON.stringify(surveys));
+fs.writeFileSync("medication_survey_responses_" + participantId + ".json.txt", JSON.stringify(surveys));
 
 function writeSqlStatements() {
   _.each(surveys, function(survey) {
@@ -60,4 +59,4 @@ function writeSqlStatements() {
   });
 }
 
-writeSqlStatements();
+//writeSqlStatements();

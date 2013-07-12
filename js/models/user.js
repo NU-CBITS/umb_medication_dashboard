@@ -1,7 +1,16 @@
-define(["backbone", "models/dose"], function(Backbone, Dose) {
+define([
+  "backbone",
+  "../../config/resource_locations",
+  "models/dose"
+], function(Backbone, Resources, Dose) {
   var User = Backbone.Model.extend({
+    initialize: function(attributes, options) {
+      this.environment = options.environment;
+      this.appCode = options.appCode;
+    },
+
     url: function() {
-      return "mock_data/user_config_" + this.id + ".json.txt";
+      return Resources[this.environment].urlRoot + this.appCode + "/participants/" + this.id + "/user_config.json";
     },
 
     doses: function() {

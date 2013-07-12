@@ -1,6 +1,6 @@
 define(["backbone"], function(Backbone) {
   var CompletedSurvey = Backbone.Model.extend({
-    COLUMN_PREFIX_LENGTH: "feature_value_dt_".length,
+    COLUMN_PREFIX_LENGTH: "FEATURE_VALUE_DT_".length,
 
     parse: function(data, options) {
       var self = this,
@@ -15,8 +15,20 @@ define(["backbone"], function(Backbone) {
       return parsed;
     },
 
-    doseTime: function() {
-      return this.get("doseTime");
+    date: function() {
+      return this.get("date");
+    },
+
+    symptomsAlwaysBother: function() {
+      return _.any(this.attributes, function(v, k) {
+        return /_frequency/.test(k) && v === "Almost all of the time";
+      });
+    },
+
+    sideEffectsAlwaysBother: function() {
+      return _.any(this.attributes, function(v, k) {
+        return /_distress/.test(k) && v === "Always";
+      });
     }
   });
 

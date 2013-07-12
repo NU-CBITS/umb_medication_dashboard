@@ -1,12 +1,15 @@
 define([
   "backbone",
+  "../../config/resource_locations",
   "models/user",
   "collections/completed_med_prompts",
-  "collections/completed_surveys"
-], function(Backbone, User, CompletedMedPrompts, CompletedSurveys) {
+  "collections/completed_surveys",
+  "collections/sent_messages"
+], function(Backbone, Resources, User, CompletedMedPrompts, CompletedSurveys,
+            SentMessages) {
   var Participants = Backbone.Collection.extend({
     initialize: function(models, options) {
-      this.url = options.url;
+      this.environment = options.environment;
       this.medPromptSurvey = options.medPromptSurvey;
       this.surveys = options.surveys;
       this.appCode = options.appCode;
@@ -14,18 +17,28 @@ define([
 
     model: User,
 
+    url: function() {
+      return Resources[this.environment].urlRoot + this.appCode + "/participants.json";
+    },
+
     fetchAll: function() {
       var self = this;
 
-      var req = $.getJSON(this.url)
+      var req = $.getJSON(this.url())
       .then(function(participantIds) {
         var requests = _.map(participantIds, function(id) {
-          var participant = new User({ id: id });
+          var participant = new User({
+            id: id
+          }, {
+            environment: self.environment,
+            appCode: self.appCode
+          });
 
           return [
             self.userConfigRequest(participant),
             self.medPromptSurveysRequest(participant),
-            self.surveysRequest(participant)
+            self.surveysRequest(participant),
+            self.messagesRequest(participant)
           ];
         });
 
@@ -46,9 +59,10 @@ define([
 
     medPromptSurveysRequest: function(participant) {
       participant.medPromptSurveys = new CompletedMedPrompts([], {
-        survey: this.medPromptSurvey,
+        environment: this.environment,
+        appCode: this.appCode,
         user: participant,
-        appCode: this.appCode
+        survey: this.medPromptSurvey
       });
 
       return participant.medPromptSurveys.fetch({ parse: true });
@@ -57,17 +71,28 @@ define([
     surveysRequest: function(participant) {
       var self = this;
       participant.surveys = {};
-      var req = _.map(this.surveys, function(survey) {
+      var requests = _.map(this.surveys, function(survey) {
         participant.surveys[survey.name] = new CompletedSurveys([], {
-          survey: survey,
+          environment: self.environment,
+          appCode: self.appCode,
           user: participant,
-          appCode: self.appCode
+          survey: survey
         });
 
         return participant.surveys[survey.name].fetch({ parse: true });
       });
 
-      return req;
+      return requests;
+    },
+
+    messagesRequest: function(participant) {
+      participant.messages = new SentMessages([], {
+        environment: this.environment,
+        appCode: this.appCode,
+        user: participant
+      });
+
+      return participant.messages.fetch({ parse: true });
     }
   });
 

@@ -15,6 +15,7 @@ requirejs.config({
 });
 
 define([
+  "../config/resource_locations",
   "../survey_definitions/ma/side_effects_survey",
   "../survey_definitions/ma/symptoms_survey",
   "../survey_definitions/ma/med_prompt",
@@ -22,20 +23,28 @@ define([
   "router",
   "backbone",
   "collections/participants"
-], function(MA_SIDE_EFFECTS, MA_SYMPTOMS, MA_MED_PROMPT, AppView, router,
+], function(Resources, MA_SIDE_EFFECTS, MA_SYMPTOMS, MA_MED_PROMPT, AppView, router,
             Backbone, Participants) {
+  var environment = (window.location.search.match(/env=([^&]+)/) || [null, "production"])[1];
   var participants = new Participants([], {
-    url: "http://10.0.1.11/medactive/participants.json",
+    environment: environment,
     appCode: "medactive",
     medPromptSurvey: MA_MED_PROMPT,
     surveys: [MA_SIDE_EFFECTS, MA_SYMPTOMS]
   });
   participants.fetchAll()
   .done(function() {
-    new AppView({ router: router, participants: participants });
+    new AppView({
+      router: router,
+      participants: participants,
+      surveys: ["side_effects", "symptoms"]
+    });
     Backbone.history.start({
       root: window.location.pathname,
       pushState: true
     });
+  })
+  .fail(function() {
+    console.log("failed!");
   });
 });

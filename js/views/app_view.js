@@ -17,7 +17,8 @@ define([
         collection: options.participants
       });
       participantView = new WeeklyParticipantSummaryView({
-        calendar: calendar
+        calendar: calendar,
+        surveys: options.surveys
       });
     }
 

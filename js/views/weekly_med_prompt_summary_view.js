@@ -8,9 +8,11 @@ define([
     _.extend(_.clone(SurveySummaryView), {
       template: _.template(template),
 
-      _render: function() {
+      survey: { name: "medication" },
+
+      render: function() {
         this.$el.html(this.template({
-          doses: this.options.user.doses(),
+          doses: this.model.doses(),
           dates: this.options.calendar.dates("iso8601"),
           statusIndicator: this._statusIndicator,
           DateFormatter: DateFormatter

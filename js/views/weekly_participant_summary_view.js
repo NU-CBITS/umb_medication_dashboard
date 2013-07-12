@@ -1,78 +1,58 @@
 define([
   "backbone",
-  "../../survey_definitions/ma/side_effects_survey",
-  "../../survey_definitions/ma/symptoms_survey",
   "../../survey_definitions/ma/med_prompt",
   "lib/date_formatter",
   "models/user",
-  "collections/completed_surveys",
-  "collections/completed_med_prompts",
   "collections/sent_messages",
   "views/weekly_med_prompt_summary_view",
   "views/weekly_survey_summary_view",
   "text!templates/weekly_participant_summary.tpl.html",
-  "text!templates/_weekly_survey_header.tpl.html"
-], function(Backbone, MA_SIDE_EFFECTS, MA_SYMPTOMS, MA_MED_PROMPT,
-            DateFormatter, User, CompletedSurveys, CompletedMedPrompts,
+  "text!templates/_weekly_survey_header.tpl.html",
+  "text!templates/_weekly_survey_navigation.tpl.html"
+], function(Backbone, MA_MED_PROMPT, DateFormatter, User,
             SentMessages, WeeklyMedPromptSummaryView, WeeklySurveySummaryView,
-            template, headerTpl) {
+            template, headerTpl, navTpl) {
   var WeeklyParticipantSummaryView = Backbone.View.extend({
     initialize: function(options) {
-      _.bindAll(this, "_renderHeader");
-      options.calendar.on("periodChanged", this._renderHeader);
+      _.bindAll(this, "_renderNavigation");
+      options.calendar.on("periodChanged", this._renderNavigation);
+      this.render();
+
+      this.medPromptView = new WeeklyMedPromptSummaryView({
+        survey: MA_MED_PROMPT,
+        calendar: options.calendar
+      });
+      this.$("#participant-summary").append(this.medPromptView.$el);
+
+      this.surveyViews = {};
+      var self = this;
+      _.each(options.surveys, function(surveyName) {
+        self.surveyViews[surveyName] = new WeeklySurveySummaryView({
+          name: surveyName,
+          calendar: options.calendar
+        });
+        self.$("#participant-summary").append(self.surveyViews[surveyName].$el);
+      });
     },
+
+    className: "span12",
 
     setParticipant: function(model) {
       this.model = model;
+
+      this._renderHeader();
+
+      this.medPromptView.collection = model.medPromptSurveys;
+      this.medPromptView.model = model;
+      this.medPromptView.render();
+
       var self = this;
-      var sentMessages = new SentMessages({
-        url: "mock_data/ma/sent_messages.json.txt"
-        //url: "messages.cfm?uid=" + UID
+      _.each(this.model.surveys, function(survey, surveyName) {
+        self.surveyViews[surveyName].collection = survey;
+        self.surveyViews[surveyName].survey = survey.survey;
+        self.surveyViews[surveyName].model = model;
+        self.surveyViews[surveyName].render();
       });
-      var medPromptView = (new WeeklyMedPromptSummaryView({
-        collection: model.medPromptSurveys,
-        survey: MA_MED_PROMPT,
-        calendar: this.options.calendar,
-        sentMessages: sentMessages,
-        user: model
-      }));
-
-      this.render();
-      this.$el.find("#participant-summary").append(medPromptView.$el);
-
-      var surveys = [
-        {
-          name: "Side Effects",
-          url: "mock_data/ma/side_effects_surveys.json.txt",
-          //url: "surveys.cfm?uid=" + UID + "&survey=side_effects",
-          definition: MA_SIDE_EFFECTS
-        },
-        {
-          name: "Symptoms",
-          url: "mock_data/ma/symptoms_surveys.json.txt",
-          //url: "surveys.cfm?uid=" + UID + "&survey=symptoms",
-          definition: MA_SYMPTOMS
-        }
-      ];
-
-      /*_.each(surveys, function(survey) {
-        var completedSurveys = new CompletedSurveys([], {
-          url: survey.url,
-          survey: survey.definition,
-          appCode: "MA"
-        });
-        var surveysView = (new WeeklySurveySummaryView({
-          collection: completedSurveys,
-          name: survey.name,
-          survey: survey.definition,
-          calendar: self.options.calendar,
-          sentMessages: sentMessages
-        }));
-
-        self.$el.find("#participant-summary").append(surveysView.$el);
-        completedSurveys.fetch({ parse: true });
-      });*/
-      sentMessages.fetch({ parse: true });
     },
 
     events: {
@@ -84,19 +64,25 @@ define([
 
     headerTemplate: _.template(headerTpl),
 
+    navTemplate: _.template(navTpl),
+
     render: function() {
-      this.$el.html(this.template({
-        participant: this.model
-      }));
-      this._renderHeader();
+      this.$el.html(this.template());
+      this._renderNavigation();
 
       return this;
     },
 
     _renderHeader: function() {
-      this.$el.find("#summary-header").html(this.headerTemplate({
+      this.$("#header").remove();
+      this.$("#participant-summary").before(this.headerTemplate({ participant: this.model }));
+    },
+
+    _renderNavigation: function() {
+      this.$("#summary-header").html(this.navTemplate({
         dates: this.options.calendar.dates(),
-        DateFormatter: DateFormatter
+        DateFormatter: DateFormatter,
+        canGoToNextPeriod: this.options.calendar.canGoToNextPeriod()
       }));
     },
 
