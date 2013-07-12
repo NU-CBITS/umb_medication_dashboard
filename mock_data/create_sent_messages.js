@@ -30,17 +30,17 @@ function pickOne(set) {
   return set[i];
 }
 
-fs.writeFileSync("medactive/participants/" + participantId + "/sent_messages.json", JSON.stringify(messages));
+//fs.writeFileSync("medactive/participants/" + participantId + "/sent_messages.json", JSON.stringify(messages));
 
 function writeSqlStatements() {
-  _.each(surveys, function(survey) {
-    fs.appendFileSync("insert_side_effects_survey_responses_" + participantId + ".sql",
-                      "INSERT INTO side_effects_survey_responses VALUES ('" +
+  _.each(messages, function(message) {
+    fs.appendFileSync("insert_sent_messages_" + participantId + ".sql",
+                      "INSERT INTO sent_messages VALUES ('" +
                       Math.round(Math.random() * 100000) +
-                      "', 1373368559, '2013-07-09 11:15:59', '2013-07-09 11:15:59', 545537511, '2013-07-09T6:15Z', 'abcd', 1373368559," +
-                      _.map(survey.fields, function(v, k) { return "'" + v + "'"; }).join(",") +
+                      "', 1373368559, '2013-07-09 11:15:59', '2013-07-09 11:15:59', 'abcd', 1373368559," +
+                      _.map(message.fields, function(v, k) { return "'" + v + "'"; }).join(",") +
                       ");\n");
   });
 }
 
-//writeSqlStatements()
+writeSqlStatements()

@@ -4,8 +4,8 @@
 <tr id="sent-messages"></tr>
 <% _.each(doses, function(dose) { %>
 <tr>
-  <td colspan="3">
-    <h3 class="tableLabel"><%= dose.summary() + " " + dose.time() %></h3>
+  <th colspan="3">
+    <%= dose.summary() + " " + dose.time() %>
   </td>
   <% _.each(dates, function(date) { %>
   <td><%= statusIndicator(dose, date) %></td>
