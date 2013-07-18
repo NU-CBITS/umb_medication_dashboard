@@ -19,6 +19,10 @@ define(["backbone"], function(Backbone) {
       return this.get("date");
     },
 
+    timestamp: function() {
+      return this.get("timestamp");
+    },
+
     symptomsAlwaysBother: function() {
       return _.any(this.attributes, function(v, k) {
         return /_frequency/.test(k) && v === "Almost all of the time";

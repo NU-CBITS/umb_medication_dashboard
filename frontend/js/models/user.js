@@ -27,6 +27,12 @@ define([
       return this._patient().name;
     },
 
+    dataLastModifiedTimestamp: function() {
+      return _.max(this.medPromptSurveys.last().timestamp(),
+                   _.max(this.surveys, function(survey) { return survey.last().timestamp(); }),
+                   this.messages.last().timestamp());
+    },
+
     _patient: function() {
       return _.find(this.get("people"), { type: "patient" });
     }

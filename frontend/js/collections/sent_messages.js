@@ -12,6 +12,10 @@ define([
       this.user = options.user;
     },
 
+    comparator: function(message) {
+      return message.timestamp();
+    },
+
     url: function() {
       return Resources[this.environment].urlRoot + this.appCode + "/participants/" + this.user.id + "/sent_messages.json";
     },

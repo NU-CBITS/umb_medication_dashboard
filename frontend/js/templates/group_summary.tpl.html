@@ -1,7 +1,5 @@
 <h2>All Users Summary</h2>
 
-<p>Last updated: <%= lastModified %></p>
-
 <table class="table table-striped table-bordered" id="group-summary">
   <thead>
     <tr>
@@ -12,6 +10,7 @@
       <th>Non Adherence<br />Due to Side Effects</th>
       <th>Symptoms Survey</th>
       <th>Side Effects Survey</th>
+      <th>Last update</th>
     </tr>
   </thead>
   <tbody>
@@ -38,6 +37,9 @@
         <% if (sideEffectsAlwaysBother(participant, "side_effects")) { %>
         <div class="status-indicator bad"><div class="excl">!</div></div>
         <% } %>
+      </td>
+      <td>
+        <%= participant.dataLastModifiedTimestamp() %>
       </td>
     </tr>
     <% }); %>

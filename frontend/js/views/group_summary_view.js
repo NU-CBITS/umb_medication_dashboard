@@ -20,8 +20,7 @@ define([
         participants: this.collection,
         nonadherenceDueToSideEffects: this._nonadherenceDueToSideEffects,
         symptomsAlwaysBother: this._symptomsAlwaysBother,
-        sideEffectsAlwaysBother: this._sideEffectsAlwaysBother,
-        lastModified: "some time ago"
+        sideEffectsAlwaysBother: this._sideEffectsAlwaysBother
       }));
 
       return this;

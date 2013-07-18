@@ -14,6 +14,10 @@ define([
       this.user = options.user;
     },
 
+    comparator: function(medPrompt) {
+      return medPrompt.timestamp();
+    },
+
     url: function() {
       return Resources[this.environment].urlRoot + this.appCode + "/participants/" + this.user.id + "/med_prompt_survey_responses.json";
     },

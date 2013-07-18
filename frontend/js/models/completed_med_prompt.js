@@ -23,6 +23,10 @@ define(["backbone"], function(Backbone) {
       return this.get("date");
     },
 
+    timestamp: function() {
+      return this.get("timestamp");
+    },
+
     nonadherenceDueToSideEffects: function() {
       return (this.get("reason_for_missing") === "It makes me feel bad.") ? this.get("date") : false;
     }

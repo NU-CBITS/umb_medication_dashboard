@@ -13,6 +13,10 @@ define(["backbone"], function(Backbone) {
       });
 
       return parsed;
+    },
+
+    timestamp: function() {
+      return this.get("timestamp");
     }
   });
 

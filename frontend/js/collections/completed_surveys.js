@@ -13,6 +13,10 @@ define([
       this.user = options.user;
     },
 
+    comparator: function(survey) {
+      return survey.timestamp();
+    },
+
     url: function() {
       return Resources[this.environment].urlRoot + this.appCode + "/participants/" + this.user.id + "/" + this.survey.name + "_survey_responses.json";
     },
