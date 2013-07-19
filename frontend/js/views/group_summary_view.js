@@ -1,15 +1,25 @@
 define([
   "backbone",
-  "models/calendar",
-  "collections/participants",
   "views/partials",
+  "views/clinician_alert_view",
   "text!templates/group_summary.tpl.html",
-], function(Backbone, Calendar, Participants, partials, template) {
+], function(Backbone, partials, ClinicianAlertView, template) {
   var GroupSummaryView = Backbone.View.extend({
     initialize: function(options) {
-      _.bindAll(this, "_nonadherenceDueToSideEffects", "_symptomsAlwaysBother", "_sideEffectsAlwaysBother");
-      this.calendar = options.calendar;
+      _.bindAll(this, "_nonadherenceDueToSideEffects", "_alwaysBotheredBy");
       this.render();
+      this.alertViews = {
+        non_adherence: new ClinicianAlertView({ alertType: "non_adherence" }),
+        symptoms: new ClinicianAlertView({ alertType: "symptoms" }),
+        side_effects: new ClinicianAlertView({ alertType: "side_effects" })
+      };
+      this.$("#non-adherence-alert").html(this.alertViews.non_adherence.$el);
+      this.$("#symptoms-alert").html(this.alertViews.symptoms.$el);
+      this.$("#side-effects-alert").html(this.alertViews.side_effects.$el);
+    },
+
+    events: {
+      "click [data-alert-type]": "_attachAlert"
     },
 
     className: "span12",
@@ -20,8 +30,7 @@ define([
       this.$el.html(this.template({
         participants: this.collection,
         nonadherenceDueToSideEffects: this._nonadherenceDueToSideEffects,
-        symptomsAlwaysBother: this._symptomsAlwaysBother,
-        sideEffectsAlwaysBother: this._sideEffectsAlwaysBother,
+        alwaysBotheredBy: this._alwaysBotheredBy,
         partials: partials
       }));
 
@@ -29,19 +38,19 @@ define([
     },
 
     _nonadherenceDueToSideEffects: function(participant) {
-      return participant.medPromptSurveys.nonadherenceDueToSideEffects({ dates: this._pastMonth() });
+      return participant.clinicianAlerts.getType("non_adherence");
     },
 
-    _symptomsAlwaysBother: function(participant, surveyName) {
-      return participant.surveys[surveyName].symptomsAlwaysBother({ dates: this._pastMonth() });
+    _alwaysBotheredBy: function(participant, surveyName) {
+      return participant.clinicianAlerts.getType(surveyName);
     },
 
-    _sideEffectsAlwaysBother: function(participant, surveyName) {
-      return participant.surveys[surveyName].sideEffectsAlwaysBother({ dates: this._pastMonth() });
-    },
-
-    _pastMonth: function() {
-      return this.calendar.dates("iso8601", { days: Calendar.MONTH });
+    _attachAlert: function(event) {
+      var options = $(event.currentTarget).data();
+      var participant = this.collection.get(options.participantId);
+      var alert = participant.clinicianAlerts.getType(options.alertType);
+      this.alertViews[options.alertType].set(participant, alert);
+      $(options.target).modal("show");
     }
   });
 

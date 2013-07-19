@@ -23,16 +23,19 @@ define(["backbone"], function(Backbone) {
       return this.get("timestamp");
     },
 
-    symptomsAlwaysBother: function() {
-      return _.any(this.attributes, function(v, k) {
-        return /_frequency/.test(k) && v === "Almost all of the time";
-      });
-    },
+    alwaysBotheredBy: function(problem) {
+      var filter = null;
+      if (problem === "symptoms") {
+        filter = function(v, k) {
+          return /_frequency/.test(k) && v === "Almost all of the time";
+        };
+      } else {
+        filter = function(v, k) {
+          return /_distress/.test(k) && v === "Always";
+        };
+      }
 
-    sideEffectsAlwaysBother: function() {
-      return _.any(this.attributes, function(v, k) {
-        return /_distress/.test(k) && v === "Always";
-      });
+      return _.any(this.attributes, filter);
     }
   });
 

@@ -33,6 +33,12 @@ define([
                    this.messages.last().timestamp());
     },
 
+    lastMissedDoseDueToSideEffects: function() {
+      return _.last(this.medPromptSurveys.filter(function(survey) {
+        return survey.nonadherenceDueToSideEffects();
+      })).doseTime();
+    },
+
     _patient: function() {
       return _.find(this.get("people"), { type: "patient" });
     }

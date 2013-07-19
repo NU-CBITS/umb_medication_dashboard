@@ -32,12 +32,10 @@ define([
     },
 
     nonadherenceDueToSideEffects: function(options) {
-      var surveys = this.filter(function(survey) {
+      return this.filter(function(survey) {
         return _.contains(options.dates, survey.date()) &&
           survey.nonadherenceDueToSideEffects();
       });
-
-      return _.map(surveys, function(s) { return s.date(); });
     },
 
     _surveysForDoseOnDate: function(dose, date) {

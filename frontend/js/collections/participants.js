@@ -4,9 +4,10 @@ define([
   "models/user",
   "collections/completed_med_prompts",
   "collections/completed_surveys",
-  "collections/sent_messages"
+  "collections/sent_messages",
+  "collections/clinician_alerts"
 ], function(Backbone, Resources, User, CompletedMedPrompts, CompletedSurveys,
-            SentMessages) {
+            SentMessages, ClinicianAlerts) {
   var Participants = Backbone.Collection.extend({
     initialize: function(models, options) {
       this.environment = options.environment;
@@ -38,7 +39,8 @@ define([
             self.userConfigRequest(participant),
             self.medPromptSurveysRequest(participant),
             self.surveysRequest(participant),
-            self.messagesRequest(participant)
+            self.messagesRequest(participant),
+            self.alertsRequest(participant)
           ];
         });
 
@@ -93,6 +95,16 @@ define([
       });
 
       return participant.messages.fetch({ parse: true });
+    },
+
+    alertsRequest: function(participant) {
+      participant.clinicianAlerts = new ClinicianAlerts([], {
+        environment: this.environment,
+        appCode: this.appCode,
+        user: participant
+      });
+
+      return participant.clinicianAlerts.fetch({ parse: true });
     }
   });
 

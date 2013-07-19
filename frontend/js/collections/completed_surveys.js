@@ -30,17 +30,10 @@ define([
       return surveys.length ? (negative ? "negative" : "positive") : "missing";
     },
 
-    symptomsAlwaysBother: function(options) {
+    alwaysBotheredBy: function(options) {
       return this.any(function(survey) {
         return _.contains(options.dates, survey.date()) &&
-          survey.symptomsAlwaysBother();
-      });
-    },
-
-    sideEffectsAlwaysBother: function(options) {
-      return this.any(function(survey) {
-        return _.contains(options.dates, survey.date()) &&
-          survey.sideEffectsAlwaysBother();
+          survey.alwaysBotheredBy(options.problem);
       });
     },
 
