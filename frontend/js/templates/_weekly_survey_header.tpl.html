@@ -1,1 +1,6 @@
-<h2 id="header">Summary for <%= participant.patientName() %></h2>
+<div>
+  <h2 class="pull-left" id="header">Summary for <%= participant.patientName() %></h2>
+  <a href="#" class="btn pull-right" data-toggle="modal" data-target="#help-modal">Help</a>
+</div>
+
+<%= partials.helpModal() %>

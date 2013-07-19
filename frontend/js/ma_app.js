@@ -4,9 +4,14 @@ requirejs.config({
     "backbone": {
       deps: ["lodash", "jquery"],
       exports: "Backbone"
+    },
+    "bootstrap": {
+      deps: ["jquery"],
+      exports: "Bootstrap"
     }
   },
   paths: {
+    bootstrap: "vendor/bootstrap-2.3.2.min",
     backbone: "vendor/backbone-1.0.0.min",
     jquery: "vendor/jquery-2.0.3.min",
     lodash: "vendor/lodash-1.3.1.min",
@@ -22,7 +27,8 @@ define([
   "views/app_view",
   "router",
   "backbone",
-  "collections/participants"
+  "collections/participants",
+  "bootstrap"
 ], function(Resources, MA_SIDE_EFFECTS, MA_SYMPTOMS, MA_MED_PROMPT, AppView, router,
             Backbone, Participants) {
   var environment = (window.location.search.match(/env=([^&]+)/) || [null, "production"])[1];
@@ -40,8 +46,7 @@ define([
       surveys: ["side_effects", "symptoms"]
     });
     Backbone.history.start({
-      root: window.location.pathname,
-      pushState: true
+      root: window.location.pathname
     });
   })
   .fail(function() {

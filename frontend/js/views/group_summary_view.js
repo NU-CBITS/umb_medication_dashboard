@@ -2,8 +2,9 @@ define([
   "backbone",
   "models/calendar",
   "collections/participants",
+  "views/partials",
   "text!templates/group_summary.tpl.html",
-], function(Backbone, Calendar, Participants, template) {
+], function(Backbone, Calendar, Participants, partials, template) {
   var GroupSummaryView = Backbone.View.extend({
     initialize: function(options) {
       _.bindAll(this, "_nonadherenceDueToSideEffects", "_symptomsAlwaysBother", "_sideEffectsAlwaysBother");
@@ -20,7 +21,8 @@ define([
         participants: this.collection,
         nonadherenceDueToSideEffects: this._nonadherenceDueToSideEffects,
         symptomsAlwaysBother: this._symptomsAlwaysBother,
-        sideEffectsAlwaysBother: this._sideEffectsAlwaysBother
+        sideEffectsAlwaysBother: this._sideEffectsAlwaysBother,
+        partials: partials
       }));
 
       return this;

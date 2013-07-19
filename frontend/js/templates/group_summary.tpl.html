@@ -1,4 +1,9 @@
-<h2>All Users Summary</h2>
+<div>
+  <h2 class="pull-left">All Users Summary</h2>
+  <a href="#" class="btn pull-right" data-toggle="modal" data-target="#help-modal">Help</a>
+</div>
+
+<%= partials.helpModal() %>
 
 <table class="table table-striped table-bordered" id="group-summary">
   <thead>
@@ -25,17 +30,17 @@
       </td>
       <td>
         <% if (dates = nonadherenceDueToSideEffects(participant)) { %>
-        <div class="status-indicator bad" title="<%= dates.join(', ') %>"><div class="excl">!</div></div>
+        <div class="status-indicator bad" title="<%= dates.join(', ') %>" data-toggle="modal" data-target="#non-adherence-alert"><div class="excl">!</div></div>
         <% } %>
       </td>
       <td>
         <% if (symptomsAlwaysBother(participant, "symptoms")) { %>
-        <div class="status-indicator bad"><div class="excl">!</div></div>
+        <div class="status-indicator bad" data-toggle="modal" data-target="#symptoms-alert"><div class="excl">!</div></div>
         <% } %>
       </td>
       <td>
         <% if (sideEffectsAlwaysBother(participant, "side_effects")) { %>
-        <div class="status-indicator bad"><div class="excl">!</div></div>
+        <div class="status-indicator bad" data-toggle="modal" data-target="#side-effects-alert"><div class="excl">!</div></div>
         <% } %>
       </td>
       <td>
@@ -45,3 +50,89 @@
     <% }); %>
   </tbody>
 </table>
+
+<div id="non-adherence-alert" class="modal hide" role="dialog">
+  <div class="modal-header">
+    <h3>Non-adherence due to side effects</h3>
+  </div>
+  <div class="modal-body">
+    <p class="text-error"><strong>Alert: </strong> Patient reports not taking their [time] dose of [medication] because of side effects</p>
+    <form>
+      <fieldset>
+        <legend>Action taken</legend>
+        <label class="checkbox">
+          <input type="checkbox">contacted participant
+        </label>
+        <label class="checkbox">
+          <input type="checkbox">aware of ongoing issue
+        </label>
+        <label class="checkbox">
+          <input type="checkbox">to discuss at next session
+        </label>
+    </form>
+    <hr>
+    <p><strong>Alert transmitted: </strong>[date / time]</p>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn"><i class="icon-ok"></i> Save &amp; Do Not Clear</a>
+    <a href="#" class="btn"><i class="icon-remove"></i> Clear Alert</a>
+  </div>
+</div>
+
+<div id="side-effects-alert" class="modal hide" role="dialog">
+  <div class="modal-header">
+    <h3>Side effects survey</h3>
+  </div>
+  <div class="modal-body">
+    <p class="text-error"><strong>Alert: </strong> Patient reports always being bothered by [X, Y, Z]</p>
+    <p><strong>Patient requests contact: </strong>[Yes|No]</p>
+    <form>
+      <fieldset>
+        <legend>Action taken</legend>
+        <label class="checkbox">
+          <input type="checkbox">contacted participant
+        </label>
+        <label class="checkbox">
+          <input type="checkbox">aware of ongoing issue
+        </label>
+        <label class="checkbox">
+          <input type="checkbox">to discuss at next session
+        </label>
+    </form>
+    <hr>
+    <p><strong>Alert transmitted: </strong>[date / time]</p>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn"><i class="icon-ok"></i> Save &amp; Do Not Clear</a>
+    <a href="#" class="btn"><i class="icon-remove"></i> Clear Alert</a>
+  </div>
+</div>
+
+<div id="symptoms-alert" class="modal hide" role="dialog">
+  <div class="modal-header">
+    <h3>Symptoms survey</h3>
+  </div>
+  <div class="modal-body">
+    <p class="text-error"><strong>Alert: </strong> Patient reports always being bothered by one or more positive psychotic symptoms.</p>
+    <p><strong>Patient requests contact: </strong>[Yes|No]</p>
+    <form>
+      <fieldset>
+        <legend>Action taken</legend>
+        <label class="checkbox">
+          <input type="checkbox">contacted participant
+        </label>
+        <label class="checkbox">
+          <input type="checkbox">aware of ongoing issue
+        </label>
+        <label class="checkbox">
+          <input type="checkbox">to discuss at next session
+        </label>
+    </form>
+    <hr>
+    <p><strong>Alert transmitted: </strong>[date / time]</p>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn"><i class="icon-ok"></i> Save &amp; Do Not Clear</a>
+    <a href="#" class="btn"><i class="icon-remove"></i> Clear Alert</a>
+  </div>
+</div>

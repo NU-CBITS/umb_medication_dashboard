@@ -6,12 +6,13 @@ define([
   "collections/sent_messages",
   "views/weekly_med_prompt_summary_view",
   "views/weekly_survey_summary_view",
+  "views/partials",
   "text!templates/weekly_participant_summary.tpl.html",
   "text!templates/_weekly_survey_header.tpl.html",
   "text!templates/_weekly_survey_navigation.tpl.html"
 ], function(Backbone, MA_MED_PROMPT, DateFormatter, User,
             SentMessages, WeeklyMedPromptSummaryView, WeeklySurveySummaryView,
-            template, headerTpl, navTpl) {
+            partials, template, headerTpl, navTpl) {
   var WeeklyParticipantSummaryView = Backbone.View.extend({
     initialize: function(options) {
       _.bindAll(this, "_renderNavigation");
@@ -75,7 +76,10 @@ define([
 
     _renderHeader: function() {
       this.$("#header").remove();
-      this.$("#participant-summary").before(this.headerTemplate({ participant: this.model }));
+      this.$("#participant-summary").before(this.headerTemplate({
+        participant: this.model,
+        partials: partials
+      }));
     },
 
     _renderNavigation: function() {
