@@ -4,7 +4,7 @@ from django.views.decorators.cache import cache_page
 from django.db.models import Q
 import json
 from medactive.models import MedPromptResponse, SideEffectsSurveyResponse, \
-  SymptomsSurveyResponse, SentMessage, ClinicianAlert
+  SymptomsSurveyResponse, SentMessage, ClinicianAlert, ParticipantAction
 
 def participants(request):
   participants = [
@@ -104,3 +104,17 @@ def pending_negative_symptoms_responses(last_cleared_alerts, participant_id):
   if len(last_cleared_alerts) == 1:
     responses = responses.filter(eventDateTime__gte=last_cleared_alerts[0].created_at)
   return responses.filter(Q(FEATURE_VALUE_DT_paranoia_frequency='Always')|Q(FEATURE_VALUE_DT_media_communication_frequency='Always')|Q(FEATURE_VALUE_DT_thought_insertion_frequency='Always')|Q(FEATURE_VALUE_DT_special_mission_frequency='Always')|Q(FEATURE_VALUE_DT_thought_broadcasting_frequency='Always')|Q(FEATURE_VALUE_DT_hallucinations_frequency='Always')|Q(FEATURE_VALUE_DT_confused_frequency='Always')|Q(FEATURE_VALUE_DT_thought_disorders_frequency='Always'))
+
+@cache_page()
+def latest_action(request, participant_id):
+  actions = ParticipantAction.objects.raw('select "id", "eventDateTime" from "medication_survey_responses" '\
+    'union select "id", "eventDateTime" from "side_effects_survey_responses" '\
+    'union select "id", "eventDateTime" from "symptoms_survey_responses" '\
+    'union select "id", "eventDateTime" from "sent_messages" '\
+    'order by "eventDateTime" desc limit(1)').using(participant_id)
+  actions_json = serializers.serialize("json", actions)
+  return HttpResponse(actions_json, content_type="application/json")
+
+def contact_research_staff(request):
+  from django.core.mail import send_mail
+  send_mail('Clinician requires assistance', 'A clinician requires assistance', 'from@example.com', ['to@example.com'], fail_silently=True)

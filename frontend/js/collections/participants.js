@@ -2,12 +2,13 @@ define([
   "backbone",
   "../../config/resource_locations",
   "models/user",
+  "models/participant_action",
   "collections/completed_med_prompts",
   "collections/completed_surveys",
   "collections/sent_messages",
   "collections/clinician_alerts"
-], function(Backbone, Resources, User, CompletedMedPrompts, CompletedSurveys,
-            SentMessages, ClinicianAlerts) {
+], function(Backbone, Resources, User, ParticipantAction, CompletedMedPrompts,
+            CompletedSurveys, SentMessages, ClinicianAlerts) {
   var Participants = Backbone.Collection.extend({
     initialize: function(models, options) {
       this.environment = options.environment;
@@ -40,7 +41,8 @@ define([
             self.medPromptSurveysRequest(participant),
             self.surveysRequest(participant),
             self.messagesRequest(participant),
-            self.alertsRequest(participant)
+            self.alertsRequest(participant),
+            self.latestActionRequest(participant)
           ];
         });
 
@@ -105,6 +107,16 @@ define([
       });
 
       return participant.clinicianAlerts.fetch({ parse: true });
+    },
+
+    latestActionRequest: function(participant) {
+      participant.setLatestAction(new ParticipantAction({}, {
+        environment: this.environment,
+        appCode: this.appCode,
+        user: participant
+      }));
+
+      return participant.getLatestAction().fetch({ parse: true });
     }
   });
 

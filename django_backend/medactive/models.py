@@ -90,3 +90,6 @@ class ClinicianAlert(models.Model):
 
   def __unicode__(self):
     return self.type
+
+class ParticipantAction(models.Model):
+  eventDateTime = models.DateTimeField()

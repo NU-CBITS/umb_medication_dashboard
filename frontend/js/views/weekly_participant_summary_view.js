@@ -6,17 +6,21 @@ define([
   "collections/sent_messages",
   "views/weekly_med_prompt_summary_view",
   "views/weekly_survey_summary_view",
-  "views/partials",
+  "views/help_modal_partial",
   "text!templates/weekly_participant_summary.tpl.html",
   "text!templates/_weekly_survey_header.tpl.html",
   "text!templates/_weekly_survey_navigation.tpl.html"
 ], function(Backbone, MA_MED_PROMPT, DateFormatter, User,
             SentMessages, WeeklyMedPromptSummaryView, WeeklySurveySummaryView,
-            partials, template, headerTpl, navTpl) {
+            HelpModalPartial, template, headerTpl, navTpl) {
   var WeeklyParticipantSummaryView = Backbone.View.extend({
     initialize: function(options) {
       _.bindAll(this, "_renderNavigation");
       options.calendar.on("periodChanged", this._renderNavigation);
+      this.helpModal = new HelpModalPartial({
+        environment: this.options.environment,
+        appCode: this.options.appCode
+      });
       this.render();
 
       this.medPromptView = new WeeklyMedPromptSummaryView({
@@ -56,9 +60,11 @@ define([
       });
     },
 
-    events: {
-      "click #previous-period": "_previousPeriod",
-      "click #next-period": "_nextPeriod"
+    events: function() {
+      return _.extend({
+        "click #previous-period": "_previousPeriod",
+        "click #next-period": "_nextPeriod"
+      }, this.helpModal.events);
     },
 
     template: _.template(template),
@@ -78,7 +84,7 @@ define([
       this.$("#header").remove();
       this.$("#participant-summary").before(this.headerTemplate({
         participant: this.model,
-        partials: partials
+        helpModal: this.helpModal
       }));
     },
 

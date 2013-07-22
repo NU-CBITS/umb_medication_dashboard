@@ -13,10 +13,14 @@ define([
     function createViews() {
       var calendar = new Calendar();
       groupView = new GroupSummaryView({
+        environment: options.environment,
+        appCode: options.appCode,
         calendar: calendar,
         collection: options.participants
       });
       participantView = new WeeklyParticipantSummaryView({
+        environment: options.environment,
+        appCode: options.appCode,
         calendar: calendar,
         surveys: options.surveys
       });

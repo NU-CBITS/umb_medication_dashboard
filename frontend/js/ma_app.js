@@ -41,6 +41,8 @@ define([
   participants.fetchAll()
   .done(function() {
     new AppView({
+      environment: environment,
+      appCode: "medactive",
       router: router,
       participants: participants,
       surveys: ["side_effects", "symptoms"]

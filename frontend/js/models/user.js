@@ -7,6 +7,7 @@ define([
     initialize: function(attributes, options) {
       this.environment = options.environment;
       this.appCode = options.appCode;
+      this.latestAction = null
     },
 
     url: function() {
@@ -37,6 +38,14 @@ define([
       return _.last(this.medPromptSurveys.filter(function(survey) {
         return survey.nonadherenceDueToSideEffects();
       })).doseTime();
+    },
+
+    getLatestAction: function() {
+      return this.latestAction;
+    },
+
+    setLatestAction: function(action) {
+      this.latestAction = action;
     },
 
     _patient: function() {

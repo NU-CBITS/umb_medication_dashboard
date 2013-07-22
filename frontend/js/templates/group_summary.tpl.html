@@ -3,7 +3,7 @@
   <a href="#" class="btn pull-right" data-toggle="modal" data-target="#help-modal">Help</a>
 </div>
 
-<%= partials.helpModal() %>
+<%= helpModal.render() %>
 
 <table class="table table-striped table-bordered" id="group-summary">
   <thead>
@@ -27,6 +27,7 @@
       <td><%= participant.doses()[0].summary() %></td>
       <td><%= _.map(participant.doses(), function(dose) { return dose.time(); }).join(", ") %></td>
       <td>
+        <%= previousWeekAdherencePct(participant) %>% / <%= previousMonthAdherencePct(participant) %>%
       </td>
       <td>
         <% if (nonadherenceDueToSideEffects(participant)) { %>
@@ -44,7 +45,7 @@
         <% } %>
       </td>
       <td>
-        <%= participant.dataLastModifiedTimestamp() %>
+        <%= participant.getLatestAction().getEventDateTime() %>
       </td>
     </tr>
     <% }); %>

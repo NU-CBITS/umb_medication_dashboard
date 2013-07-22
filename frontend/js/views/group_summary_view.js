@@ -1,12 +1,16 @@
 define([
   "backbone",
-  "views/partials",
+  "views/help_modal_partial",
   "views/clinician_alert_view",
   "text!templates/group_summary.tpl.html",
-], function(Backbone, partials, ClinicianAlertView, template) {
+], function(Backbone, HelpModalPartial, ClinicianAlertView, template) {
   var GroupSummaryView = Backbone.View.extend({
     initialize: function(options) {
       _.bindAll(this, "_nonadherenceDueToSideEffects", "_alwaysBotheredBy");
+      this.helpModal = new HelpModalPartial({
+        environment: this.options.environment,
+        appCode: this.options.appCode
+      });
       this.render();
       this.alertViews = {
         non_adherence: new ClinicianAlertView({ alertType: "non_adherence" }),
@@ -18,8 +22,10 @@ define([
       this.$("#side-effects-alert").html(this.alertViews.side_effects.$el);
     },
 
-    events: {
-      "click [data-alert-type]": "_attachAlert"
+    events: function() {
+      return _.extend({
+        "click [data-alert-type]": "_attachAlert"
+      }, this.helpModal.events);
     },
 
     className: "span12",
@@ -31,7 +37,9 @@ define([
         participants: this.collection,
         nonadherenceDueToSideEffects: this._nonadherenceDueToSideEffects,
         alwaysBotheredBy: this._alwaysBotheredBy,
-        partials: partials
+        previousWeekAdherencePct: this._previousWeekAdherencePct,
+        previousMonthAdherencePct: this._previousMonthAdherencePct,
+        helpModal: this.helpModal
       }));
 
       return this;
@@ -51,6 +59,12 @@ define([
       var alert = participant.clinicianAlerts.getType(options.alertType);
       this.alertViews[options.alertType].set(participant, alert);
       $(options.target).modal("show");
+    },
+
+    _previousWeekAdherencePct: function(participant) {
+    },
+
+    _previousMonthAdherencePct: function(participant) {
     }
   });
 
