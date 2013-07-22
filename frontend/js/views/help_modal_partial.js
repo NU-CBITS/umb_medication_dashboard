@@ -9,12 +9,18 @@ define([
     };
 
     this.events = {
-      "click #help-yes": contactResearchStaff
+      "click #help-yes": contactResearchStaff,
+      "click #help-cancel": hideModal
     };
 
     function contactResearchStaff() {
       $.post(Resources[options.environment].urlRoot + options.appCode + "/contact_research_staff.json", function(data) {
       });
+      hideModal();
+    }
+
+    function hideModal() {
+      $("#help-modal").modal("hide");
     }
   }
 
