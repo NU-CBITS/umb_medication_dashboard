@@ -28,6 +28,10 @@ define(function() {
       hours = hours === 0 ? 12 : hours;
 
       return hours + ":" + padLeft2(minutes, "0") + ampm;
+    },
+
+    dateTimeString: function(timeStampStr) {
+      return DateFormatter.monthSlashDate(new Date(timeStampStr)) + " " + DateFormatter.timeStringToMeridian(timeStampStr);
     }
   };
 

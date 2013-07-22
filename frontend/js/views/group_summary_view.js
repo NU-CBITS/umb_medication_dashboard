@@ -1,9 +1,10 @@
 define([
   "backbone",
+  "lib/date_formatter",
   "views/help_modal_partial",
   "views/clinician_alert_view",
   "text!templates/group_summary.tpl.html",
-], function(Backbone, HelpModalPartial, ClinicianAlertView, template) {
+], function(Backbone, DateFormatter, HelpModalPartial, ClinicianAlertView, template) {
   var GroupSummaryView = Backbone.View.extend({
     initialize: function(options) {
       _.bindAll(this, "_nonadherenceDueToSideEffects", "_alwaysBotheredBy");
@@ -39,7 +40,8 @@ define([
         alwaysBotheredBy: this._alwaysBotheredBy,
         previousWeekAdherencePct: this._previousWeekAdherencePct,
         previousMonthAdherencePct: this._previousMonthAdherencePct,
-        helpModal: this.helpModal
+        helpModal: this.helpModal,
+        DateFormatter: DateFormatter
       }));
 
       return this;

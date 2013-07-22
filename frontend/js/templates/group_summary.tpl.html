@@ -45,7 +45,8 @@
         <% } %>
       </td>
       <td>
-        <%= participant.getLatestAction().getEventDateTime() %>
+        <% timeStamp = participant.getLatestAction().getEventDateTime() %>
+        <%= DateFormatter.dateTimeString(timeStamp) %>
       </td>
     </tr>
     <% }); %>

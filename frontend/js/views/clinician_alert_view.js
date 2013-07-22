@@ -1,9 +1,10 @@
 define([
   "backbone",
+  "lib/date_formatter",
   "text!templates/clinician_alerts/_non_adherence.tpl.html",
   "text!templates/clinician_alerts/_symptoms.tpl.html",
   "text!templates/clinician_alerts/_side_effects.tpl.html"
-], function(Backbone, nonAdherenceTpl, symptomsTpl, sideEffectsTpl) {
+], function(Backbone, DateFormatter, nonAdherenceTpl, symptomsTpl, sideEffectsTpl) {
   var ClinicianAlertView = Backbone.View.extend({
     events: {
       "change input": "_changedInput",
@@ -14,7 +15,8 @@ define([
     render: function() {
       this.$el.html(this._templates[this.options.alertType]({
         alert: this.model,
-        participant: this.participant
+        participant: this.participant,
+        DateFormatter: DateFormatter
       }));
 
       return this;

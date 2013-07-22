@@ -2,7 +2,8 @@
   <h3>Non-adherence due to side effects</h3>
 </div>
 <div class="modal-body">
-  <p class="text-error"><strong>Alert: </strong> Patient reports not taking their <%= participant.lastMissedDoseDueToSideEffects() %> dose because of side effects</p>
+  <% doseTimeStamp = participant.lastMissedDoseDueToSideEffects() %>
+  <p class="text-error"><strong>Alert: </strong> Patient reports not taking their <%= DateFormatter.dateTimeString(doseTimeStamp) %> dose because of side effects</p>
   <form>
     <fieldset>
       <legend>Action taken</legend>
@@ -17,7 +18,7 @@
       </label>
   </form>
   <hr>
-  <p><strong>Alert transmitted: </strong><%= alert.createdAt() %></p>
+  <p><strong>Alert transmitted: </strong><%= DateFormatter.dateTimeString(alert.createdAt()) %></p>
 </div>
 <div class="modal-footer">
   <a href="#" class="btn hide-alert" data-target="#non-adherence-alert"><i class="icon-ok"></i> Save &amp; Do Not Clear</a>
