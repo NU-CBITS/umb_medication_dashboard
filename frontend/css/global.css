@@ -18,6 +18,7 @@ body {font: "Droid Sans"}
 
 .status-indicator {
 	-webkit-transform: rotate(-60deg) skewX(-30deg) scale(1,.866);
+  cursor: pointer;
 }
 .status-indicator:before {
 	-webkit-transform: rotate(-135deg) skewX(-45deg) scale(1.414,.707) translate(0,-50%);
@@ -35,5 +36,9 @@ body {font: "Droid Sans"}
   font-weight: bold;
 }
 
-.status-indicator.bad,.status-indicator.bad:before,.status-indicator.bad:after { background-color: red; }
-.status-indicator.na,.status-indicator.na:before,.status-indicator.na:after { background-color: gray; }
+.status-indicator.bad,.status-indicator.bad:before,.status-indicator.bad:after {
+  background-color: red;
+}
+.status-indicator.na,.status-indicator.na:before,.status-indicator.na:after {
+  background-color: gray;
+}
