@@ -7,7 +7,8 @@
       "is_cleared": false,
       "contacted_patient": false,
       "aware_of_issue": false,
-      "will_discuss": false
+      "will_discuss": false,
+      "problem_details": "[\"index\",\"sexual_problems\"]"
     }
   }
 ]

@@ -19,6 +19,10 @@ define([
 
     willDiscuss: function() {
       return this.get("will_discuss");
+    },
+
+    problemDetails: function() {
+      return JSON.parse(this.get("problem_details"));
     }
   });
 

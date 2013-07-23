@@ -42,14 +42,14 @@ define(["lib/hash"], function(Hash) {
             completes_survey: true
           },
           {
-            label: "It makes me feel bad.",
+            label: "The side effects make me feel bad.",
             next_page: "ask_to_notify",
             completes_survey: true
           }
         ]
       },
       ask_to_notify: {
-        question: "You have indicated that you are not taking your <strong><%= dose.medication %></strong> because it makes you feel bad.<br />Would you like to let your adherence counselor know so you can discuss it at your next appointment?",
+        question: "You have indicated that you are not taking your <strong><%= dose.medication %></strong> because it makes you feel bad.<br />Would you like to let your psychiatrist know so you can discuss it at your next appointment?",
         responses: [
           {
             label: "Yes",
@@ -62,7 +62,7 @@ define(["lib/hash"], function(Hash) {
         ]
       },
       offer_information: {
-        question: "Would you like to see some information on common side effects of HIV medications?",
+        question: "Would you like to see some information on common side effects of Antipsychotic medications?",
         responses: [
           {
             label: "Yes, view information now",

@@ -1,10 +1,14 @@
 define([
   "backbone",
+  "../../survey_definitions/ma/med_prompt",
+  "../../survey_definitions/ma/side_effects_survey",
+  "../../survey_definitions/ma/symptoms_survey",
   "lib/date_formatter",
   "text!templates/clinician_alerts/_non_adherence.tpl.html",
   "text!templates/clinician_alerts/_symptoms.tpl.html",
   "text!templates/clinician_alerts/_side_effects.tpl.html"
-], function(Backbone, DateFormatter, nonAdherenceTpl, symptomsTpl, sideEffectsTpl) {
+], function(Backbone, medPromptSurvey, sideEffectsSurvey, symptomsSurvey,
+            DateFormatter, nonAdherenceTpl, symptomsTpl, sideEffectsTpl) {
   var ClinicianAlertView = Backbone.View.extend({
     events: {
       "change input": "_changedInput",
@@ -16,7 +20,8 @@ define([
       this.$el.html(this._templates[this.options.alertType]({
         alert: this.model,
         participant: this.participant,
-        DateFormatter: DateFormatter
+        DateFormatter: DateFormatter,
+        survey: this._surveys[this.options.alertType]
       }));
 
       return this;
@@ -32,6 +37,12 @@ define([
       non_adherence: _.template(nonAdherenceTpl),
       symptoms: _.template(symptomsTpl),
       side_effects: _.template(sideEffectsTpl)
+    },
+
+    _surveys: {
+      non_adherence: medPromptSurvey,
+      symptoms: symptomsSurvey,
+      side_effects: sideEffectsSurvey
     },
 
     _changedInput: function(event) {

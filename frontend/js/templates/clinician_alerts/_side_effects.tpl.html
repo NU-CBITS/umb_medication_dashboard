@@ -2,7 +2,7 @@
   <h3>Side effects survey</h3>
 </div>
 <div class="modal-body">
-  <p class="text-error"><strong>Alert: </strong> Patient reports always being bothered by [X, Y, Z]</p>
+  <p class="text-error"><strong>Alert: </strong> Patient reports always being bothered by <%= _.map(alert.problemDetails(), function(d) { return survey.pages[d].summary }).join(", ") %></p>
   <p><strong>Patient requests contact: </strong>[Yes|No]</p>
   <form>
     <fieldset>
