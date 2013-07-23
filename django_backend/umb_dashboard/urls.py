@@ -5,9 +5,7 @@ from django.conf.urls import patterns, include, url
 # admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'umb_dashboard.views.home', name='home'),
-    # url(r'^umb_dashboard/', include('umb_dashboard.foo.urls')),
+    url(r'^accounts/login/$', 'django.contrib.auth.views.login'),
     url(r'^medactive/participants.json$', 'medactive.views.participants'),
     url(r'^medactive/participants/(\w+)/user_config.json$', 'medactive.views.user_config'),
     url(r'^medactive/participants/(\w+)/med_prompt_survey_responses.json$', 'medactive.views.med_prompt_survey_responses'),

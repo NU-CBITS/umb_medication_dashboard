@@ -12,6 +12,7 @@ class MedPromptResponse(models.Model):
 
   class Meta:
     db_table = 'medication_survey_responses'
+    managed = False
 
 class SideEffectsSurveyResponse(models.Model):
   id = models.TextField(primary_key=True)
@@ -40,6 +41,7 @@ class SideEffectsSurveyResponse(models.Model):
 
   class Meta:
     db_table = 'side_effects_survey_responses'
+    managed = False
 
 class SymptomsSurveyResponse(models.Model):
   id = models.TextField(primary_key=True)
@@ -67,6 +69,7 @@ class SymptomsSurveyResponse(models.Model):
 
   class Meta:
     db_table = 'symptoms_survey_responses'
+    managed = False
 
 class SentMessage(models.Model):
   id = models.TextField(primary_key=True)
@@ -75,10 +78,11 @@ class SentMessage(models.Model):
 
   class Meta:
     db_table = 'sent_messages'
+    managed = False
 
 class ClinicianAlert(models.Model):
-  participant_id = models.CharField()
-  type = models.CharField()
+  participant_id = models.CharField(max_length=255)
+  type = models.CharField(max_length=255)
   created_at = models.DateTimeField(auto_now_add=True)
   is_cleared = models.BooleanField()
   contacted_patient = models.BooleanField()
@@ -93,3 +97,6 @@ class ClinicianAlert(models.Model):
 
 class ParticipantAction(models.Model):
   eventDateTime = models.DateTimeField()
+
+  class Meta:
+    managed = False
