@@ -7,5 +7,7 @@ CREATE TABLE clinician_alerts
   is_cleared boolean NOT NULL DEFAULT FALSE,
   contacted_patient boolean NOT NULL DEFAULT FALSE,
   aware_of_issue boolean NOT NULL DEFAULT FALSE,
-  will_discuss boolean NOT NULL DEFAULT FALSE
+  will_discuss boolean NOT NULL DEFAULT FALSE,
+  problem_details text,
+  participant_requests_contact boolean NOT NULL DEFAULT FALSE
 );

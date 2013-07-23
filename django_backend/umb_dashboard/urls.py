@@ -12,7 +12,7 @@ urlpatterns = patterns('',
     url(r'^medactive/participants/(\w+)/side_effects_survey_responses.json$', 'medactive.views.side_effects_survey_responses'),
     url(r'^medactive/participants/(\w+)/symptoms_survey_responses.json$', 'medactive.views.symptoms_survey_responses'),
     url(r'^medactive/participants/(\w+)/sent_messages.json$', 'medactive.views.sent_messages'),
-    url(r'^medactive/participants/(\w+)/clinician_alerts/(\w+).json$', 'medactive.views.find_uncleared_alert'),
+    url(r'^medactive/participants/(\w+)/clinician_alerts.json$', 'medactive.views.uncleared_clinician_alerts'),
     url(r'^medactive/participants/(\w+)/latest_action.json$', 'medactive.views.latest_action'),
     url(r'^medactive/contact_research_staff.json$', 'medactive.views.contact_research_staff'),
 

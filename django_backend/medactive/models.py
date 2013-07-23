@@ -73,6 +73,7 @@ class SymptomsSurveyResponse(models.Model):
 
 class SentMessage(models.Model):
   id = models.TextField(primary_key=True)
+  eventDateTime = models.DateTimeField()
   FEATURE_VALUE_DT_context = models.TextField()
   FEATURE_VALUE_DT_date = models.TextField()
 
@@ -88,6 +89,8 @@ class ClinicianAlert(models.Model):
   contacted_patient = models.BooleanField()
   aware_of_issue = models.BooleanField()
   will_discuss = models.BooleanField()
+  problem_details = models.TextField()
+  participant_requests_contact = models.BooleanField()
 
   class Meta:
     db_table = 'clinician_alerts'

@@ -22,7 +22,7 @@ define([
     },
 
     problemDetails: function() {
-      return JSON.parse(this.get("problem_details"));
+      return JSON.parse(this.get("problem_details").replace(/'/g, "\""));
     },
 
     participantRequestsContact: function() {

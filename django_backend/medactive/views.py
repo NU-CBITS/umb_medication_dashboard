@@ -77,41 +77,89 @@ def user_config(request, participant_id):
   return HttpResponse(user_config_json, content_type="application/json")
 
 @login_required
-def find_uncleared_alert(request, participant_id, alert_type):
-  alerts = ClinicianAlert.objects.filter(participant_id=participant_id, type=alert_type, is_cleared=False)
-  if len(alerts) == 0 and pending_alert_conditions(participant_id, alert_type):
-    alerts = [ClinicianAlert.objects.create(participant_id=participant_id, type=alert_type)]
+def uncleared_clinician_alerts(request, participant_id):
+  alerts = []
+  alert_types = ["non_adherence", "side_effects", "symptoms"]
+  for alert_type in alert_types:
+    alert = find_uncleared_alert(participant_id, alert_type)
+    if alert != None:
+      alerts.append(alert)
   alerts_json = serializers.serialize("json", alerts)
   return HttpResponse(alerts_json, content_type="application/json")
 
-def pending_alert_conditions(participant_id, alert_type):
-  last_cleared_alerts = ClinicianAlert.objects.filter(participant_id=participant_id, type=alert_type, is_cleared=True).order_by('-created_at')[:1]
-  negative_responses = []
-  if alert_type == "medication":
-    negative_responses = pending_negative_med_prompt_responses(last_cleared_alerts, participant_id)
+def find_uncleared_alert(participant_id, alert_type):
+  alerts = ClinicianAlert.objects.filter(participant_id=participant_id, type=alert_type, is_cleared=False) or []
+  if len(alerts) == 0:
+    last_cleared_alerts = ClinicianAlert.objects.filter(participant_id=participant_id, type=alert_type, is_cleared=True).order_by('-created_at')[:1]
+    last_alert_timestamp = None
+    if len(last_cleared_alerts) == 1:
+      last_alert_timestamp = last_cleared_alerts[0].updated_at
+    details = pending_alert_details(last_alert_timestamp, participant_id, alert_type)
+    if len(details) > 0:
+      participant_requests_contact = any_contact_requests(last_alert_timestamp, participant_id, alert_type)
+      alert = ClinicianAlert.objects.create(participant_id=participant_id, type=alert_type,
+        problem_details=details, participant_requests_contact=participant_requests_contact)
+      alerts.append(alert)
+  if len(alerts) == 1:
+    return alerts[0]
+  return None
+
+def pending_alert_details(last_alert_timestamp, participant_id, alert_type):
+  if alert_type == "non_adherence":
+    return pending_negative_med_prompt_responses(last_alert_timestamp, participant_id)
   elif alert_type == "side_effects":
-    negative_responses = pending_negative_side_effects_responses(last_cleared_alerts, participant_id)
+    return pending_negative_side_effects_responses(last_alert_timestamp, participant_id)
   elif alert_type == "symptoms":
-    negative_responses = pending_negative_symptoms_responses(last_cleared_alerts, participant_id)
-  return len(negative_responses) > 0
+    return pending_negative_symptoms_responses(last_alert_timestamp, participant_id)
 
-def pending_negative_med_prompt_responses(last_cleared_alerts, participant_id):
+def pending_negative_med_prompt_responses(last_alert_timestamp, participant_id):
   responses = MedPromptResponse.objects.using(participant_id)
-  if len(last_cleared_alerts) == 1:
-    responses = responses.filter(eventDateTime__gte=last_cleared_alerts[0].created_at)
-  return responses.filter(FEATURE_VALUE_DT_reason_for_missing='It makes me feel bad.')
+  if last_alert_timestamp != None:
+    responses = responses.filter(eventDateTime__gte=last_alert_timestamp)
+  responses = responses.filter(FEATURE_VALUE_DT_reason_for_missing='It makes me feel bad.')
+  details = (r.FEATURE_VALUE_DT_doseTime for r in responses)
+  return filter(None, details)
 
-def pending_negative_side_effects_responses(last_cleared_alerts, participant_id):
+def pending_negative_side_effects_responses(last_alert_timestamp, participant_id):
+  HIGH_FREQ = 'Always'
   responses = SideEffectsSurveyResponse.objects.using(participant_id)
-  if len(last_cleared_alerts) == 1:
-    responses = responses.filter(eventDateTime__gte=last_cleared_alerts[0].created_at)
-  return responses.filter(Q(FEATURE_VALUE_DT_weight_concern_distress='Always')|Q(FEATURE_VALUE_DT_sexual_problems_distress='Always')|Q(FEATURE_VALUE_DT_insomnia_distress='Always')|Q(FEATURE_VALUE_DT_restlessness_distress='Always')|Q(FEATURE_VALUE_DT_low_energy_distress='Always')|Q(FEATURE_VALUE_DT_not_like_self_distress='Always')|Q(FEATURE_VALUE_DT_excess_sedation_distress='Always')|Q(FEATURE_VALUE_DT_poor_concentration_distress='Always')|Q(FEATURE_VALUE_DT_trembling_distress='Always'))
+  if last_alert_timestamp != None:
+    responses = responses.filter(eventDateTime__gte=last_alert_timestamp)
+  responses = responses.filter(Q(FEATURE_VALUE_DT_weight_concern_distress=HIGH_FREQ)|Q(FEATURE_VALUE_DT_sexual_problems_distress=HIGH_FREQ)|Q(FEATURE_VALUE_DT_insomnia_distress=HIGH_FREQ)|Q(FEATURE_VALUE_DT_restlessness_distress=HIGH_FREQ)|Q(FEATURE_VALUE_DT_low_energy_distress=HIGH_FREQ)|Q(FEATURE_VALUE_DT_not_like_self_distress=HIGH_FREQ)|Q(FEATURE_VALUE_DT_excess_sedation_distress=HIGH_FREQ)|Q(FEATURE_VALUE_DT_poor_concentration_distress=HIGH_FREQ)|Q(FEATURE_VALUE_DT_trembling_distress=HIGH_FREQ))
+  details = []
+  details.append(next(("index" for r in responses if r.FEATURE_VALUE_DT_weight_concern_distress == HIGH_FREQ), None))
+  details.append(next(("sexual_problems" for r in responses if r.FEATURE_VALUE_DT_sexual_problems_distress == HIGH_FREQ), None))
+  details.append(next(("insomnia" for r in responses if r.FEATURE_VALUE_DT_insomnia_distress == HIGH_FREQ), None))
+  details.append(next(("restlessness" for r in responses if r.FEATURE_VALUE_DT_restlessness_distress == HIGH_FREQ), None))
+  details.append(next(("low_energy" for r in responses if r.FEATURE_VALUE_DT_low_energy_distress == HIGH_FREQ), None))
+  details.append(next(("not_like_self" for r in responses if r.FEATURE_VALUE_DT_not_like_self_distress == HIGH_FREQ), None))
+  details.append(next(("excess_sedation" for r in responses if r.FEATURE_VALUE_DT_excess_sedation_distress == HIGH_FREQ), None))
+  details.append(next(("poor_concentration" for r in responses if r.FEATURE_VALUE_DT_poor_concentration_distress == HIGH_FREQ), None))
+  details.append(next(("trembling" for r in responses if r.FEATURE_VALUE_DT_trembling_distress == HIGH_FREQ), None))
+  return filter(None, details)
 
-def pending_negative_symptoms_responses(last_cleared_alerts, participant_id):
+def pending_negative_symptoms_responses(last_alert_timestamp, participant_id):
+  HIGH_FREQ = 'Almost all of the time'
   responses = SymptomsSurveyResponse.objects.using(participant_id)
-  if len(last_cleared_alerts) == 1:
-    responses = responses.filter(eventDateTime__gte=last_cleared_alerts[0].created_at)
-  return responses.filter(Q(FEATURE_VALUE_DT_paranoia_frequency='Always')|Q(FEATURE_VALUE_DT_media_communication_frequency='Always')|Q(FEATURE_VALUE_DT_thought_insertion_frequency='Always')|Q(FEATURE_VALUE_DT_special_mission_frequency='Always')|Q(FEATURE_VALUE_DT_thought_broadcasting_frequency='Always')|Q(FEATURE_VALUE_DT_hallucinations_frequency='Always')|Q(FEATURE_VALUE_DT_confused_frequency='Always')|Q(FEATURE_VALUE_DT_thought_disorders_frequency='Always'))
+  if last_alert_timestamp != None:
+    responses = responses.filter(eventDateTime__gte=last_alert_timestamp)
+  responses = responses.filter(Q(FEATURE_VALUE_DT_paranoia_frequency=HIGH_FREQ)|Q(FEATURE_VALUE_DT_media_communication_frequency=HIGH_FREQ)|Q(FEATURE_VALUE_DT_thought_insertion_frequency=HIGH_FREQ)|Q(FEATURE_VALUE_DT_special_mission_frequency=HIGH_FREQ)|Q(FEATURE_VALUE_DT_thought_broadcasting_frequency=HIGH_FREQ)|Q(FEATURE_VALUE_DT_hallucinations_frequency=HIGH_FREQ)|Q(FEATURE_VALUE_DT_confused_frequency=HIGH_FREQ)|Q(FEATURE_VALUE_DT_thought_disorders_frequency=HIGH_FREQ))
+  details = []
+  details.append(next(("index" for r in responses if r.FEATURE_VALUE_DT_paranoia_frequency == HIGH_FREQ), None))
+  details.append(next(("media_communication" for r in responses if r.FEATURE_VALUE_DT_media_communication_frequency == HIGH_FREQ), None))
+  details.append(next(("thought_insertion" for r in responses if r.FEATURE_VALUE_DT_thought_insertion_frequency == HIGH_FREQ), None))
+  details.append(next(("special_mission" for r in responses if r.FEATURE_VALUE_DT_special_mission_frequency == HIGH_FREQ), None))
+  details.append(next(("thought_broadcasting" for r in responses if r.FEATURE_VALUE_DT_thought_broadcasting_frequency == HIGH_FREQ), None))
+  details.append(next(("hallucinations" for r in responses if r.FEATURE_VALUE_DT_hallucinations_frequency == HIGH_FREQ), None))
+  details.append(next(("confused" for r in responses if r.FEATURE_VALUE_DT_confused_frequency == HIGH_FREQ), None))
+  details.append(next(("thought_disorders" for r in responses if r.FEATURE_VALUE_DT_thought_disorders_frequency == HIGH_FREQ), None))
+  return filter(None, details)
+
+def any_contact_requests(last_alert_timestamp, participant_id, alert_type):
+  messages = SentMessage.objects.using(participant_id).filter(FEATURE_VALUE_DT_context=alert_type)
+  if last_alert_timestamp != None:
+    messages = messages.filter(eventDateTime__gte=last_alert_timestamp)
+  return len(messages) > 0
 
 @login_required
 @cache_page()
