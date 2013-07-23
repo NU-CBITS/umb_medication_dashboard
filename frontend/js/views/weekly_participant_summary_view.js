@@ -45,7 +45,7 @@ define([
     setParticipant: function(model) {
       this.model = model;
 
-      this._renderHeader();
+      this.$("#header").html("Summary for " + this.model.patientName());
 
       this.medPromptView.collection = model.medPromptSurveys;
       this.medPromptView.model = model;
@@ -76,14 +76,13 @@ define([
     render: function() {
       this.$el.html(this.template());
       this._renderNavigation();
+      this._renderHeader();
 
       return this;
     },
 
     _renderHeader: function() {
-      this.$("#header").remove();
       this.$("#participant-summary").before(this.headerTemplate({
-        participant: this.model,
         helpModal: this.helpModal
       }));
     },
