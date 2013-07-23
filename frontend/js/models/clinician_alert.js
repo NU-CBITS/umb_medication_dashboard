@@ -23,6 +23,10 @@ define([
 
     problemDetails: function() {
       return JSON.parse(this.get("problem_details"));
+    },
+
+    participantRequestsContact: function() {
+      return this.get("participant_requests_contact");
     }
   });
 
