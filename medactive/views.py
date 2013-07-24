@@ -9,6 +9,11 @@ from medactive.models import MedPromptResponse, SideEffectsSurveyResponse, \
   ParticipantAction
 
 @login_required
+def group_summary(request):
+  from django.shortcuts import render_to_response
+  return render_to_response("index.html")
+
+@login_required
 def participants(request):
   participants = [
     "adam",
@@ -158,7 +163,7 @@ def any_contact_requests(last_alert_timestamp, participant_id, alert_type):
   return len(messages) > 0
 
 @login_required
-@cache_page()
+#@cache_page()
 def latest_action(request, participant_id):
   actions = ParticipantAction.objects.raw('select "id", "eventDateTime" from "medication_survey_responses" '\
     'union select "id", "eventDateTime" from "side_effects_survey_responses" '\

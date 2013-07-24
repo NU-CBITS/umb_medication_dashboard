@@ -5,6 +5,7 @@ from django.conf.urls import patterns, include, url
 # admin.autodiscover()
 
 urlpatterns = patterns('',
+    url(r'^medactive$', 'medactive.views.group_summary'),
     url(r'^accounts/login/$', 'django.contrib.auth.views.login'),
     url(r'^medactive/participants.json$', 'medactive.views.participants'),
     url(r'^medactive/participants/(\w+)/user_config.json$', 'medactive.views.user_config'),
