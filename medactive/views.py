@@ -176,6 +176,7 @@ def latest_action(request, participant_id):
 def contact_research_staff(request):
   from django.core.mail import send_mail
   send_mail('Clinician requires assistance', 'A clinician requires assistance', 'from@example.com', ['to@example.com'], fail_silently=True)
+  return HttpResponse(status=200)
 
 @login_required
 def dose_history(request, participant_id):

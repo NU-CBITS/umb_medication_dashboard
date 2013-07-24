@@ -28,6 +28,7 @@ define([
   "router",
   "backbone",
   "collections/participants",
+  "lib/django_csrf_helper",
   "bootstrap"
 ], function(Resources, MA_SIDE_EFFECTS, MA_SYMPTOMS, MA_MED_PROMPT, AppView, router,
             Backbone, Participants) {
