@@ -82,7 +82,7 @@ def user_config(request, participant_id):
 def update_clinician_alert(request, participant_id, alert_id):
   from django.core import serializers
   for alert in serializers.deserialize("json", request.body):
-    alert.save(using=participant_id)
+    alert.save()
   return HttpResponse()
 
 @login_required
@@ -96,7 +96,7 @@ def uncleared_clinician_alerts(request, participant_id):
   return respond_with_json(alerts)
 
 def find_uncleared_alert(participant_id, alert_type):
-  alert_manager = ClinicianAlert.objects.using(participant_id)
+  alert_manager = ClinicianAlert.objects
   alerts = alert_manager.filter(participant_id=participant_id, type=alert_type, is_cleared=False) or []
   if len(alerts) == 0:
     last_cleared_alerts = alert_manager.filter(participant_id=participant_id, type=alert_type, is_cleared=True).order_by('-created_at')[:1]
