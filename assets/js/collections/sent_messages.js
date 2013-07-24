@@ -17,7 +17,7 @@ define([
     },
 
     url: function() {
-      return Resources[this.environment].urlRoot + this.appCode + "/participants/" + this.user.id + "/sent_messages.json";
+      return Resources[this.environment].urlRoot + this.appCode + "/participants/" + this.user.id + "/sent_messages";
     },
 
     countByContextAndDate: function(context, date) {

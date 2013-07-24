@@ -12,4 +12,5 @@ class ClinicianAlert(models.Model):
   participant_requests_contact = models.BooleanField()
 
   class Meta:
+    app_label = 'medactive'
     db_table = 'clinician_alerts'

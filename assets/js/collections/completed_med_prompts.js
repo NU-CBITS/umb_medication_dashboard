@@ -19,7 +19,7 @@ define([
     },
 
     url: function() {
-      return Resources[this.environment].urlRoot + this.appCode + "/participants/" + this.user.id + "/med_prompt_survey_responses.json";
+      return Resources[this.environment].urlRoot + this.appCode + "/participants/" + this.user.id + "/med_prompt_survey_responses";
     },
 
     responseStatus: function(dose, date) {

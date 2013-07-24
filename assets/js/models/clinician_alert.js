@@ -5,6 +5,17 @@ define([
   var CompletedMedPrompt = Backbone.Model.extend({
     parse: parser,
 
+    toJSON: function(options) {
+      var fields = _.clone(this.attributes);
+      delete fields.id;
+
+      return [{
+        pk: this.id,
+        model: "medactive.clinicianalert",
+        fields: fields
+      }];
+    },
+
     createdAt: function() {
       return this.get("created_at");
     },

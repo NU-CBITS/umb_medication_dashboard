@@ -13,7 +13,7 @@ define([
     },
 
     url: function() {
-      return Resources[this.environment].urlRoot + this.appCode + "/participants/" + this.user.id + "/clinician_alerts.json";
+      return Resources[this.environment].urlRoot + this.appCode + "/participants/" + this.user.id + "/clinician_alerts";
     },
 
     getType: function(type) {

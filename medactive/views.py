@@ -79,6 +79,13 @@ def user_config(request, participant_id):
   return HttpResponse(user_config_json, content_type="application/json")
 
 @login_required
+def update_clinician_alert(request, participant_id, alert_id):
+  from django.core import serializers
+  for alert in serializers.deserialize("json", request.body):
+    alert.save(using=participant_id)
+  return HttpResponse()
+
+@login_required
 def uncleared_clinician_alerts(request, participant_id):
   alerts = []
   alert_types = ["non_adherence", "side_effects", "symptoms"]
@@ -89,16 +96,17 @@ def uncleared_clinician_alerts(request, participant_id):
   return respond_with_json(alerts)
 
 def find_uncleared_alert(participant_id, alert_type):
-  alerts = ClinicianAlert.objects.filter(participant_id=participant_id, type=alert_type, is_cleared=False) or []
+  alert_manager = ClinicianAlert.objects.using(participant_id)
+  alerts = alert_manager.filter(participant_id=participant_id, type=alert_type, is_cleared=False) or []
   if len(alerts) == 0:
-    last_cleared_alerts = ClinicianAlert.objects.filter(participant_id=participant_id, type=alert_type, is_cleared=True).order_by('-created_at')[:1]
+    last_cleared_alerts = alert_manager.filter(participant_id=participant_id, type=alert_type, is_cleared=True).order_by('-created_at')[:1]
     last_alert_timestamp = None
     if len(last_cleared_alerts) == 1:
       last_alert_timestamp = last_cleared_alerts[0].updated_at
     details = pending_alert_details(last_alert_timestamp, participant_id, alert_type)
     if len(details) > 0:
       participant_requests_contact = any_contact_requests(last_alert_timestamp, participant_id, alert_type)
-      alert = ClinicianAlert.objects.create(participant_id=participant_id, type=alert_type,
+      alert = alert_manager.create(participant_id=participant_id, type=alert_type,
         problem_details=details, participant_requests_contact=participant_requests_contact)
       alerts.append(alert)
   if len(alerts) == 1:

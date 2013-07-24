@@ -10,7 +10,7 @@ define([
     },
 
     url: function() {
-      return Resources[this.environment].urlRoot + this.appCode + "/participants/" + this.user.id + "/latest_action.json";
+      return Resources[this.environment].urlRoot + this.appCode + "/participants/" + this.user.id + "/latest_action";
     },
 
     parse: function(data, options) {

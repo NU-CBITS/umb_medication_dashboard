@@ -20,7 +20,7 @@ define([
     model: User,
 
     url: function() {
-      return Resources[this.environment].urlRoot + this.appCode + "/participants.json";
+      return Resources[this.environment].urlRoot + this.appCode + "/participants";
     },
 
     fetchAll: function() {

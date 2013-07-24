@@ -18,7 +18,7 @@ define([
     },
 
     url: function() {
-      return Resources[this.environment].urlRoot + this.appCode + "/participants/" + this.user.id + "/" + this.survey.name + "_survey_responses.json";
+      return Resources[this.environment].urlRoot + this.appCode + "/participants/" + this.user.id + "/" + this.survey.name + "_survey_responses";
     },
 
     responseStatus: function(pageName, date) {

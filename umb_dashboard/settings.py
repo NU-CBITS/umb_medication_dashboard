@@ -14,48 +14,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'umb_medactive',
         'USER': 'umb',
-        'PASSWORD': 'secret',
-        'HOST': '',
-        'PORT': '',
-    },
-    'adam': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'umb_adam',
-        'USER': 'umb',
-        'PASSWORD': 'secret',
-        'HOST': '',
-        'PORT': '',
-    },
-    'barbara': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'umb_barbara',
-        'USER': 'umb',
-        'PASSWORD': 'secret',
-        'HOST': '',
-        'PORT': '',
-    },
-    'chris': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'umb_chris',
-        'USER': 'umb',
-        'PASSWORD': 'secret',
-        'HOST': '',
-        'PORT': '',
-    },
-    'dalila': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'umb_dalila',
-        'USER': 'umb',
-        'PASSWORD': 'secret',
-        'HOST': '',
-        'PORT': '',
-    },
-    'emmitt': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'umb_emmitt',
-        'USER': 'umb',
-        'PASSWORD': 'secret',
-        'HOST': '',
+        'PASSWORD': '3fSlgW2HOuq5',
+        'HOST': '127.0.0.1',
         'PORT': '',
     }
 }
@@ -100,7 +60,7 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = '/home/ericcf/assets/'
+STATIC_ROOT = '/var/www/django/umb_medication_dashboard/assets/'
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
@@ -111,7 +71,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    "/home/ericcf/adherence_dashboard/assets",
+    "/var/www/django/umb_medication_dashboard/adherence_dashboard/assets",
 )
 
 # List of finder classes that know how to find static files in
@@ -151,7 +111,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    "/home/ericcf/adherence_dashboard/templates"
+    "/var/www/django/umb_medication_dashboard/adherence_dashboard/templates"
 )
 
 INSTALLED_APPS = (
@@ -207,3 +167,5 @@ CACHES = {
         }
     }
 }
+
+LOGIN_URL = '/umb/accounts/login/'

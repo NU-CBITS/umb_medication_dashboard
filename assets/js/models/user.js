@@ -11,7 +11,7 @@ define([
     },
 
     url: function() {
-      return Resources[this.environment].urlRoot + this.appCode + "/participants/" + this.id + "/user_config.json";
+      return Resources[this.environment].urlRoot + this.appCode + "/participants/" + this.id + "/user_config";
     },
 
     doses: function() {
