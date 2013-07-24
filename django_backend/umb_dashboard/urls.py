@@ -14,6 +14,7 @@ urlpatterns = patterns('',
     url(r'^medactive/participants/(\w+)/sent_messages.json$', 'medactive.views.sent_messages'),
     url(r'^medactive/participants/(\w+)/clinician_alerts.json$', 'medactive.views.uncleared_clinician_alerts'),
     url(r'^medactive/participants/(\w+)/latest_action.json$', 'medactive.views.latest_action'),
+    url(r'^medactive/participants/(\w+)/dose_history.json$', 'medactive.views.dose_history'),
     url(r'^medactive/contact_research_staff.json$', 'medactive.views.contact_research_staff'),
 
     # Uncomment the admin/doc line below to enable admin documentation:

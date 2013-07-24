@@ -1,11 +1,12 @@
 from django.http import HttpResponse
-from django.core import serializers
 from django.views.decorators.cache import cache_page
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 import json
+from umb_dashboard.views import respond_with_json
 from medactive.models import MedPromptResponse, SideEffectsSurveyResponse, \
-  SymptomsSurveyResponse, SentMessage, ClinicianAlert, ParticipantAction
+  SymptomsSurveyResponse, SentMessage, ClinicianAlert, DoseHistory, \
+  ParticipantAction
 
 @login_required
 def participants(request):
@@ -20,32 +21,28 @@ def participants(request):
   return HttpResponse(participants_json, content_type="application/json")
 
 @login_required
-@cache_page()
+#@cache_page()
 def med_prompt_survey_responses(request, participant_id):
   responses = MedPromptResponse.objects.using(participant_id).all()
-  responses_json = serializers.serialize("json", responses)
-  return HttpResponse(responses_json, content_type="application/json")
+  return respond_with_json(responses)
 
 @login_required
-@cache_page()
+#@cache_page()
 def side_effects_survey_responses(request, participant_id):
   responses = SideEffectsSurveyResponse.objects.using(participant_id).all()
-  responses_json = serializers.serialize("json", responses)
-  return HttpResponse(responses_json, content_type="application/json")
+  return respond_with_json(responses)
 
 @login_required
-@cache_page()
+#@cache_page()
 def symptoms_survey_responses(request, participant_id):
   responses = SymptomsSurveyResponse.objects.using(participant_id).all()
-  responses_json = serializers.serialize("json", responses)
-  return HttpResponse(responses_json, content_type="application/json")
+  return respond_with_json(responses)
 
 @login_required
-@cache_page()
+#@cache_page()
 def sent_messages(request, participant_id):
   messages = SentMessage.objects.using(participant_id).all()
-  messages_json = serializers.serialize("json", messages)
-  return HttpResponse(messages_json, content_type="application/json")
+  return respond_with_json(messages)
 
 @login_required
 def user_config(request, participant_id):
@@ -84,8 +81,7 @@ def uncleared_clinician_alerts(request, participant_id):
     alert = find_uncleared_alert(participant_id, alert_type)
     if alert != None:
       alerts.append(alert)
-  alerts_json = serializers.serialize("json", alerts)
-  return HttpResponse(alerts_json, content_type="application/json")
+  return respond_with_json(alerts)
 
 def find_uncleared_alert(participant_id, alert_type):
   alerts = ClinicianAlert.objects.filter(participant_id=participant_id, type=alert_type, is_cleared=False) or []
@@ -169,10 +165,14 @@ def latest_action(request, participant_id):
     'union select "id", "eventDateTime" from "symptoms_survey_responses" '\
     'union select "id", "eventDateTime" from "sent_messages" '\
     'order by "eventDateTime" desc limit(1)').using(participant_id)
-  actions_json = serializers.serialize("json", actions)
-  return HttpResponse(actions_json, content_type="application/json")
+  return respond_with_json(actions)
 
 @login_required
 def contact_research_staff(request):
   from django.core.mail import send_mail
   send_mail('Clinician requires assistance', 'A clinician requires assistance', 'from@example.com', ['to@example.com'], fail_silently=True)
+
+@login_required
+def dose_history(request, participant_id):
+  doses = DoseHistory.objects.using(participant_id).all()
+  return respond_with_json(doses)
