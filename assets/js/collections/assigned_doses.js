@@ -3,6 +3,8 @@ define([
   "models/dose"
 ], function(Resources, Dose) {
   var AssignedDoses = function(models, options) {
+    var self = this;
+
     this.environment = options.environment;
     this.appCode = options.appCode;
     this.user = options.user;
@@ -17,6 +19,7 @@ define([
             doses: doses(dosesAssignment)
           });
         });
+      });
 
       return req;
     };
