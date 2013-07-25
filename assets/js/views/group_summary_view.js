@@ -40,8 +40,7 @@ define([
         participants: this.collection,
         nonadherenceDueToSideEffects: this._nonadherenceDueToSideEffects,
         alwaysBotheredBy: this._alwaysBotheredBy,
-        previousWeekAdherencePct: this._previousWeekAdherencePct,
-        previousMonthAdherencePct: this._previousMonthAdherencePct,
+        previousSpanAdherencePct: this._previousSpanAdherencePct,
         helpModal: this.helpModal,
         DateFormatter: DateFormatter
       }));
