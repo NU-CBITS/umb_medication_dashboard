@@ -25,7 +25,7 @@ define([
     };
 
     function url() {
-      return Resources[this.environment].urlRoot + this.appCode + "/participants/" + this.user.id + "/sent_messages";
+      return Resources[self.environment].urlRoot + self.appCode + "/participants/" + self.user.id + "/dose_history";
     }
 
     function isoDate(dosesAssignment) {
