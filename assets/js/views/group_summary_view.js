@@ -61,6 +61,11 @@ define([
       var participant = this.collection.get(options.participantId);
       var alert = participant.clinicianAlerts.getType(options.alertType);
       this.alertViews[options.alertType].set(participant, alert);
+      var self = this;
+      this.alertViews[options.alertType].on("cleared", function() {
+        $(event.currentTarget).remove();
+        self.alertViews[options.alertType].off();
+      });
       $(options.target).modal("show");
     },
 

@@ -59,6 +59,7 @@ define([
     _clearAlert: function(event) {
       this.model.save({ is_cleared: true });
       this._hideAlert(event);
+      this.trigger("cleared");
     }
   });
 
