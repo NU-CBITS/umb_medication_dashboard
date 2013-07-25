@@ -65,8 +65,8 @@ define([
       $(options.target).modal("show");
     },
 
-    _previousWeekAdherencePct: function(participant) {
-      var dates = (new Calendar()).dates("iso8601");
+    _previousSpanAdherencePct: function(participant, days) {
+      var dates = (new Calendar()).dates("iso8601", { days: days });
       var adherentDates = _.filter(dates, function(date) {
         return allDosesTaken(date);
       });
@@ -79,10 +79,7 @@ define([
         });
       }
 
-      return adherentDates.length / dates.length;
-    },
-
-    _previousMonthAdherencePct: function(participant) {
+      return Math.round(100 * adherentDates.length / dates.length);
     }
   });
 
