@@ -24,6 +24,10 @@ define([
       return req;
     };
 
+    this.getValues = function() {
+      return this.values;
+    };
+
     function url() {
       return Resources[self.environment].urlRoot + self.appCode + "/participants/" + self.user.id + "/dose_history";
     }

@@ -44,7 +44,7 @@ define([
     },
 
     getAssignedDoses: function() {
-      return this.assignedDoses;
+      return this.assignedDoses.getValues();
     },
 
     getCurrentDoses: function() {
