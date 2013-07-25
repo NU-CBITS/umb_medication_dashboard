@@ -44,11 +44,11 @@ define([
     },
 
     getAssignedDoses: function() {
-      return this.assignedDoses.getValues();
+      return this.assignedDoses;
     },
 
     getCurrentDoses: function() {
-      return (_.last(this.getAssignedDoses()) || {}).doses;
+      return (_.last(this.getAssignedDoses().getValues()) || {}).doses;
     },
 
     setAssignedDoses: function(dosesByStartDate) {
