@@ -28,7 +28,7 @@ define([
       return this.values;
     };
 
-    this.getValuesOnDate(date) {
+    this.getValuesOnDate = function(date) {
       return _.last(this.values, function(dosesAssignment) {
         return dosesAssignment.startDate <= date;
       });
