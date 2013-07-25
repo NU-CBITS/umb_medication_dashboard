@@ -75,7 +75,7 @@ define([
         var dosesOnDate = participant.getAssignedDoses().getValuesOnDate(date).doses;
 
         return _.all(dosesOnDate, function(dose) {
-          return participant.getCompletedMedPrompts().responseStatus(dose, date) === "positive";
+          return participant.medPromptSurveys.responseStatus(dose, date) === "positive";
         });
       }
 

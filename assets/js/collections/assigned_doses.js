@@ -29,9 +29,11 @@ define([
     };
 
     this.getValuesOnDate = function(date) {
-      return _.last(this.values, function(dosesAssignment) {
+      var values = _.last(this.values, function(dosesAssignment) {
         return dosesAssignment.startDate <= date;
       });
+
+      return values ? values[0] : {};
     };
 
     function url() {
