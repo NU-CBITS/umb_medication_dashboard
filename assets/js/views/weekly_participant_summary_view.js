@@ -27,6 +27,8 @@ define([
         survey: MA_MED_PROMPT,
         calendar: options.calendar
       });
+      this.medPromptView.$el.addClass("active");
+      this.medPromptView.$el.attr("id", "medication");
       this.$("#participant-summary").append(this.medPromptView.$el);
 
       this.surveyViews = {};
@@ -36,6 +38,7 @@ define([
           name: surveyName,
           calendar: options.calendar
         });
+        this.medPromptView.$el.attr("id", surveyName);
         self.$("#participant-summary").append(self.surveyViews[surveyName].$el);
       });
     },

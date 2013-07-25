@@ -1,8 +1,5 @@
-<table>
+<table class="table table-striped table-bordered">
   <tbody>
-    <tr>
-      <td colspan="10" class="heading"><h3><%= surveyName %></h3></td>
-    </tr>
     <tr id="sent-messages"></tr>
     <% _.each(survey.pages, function(page, name) { %>
       <% if (page.summary) { %>
