@@ -1,10 +1,12 @@
 define([
   "backbone",
   "lib/date_formatter",
+  "models/calendar",
   "views/help_modal_partial",
   "views/clinician_alert_view",
   "text!templates/group_summary.tpl.html",
-], function(Backbone, DateFormatter, HelpModalPartial, ClinicianAlertView, template) {
+], function(Backbone, DateFormatter, Calendar, HelpModalPartial,
+            ClinicianAlertView, template) {
   var GroupSummaryView = Backbone.View.extend({
     initialize: function(options) {
       _.bindAll(this, "_nonadherenceDueToSideEffects", "_alwaysBotheredBy");
