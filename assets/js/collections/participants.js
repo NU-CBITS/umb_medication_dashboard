@@ -42,7 +42,8 @@ define([
             self.surveysRequest(participant),
             self.messagesRequest(participant),
             self.alertsRequest(participant),
-            self.latestActionRequest(participant)
+            self.latestActionRequest(participant),
+            self.doseHistoryRequest(participant)
           ];
         });
 
@@ -117,6 +118,16 @@ define([
       }));
 
       return participant.getLatestAction().fetch({ parse: true });
+    },
+
+    doseHistoryRequest: function(participant) {
+      participant.setAssignedDoses(new AssignedDoses({}, {
+        environment: this.environment,
+        appCode: this.appCode,
+        user: participant
+      }));
+
+      return participant.getAssignedDoses().fetch({ parse: true });
     }
   });
 

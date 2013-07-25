@@ -7,17 +7,12 @@ define([
     initialize: function(attributes, options) {
       this.environment = options.environment;
       this.appCode = options.appCode;
-      this.latestAction = null
+      this.latestAction = null;
+      this.assignedDoses = [];
     },
 
     url: function() {
       return Resources[this.environment].urlRoot + this.appCode + "/participants/" + this.id + "/user_config";
-    },
-
-    doses: function() {
-      return _.map(this.get("doses"), function(dose) {
-        return new Dose(dose);
-      });
     },
 
     patientId: function() {
@@ -46,6 +41,18 @@ define([
 
     setLatestAction: function(action) {
       this.latestAction = action;
+    },
+
+    getAssignedDoses: function() {
+      return this.assignedDoses;
+    },
+
+    getCurrentDoses: function() {
+      return (_.last(this.getAssignedDoses()) || {}).doses;
+    },
+
+    setAssignedDoses: function(dosesByStartDate) {
+      this.assignedDoses = dosesByStartDate;
     },
 
     _patient: function() {

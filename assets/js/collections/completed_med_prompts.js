@@ -45,16 +45,6 @@ define([
       });
     },
 
-    _isNonadherent: function(surveys) {
-      var self = this;
-
-      return _.any(this.user.doses(), function(dose) {
-        function atTime(survey) { return DateFormatter.timeStringToMeridian(survey.doseTime()) === dose.time(); }
-        return !_.find(surveys, atTime) ||
-          self._isNegative(_.filter(surveys, atTime), "index");
-      });
-    },
-
     _isNegative: function(surveys, pageName) {
       var self = this;
 

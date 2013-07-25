@@ -24,8 +24,8 @@
       <td>
         <a href="/weekly_summaries/<%= participant.patientId() %>" class="view-details"><%= participant.patientName() %></a>
       </td>
-      <td><%= participant.doses()[0].summary() %></td>
-      <td><%= _.map(participant.doses(), function(dose) { return dose.time(); }).join(", ") %></td>
+      <td><%= participant.getCurrentDoses()[0].summary() %></td>
+      <td><%= _.map(participant.getCurrentDoses(), function(dose) { return dose.time(); }).join(", ") %></td>
       <td>
         <%= previousWeekAdherencePct(participant) %>% / <%= previousMonthAdherencePct(participant) %>%
       </td>

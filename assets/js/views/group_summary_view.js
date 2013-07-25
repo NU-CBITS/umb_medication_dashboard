@@ -64,6 +64,11 @@ define([
     },
 
     _previousWeekAdherencePct: function(participant) {
+      var dates = (new Calendar()).dates("iso8601");
+
+      return _.filter(participant.assignedDoseHistory, function(dose) {
+        return _.contains(dates, dose.date) && wasTaken(assignedDose);
+      });
     },
 
     _previousMonthAdherencePct: function(participant) {
