@@ -13,7 +13,7 @@ define([
       options.calendar.on("periodChanged", this.render);
     },
 
-    tagName: "tbody",
+    className: "tab-pane",
 
     render: function() {
       this.$el.html(this.template({

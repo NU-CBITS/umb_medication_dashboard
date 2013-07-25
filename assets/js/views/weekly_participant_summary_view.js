@@ -82,7 +82,7 @@ define([
     },
 
     _renderHeader: function() {
-      this.$("#participant-summary").before(this.headerTemplate({
+      this.$("#participant-header").before(this.headerTemplate({
         helpModal: this.helpModal
       }));
     },

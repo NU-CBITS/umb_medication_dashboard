@@ -1,15 +1,19 @@
-<tr>
-  <td colspan="10"><h3>Medication Adherence</h3></td>
-</tr>
-<tr id="sent-messages"></tr>
-<tr>
-  <th colspan="3">
-  </th>
-  <% _.each(dates, function(date) { %>
-  <td>
-    <% _.each(dosesOnDate(date), function(dose) { %>
-      <%= statusIndicator(dose, date) %>
-    <% }); %>
-  </td>
-  <% }); %>
-</tr>
+<table>
+  <tbody>
+    <tr>
+      <td colspan="10"><h3>Medication Adherence</h3></td>
+    </tr>
+    <tr id="sent-messages"></tr>
+    <tr>
+      <th colspan="3">
+      </th>
+      <% _.each(dates, function(date) { %>
+      <td>
+        <% _.each(dosesOnDate(date), function(dose) { %>
+          <%= statusIndicator(dose, date) %>
+        <% }); %>
+      </td>
+      <% }); %>
+    </tr>
+  </tbody>
+</table>
