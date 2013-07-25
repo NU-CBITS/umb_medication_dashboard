@@ -15,8 +15,8 @@ define([
       .done(function(doseHistory) {
         _.each(doseHistory, function(dosesAssignment) {
           self.values.push({
-            startDate: isoDate(dosesAssignment),
-            doses: doses(dosesAssignment)
+            startDate: isoDate(dosesAssignment.fields.eventDateTime),
+            doses: doses(dosesAssignment.fields.doses)
           });
         });
       });
@@ -28,12 +28,12 @@ define([
       return Resources[self.environment].urlRoot + self.appCode + "/participants/" + self.user.id + "/dose_history";
     }
 
-    function isoDate(dosesAssignment) {
-      return dosesAssignment.eventDateTime.slice(0, 10);
+    function isoDate(eventDateTime) {
+      return eventDateTime.slice(0, 10);
     }
 
-    function doses(dosesAssignment) {
-      return _.map(JSON.parse(dosesAssignment.doses), function(doseAttrs) {
+    function doses(dosesJson) {
+      return _.map(JSON.parse(dosesJson), function(doseAttrs) {
         return new Dose(doseAttrs);
       });
     }
