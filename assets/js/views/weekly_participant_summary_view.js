@@ -38,7 +38,7 @@ define([
           name: surveyName,
           calendar: options.calendar
         });
-        this.medPromptView.$el.attr("id", surveyName);
+        self.surveyViews[surveyName].$el.attr("id", surveyName);
         self.$("#participant-summary").append(self.surveyViews[surveyName].$el);
       });
     },
