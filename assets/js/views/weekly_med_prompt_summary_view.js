@@ -12,7 +12,7 @@ define([
 
       render: function() {
         this.$el.html(this.template({
-          doses: this.model.doses(),
+          dosesOnDate: function(date) { return participant.getAssignedDoses().getValuesOnDate(date).doses; },
           dates: this.options.calendar.dates("iso8601"),
           statusIndicator: this._statusIndicator,
           DateFormatter: DateFormatter

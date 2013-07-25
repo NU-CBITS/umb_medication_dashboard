@@ -6,8 +6,10 @@
   <th colspan="3">
   </th>
   <% _.each(dates, function(date) { %>
-    <% _.each(dosesByDate(date), function(dose) { %>
-  <td><%= statusIndicator(dose, date) %></td>
+  <td>
+    <% _.each(dosesOnDate(date), function(dose) { %>
+      <%= statusIndicator(dose, date) %>
     <% }); %>
+  </td>
   <% }); %>
 </tr>
