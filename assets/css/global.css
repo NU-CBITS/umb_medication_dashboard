@@ -23,6 +23,7 @@ td.date-column, th.date-column {
 .status-indicator {
 	-webkit-transform: rotate(-60deg) skewX(-30deg) scale(1,.866);
   cursor: pointer;
+  margin-top: 1em;
 }
 .status-indicator:before {
 	-webkit-transform: rotate(-135deg) skewX(-45deg) scale(1.414,.707) translate(0,-50%);
