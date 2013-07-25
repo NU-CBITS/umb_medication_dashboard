@@ -6,9 +6,10 @@ define([
   "collections/completed_med_prompts",
   "collections/completed_surveys",
   "collections/sent_messages",
-  "collections/clinician_alerts"
+  "collections/clinician_alerts",
+  "collections/assigned_doses"
 ], function(Backbone, Resources, User, ParticipantAction, CompletedMedPrompts,
-            CompletedSurveys, SentMessages, ClinicianAlerts) {
+            CompletedSurveys, SentMessages, ClinicianAlerts, AssignedDoses) {
   var Participants = Backbone.Collection.extend({
     initialize: function(models, options) {
       this.environment = options.environment;
@@ -121,13 +122,13 @@ define([
     },
 
     doseHistoryRequest: function(participant) {
-      participant.setAssignedDoses(new AssignedDoses({}, {
+      participant.setAssignedDoses(new AssignedDoses({
         environment: this.environment,
         appCode: this.appCode,
         user: participant
       }));
 
-      return participant.getAssignedDoses().fetch({ parse: true });
+      return participant.getAssignedDoses().fetch();
     }
   });
 
