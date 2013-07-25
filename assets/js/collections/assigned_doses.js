@@ -2,7 +2,7 @@ define([
   "../../config/resource_locations",
   "models/dose"
 ], function(Resources, Dose) {
-   function AssignedDoses(models, options) {
+   function AssignedDoses(options) {
     var self = this;
 
     this.environment = options.environment;
