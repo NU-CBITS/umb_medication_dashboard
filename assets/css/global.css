@@ -1,5 +1,9 @@
 body {font: "Droid Sans"}
 
+td.date-column, th.date-column {
+  width: 4em;
+}
+
 .status-indicator,
 .status-indicator:before,
 .status-indicator:after {

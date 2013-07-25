@@ -6,9 +6,9 @@
     <tr>
       <th colspan="3" class="subheader">
         <%= page.summary %>
-      </td>
+      </th>
       <% _.each(dates, function(date) { %>
-      <td><%= statusIndicator(name, date) %></td>
+      <td class="date-column"><%= statusIndicator(name, date) %></td>
       <% }); %>
     </tr>
       <% } %>
