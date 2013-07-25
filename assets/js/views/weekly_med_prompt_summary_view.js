@@ -11,8 +11,9 @@ define([
       survey: { name: "medication" },
 
       render: function() {
+        var self = this;
         this.$el.html(this.template({
-          dosesOnDate: function(date) { return participant.getAssignedDoses().getValuesOnDate(date).doses; },
+          dosesOnDate: function(date) { return self.model.getAssignedDoses().getValuesOnDate(date).doses; },
           dates: this.options.calendar.dates("iso8601"),
           statusIndicator: this._statusIndicator,
           DateFormatter: DateFormatter
