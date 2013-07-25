@@ -67,10 +67,19 @@ define([
 
     _previousWeekAdherencePct: function(participant) {
       var dates = (new Calendar()).dates("iso8601");
-
-      return _.filter(participant.assignedDoseHistory, function(dose) {
-        return _.contains(dates, dose.date) && wasTaken(assignedDose);
+      var adherentDates = _.filter(dates, function(date) {
+        return allDosesTaken(date);
       });
+
+      function allDosesTaken(date) {
+        var dosesOnDate = participant.getAssignedDoses().getValuesOnDate(date).doses;
+
+        return _.all(dosesOnDate, function(dose) {
+          return participant.getCompletedMedPrompts().responseStatus(dose, date) === "positive";
+        });
+      }
+
+      return adherentDates.length / dates.length;
     },
 
     _previousMonthAdherencePct: function(participant) {

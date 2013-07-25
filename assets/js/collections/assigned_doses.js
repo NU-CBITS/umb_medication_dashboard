@@ -28,6 +28,12 @@ define([
       return this.values;
     };
 
+    this.getValuesOnDate(date) {
+      return _.last(this.values, function(dosesAssignment) {
+        return dosesAssignment.startDate <= date;
+      });
+    };
+
     function url() {
       return Resources[self.environment].urlRoot + self.appCode + "/participants/" + self.user.id + "/dose_history";
     }
