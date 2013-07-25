@@ -2,7 +2,7 @@ define([
   "../../config/resource_locations",
   "models/dose"
 ], function(Resources, Dose) {
-  var AssignedDoses = function(models, options) {
+   function AssignedDoses(models, options) {
     var self = this;
 
     this.environment = options.environment;
@@ -37,8 +37,8 @@ define([
         return new Dose(doseAttrs);
       });
     }
-  });
+  }
 
-  return SentMessages;
+  return AssignedDoses;
 });
 
