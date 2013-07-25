@@ -8,6 +8,7 @@ define([
     toJSON: function(options) {
       var fields = _.clone(this.attributes);
       delete fields.id;
+      fields.updated_at = (new Date()).toISOString();
 
       return [{
         pk: this.id,
