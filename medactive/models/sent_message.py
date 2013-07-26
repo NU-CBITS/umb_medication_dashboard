@@ -1,10 +1,13 @@
 from django.db import models
+from medactive.models.participant_model_manager import ParticipantModelManager
 
 class SentMessage(models.Model):
   id = models.TextField(primary_key=True)
   eventDateTime = models.DateTimeField()
-  FEATURE_VALUE_DT_context = models.TextField()
-  FEATURE_VALUE_DT_date = models.TextField()
+  context = models.TextField()
+  date = models.TextField()
+
+  objects = ParticipantModelManager()
 
   class Meta:
     db_table = 'sent_messages'

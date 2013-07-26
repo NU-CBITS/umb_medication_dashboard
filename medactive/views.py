@@ -34,19 +34,19 @@ def med_prompt_survey_responses(request, participant_id):
 @login_required
 #@cache_page()
 def side_effects_survey_responses(request, participant_id):
-  responses = SideEffectsSurveyResponse.objects.using(participant_id).all()
+  responses = SideEffectsSurveyResponse.objects.all_for_participant(participant_id)
   return respond_with_json(responses)
 
 @login_required
 #@cache_page()
 def symptoms_survey_responses(request, participant_id):
-  responses = SymptomsSurveyResponse.objects.using(participant_id).all()
+  responses = SymptomsSurveyResponse.objects.all_for_participant(participant_id)
   return respond_with_json(responses)
 
 @login_required
 #@cache_page()
 def sent_messages(request, participant_id):
-  messages = SentMessage.objects.using(participant_id).all()
+  messages = SentMessage.objects.all_for_participant(participant_id)
   return respond_with_json(messages)
 
 @login_required
