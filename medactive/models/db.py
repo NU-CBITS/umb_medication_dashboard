@@ -8,6 +8,6 @@ def participant_db_cursor(participant_id):
   
   return connection.cursor()
 
-def _db_name(self, participant_id):
+def _db_name(participant_id):
   return 'umb_' + participant_id
 
