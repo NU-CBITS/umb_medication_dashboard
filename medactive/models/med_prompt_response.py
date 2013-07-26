@@ -13,7 +13,7 @@ class MedPromptResponseManager(models.Manager):
              "FEATURE_VALUE_DT_index" AS "index",
              "FEATURE_VALUE_DT_date" AS "date",
              "FEATURE_VALUE_DT_reason_for_missing" AS "reason_for_missing",
-             "FEATURE_VALUE_DT_doseTime" AS "doseTime",
+             "FEATURE_VALUE_DT_doseTime" AS "doseTime"
       FROM "%s";""" % self.model._meta.db_table)
     result_list = []
     for row in cursor.fetchall():
