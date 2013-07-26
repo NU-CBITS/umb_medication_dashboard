@@ -1,9 +1,14 @@
 from django.db import models
 from medactive.models.db import participant_db_cursor
 
-def select_sql(model):
+def select_sql(model, cursor):
+  import re
+  cursor.execute('SELECT column_name FROM information_schema.columns WHERE table_name=\'%s\';' % model._meta.db_table)
+  db_col_names = (name[0] for name in cursor.fetchall())
   def alias(name):
-    return '"%s" AS "%s"' % (name, name.replace('FEATURE_VALUE_DT_', ''))
+    if 'FEATURE_VALUE_DT_' + name in db_col_names:
+      return '"FEATURE_VALUE_DT_%s" AS "%s"' % (name, name)
+    return '"%s"' % name
   cols = (alias(name) for name in model._meta.get_all_field_names())
 
   return 'SELECT %s FROM "%s";' % (', '.join(cols), model._meta.db_table)
@@ -11,7 +16,8 @@ def select_sql(model):
 class MedPromptResponseManager(models.Manager):
   def all_for_participant(self, participant_id):
     cursor = participant_db_cursor(participant_id)
-    cursor.execute(select_sql(self.model))
+    sql = select_sql(self.model, cursor)
+    cursor.execute(sql)
     desc = cursor.description
     result_list = [
       self.model(**dict(zip([col[0] for col in desc], row)))
