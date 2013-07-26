@@ -23,17 +23,18 @@ class ParticipantModelManager(models.Manager):
     return connection.cursor()
 
   def select_sql(self, cursor):
+    meta = self.model._meta
     col_name_query = 'SELECT column_name FROM information_schema.columns WHERE table_name=\'%s\';' % \
-      self.model._meta.db_table
+      meta.db_table
     cursor.execute(col_name_query)
     db_col_names = list(name[0] for name in cursor.fetchall())
     def alias(name):
       if 'FEATURE_VALUE_DT_' + name in db_col_names:
         return '"FEATURE_VALUE_DT_%s" AS "%s"' % (name, name)
       return '"%s"' % name
-    cols = (alias(name) for name in model._meta.get_all_field_names())
+    cols = (alias(name) for name in meta.get_all_field_names())
 
-    return 'SELECT %s FROM "%s";' % (', '.join(cols), model._meta.db_table)
+    return 'SELECT %s FROM "%s";' % (', '.join(cols), meta.db_table)
 
   def _db_name(self, participant_id):
     return 'umb_' + participant_id
