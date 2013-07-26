@@ -28,7 +28,7 @@ def participants(request):
 @login_required
 #@cache_page()
 def med_prompt_survey_responses(request, participant_id):
-  responses = MedPromptResponse.objects.for_participant(participant_id).all()
+  responses = MedPromptResponse.objects.all_for_participant(participant_id)
   return respond_with_json(responses)
 
 @login_required

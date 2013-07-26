@@ -3,11 +3,8 @@ from django.db import models
 import psycopg2
 
 class MedPromptResponseManager(models.Manager):
-  def for_participant(self, participant_id):
-    db_string = "host='%(HOST)' dbname='" + db_name(participant_id) + "' user='%(USER)' password='%(PASSWORD)'" % \
-      settings.PARTICIPANT_DB
-    connection = psycopg2.connect(db_string)
-    cursor = connection.cursor()
+  def all_for_participant(self, participant_id):
+    cursor = self._db_cursor(participant_id)
     cursor.execute("""
       SELECT "id",
              "eventDateTime",
@@ -17,7 +14,7 @@ class MedPromptResponseManager(models.Manager):
              "FEATURE_VALUE_DT_date" AS "date",
              "FEATURE_VALUE_DT_reason_for_missing" AS "reason_for_missing",
              "FEATURE_VALUE_DT_doseTime" AS "doseTime",
-      FROM "' + model._meta.db_table + '";""")
+      FROM "%s";""" % self.model._meta.db_table)
     result_list = []
     for row in cursor.fetchall():
       m = self.model(id=row[0], eventDateTime=row[1], surveyVersion=row[2],
@@ -26,6 +23,13 @@ class MedPromptResponseManager(models.Manager):
       result_list.append(p)
 
     return result_list
+
+  def _db_cursor(self, participant_id):
+    db_string = "host='%(HOST)' dbname='" + self._db_name(participant_id) + "' user='%(USER)' password='%(PASSWORD)'" % \
+      settings.PARTICIPANT_DB
+    connection = psycopg2.connect(db_string)
+    
+    return connection.cursor()
 
   def _db_name(self, participant_id):
     return 'umb_' + participant_id
