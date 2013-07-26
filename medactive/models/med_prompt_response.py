@@ -4,7 +4,7 @@ from medactive.models.db import participant_db_cursor
 def select_sql(model, cursor):
   import re
   cursor.execute('SELECT column_name FROM information_schema.columns WHERE table_name=\'%s\';' % model._meta.db_table)
-  db_col_names = (name[0] for name in cursor.fetchall())
+  db_col_names = list(name[0] for name in cursor.fetchall())
   def alias(name):
     if 'FEATURE_VALUE_DT_' + name in db_col_names:
       return '"FEATURE_VALUE_DT_%s" AS "%s"' % (name, name)
