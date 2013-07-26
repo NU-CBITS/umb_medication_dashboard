@@ -1,10 +1,9 @@
-from django.conf import settings
 from django.db import models
-import psycopg2
+from medactive.models import participant_db_cursor
 
 class MedPromptResponseManager(models.Manager):
   def all_for_participant(self, participant_id):
-    cursor = self._db_cursor(participant_id)
+    cursor = participant_db_cursor(participant_id)
     cursor.execute("""
       SELECT "id",
              "eventDateTime",
@@ -23,16 +22,6 @@ class MedPromptResponseManager(models.Manager):
       result_list.append(m)
 
     return result_list
-
-  def _db_cursor(self, participant_id):
-    db_string = ('host=\'%(HOST)s\' dbname=\'' + self._db_name(participant_id) + \
-      '\' user=\'%(USER)s\' password=\'%(PASSWORD)s\'') % settings.PARTICIPANT_DB
-    connection = psycopg2.connect(db_string)
-    
-    return connection.cursor()
-
-  def _db_name(self, participant_id):
-    return 'umb_' + participant_id
 
 class MedPromptResponse(models.Model):
   id = models.TextField(primary_key=True)
