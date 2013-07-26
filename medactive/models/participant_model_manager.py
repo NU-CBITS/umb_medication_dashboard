@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.db import models
 import psycopg2
 
 class ParticipantModelManager(models.Manager):
