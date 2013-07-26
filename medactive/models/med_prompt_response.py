@@ -25,7 +25,7 @@ class MedPromptResponseManager(models.Manager):
     return result_list
 
   def _db_cursor(self, participant_id):
-    db_string = "host='%(HOST)' dbname='" + self._db_name(participant_id) + "' user='%(USER)' password='%(PASSWORD)'" % \
+    db_string = "host='%(HOST)s' dbname='" + self._db_name(participant_id) + "' user='%(USER)s' password='%(PASSWORD)s'" % \
       settings.PARTICIPANT_DB
     connection = psycopg2.connect(db_string)
     
