@@ -1,5 +1,5 @@
 from django.db import models
-from medactive.db import participant_db_cursor
+from medactive.models.db import participant_db_cursor
 
 class MedPromptResponseManager(models.Manager):
   def all_for_participant(self, participant_id):

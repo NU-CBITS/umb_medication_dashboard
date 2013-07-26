@@ -5,3 +5,4 @@ from .participant_action import ParticipantAction
 from .sent_message import SentMessage
 from .side_effects_survey_response import SideEffectsSurveyResponse
 from .symptoms_survey_response import SymptomsSurveyResponse
+from .db import participant_db_cursor
