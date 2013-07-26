@@ -20,7 +20,7 @@ class MedPromptResponseManager(models.Manager):
       m = self.model(id=row[0], eventDateTime=row[1], surveyVersion=row[2],
         timeStarted=row[3], index=row[4], date=row[5],
         reason_for_missing=row[6], doseTime=row[7])
-      result_list.append(p)
+      result_list.append(m)
 
     return result_list
 
