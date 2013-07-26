@@ -5,7 +5,7 @@ var _ = require("../js/vendor/lodash-1.3.1.min"),
 var participantId = process.argv[2];
 var CHANCE_DIDNT_TAKE = 0.3;
 var CHANCE_DIDNT_RESPOND = 0.1;
-var REASONS_FOR_MISSING = ["It doesn't help me.", "I don't need it.", "It's okay to skip it.", "I don't have it with me.", "It makes me feel bad."];
+var REASONS_FOR_MISSING = ["It doesn't help me.", "I don't need it.", "It's okay to skip it.", "I don't have it with me.", "The side effects make me feel bad."];
 
 var date = new Date();
 var dates = _.map(_.range(-40, 1), function(days) {

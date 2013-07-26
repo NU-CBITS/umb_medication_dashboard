@@ -28,7 +28,7 @@ def participants(request):
 @login_required
 #@cache_page()
 def med_prompt_survey_responses(request, participant_id):
-  responses = MedPromptResponse.objects.using(participant_id).all()
+  responses = MedPromptResponse.objects.for_participant(participant_id).all()
   return respond_with_json(responses)
 
 @login_required
@@ -125,7 +125,7 @@ def pending_negative_med_prompt_responses(last_alert_timestamp, participant_id):
   responses = MedPromptResponse.objects.using(participant_id)
   if last_alert_timestamp != None:
     responses = responses.filter(eventDateTime__gte=last_alert_timestamp)
-  responses = responses.filter(FEATURE_VALUE_DT_reason_for_missing='It makes me feel bad.')
+  responses = responses.filter(FEATURE_VALUE_DT_reason_for_missing='The side effects make me feel bad.')
   details = (r.FEATURE_VALUE_DT_doseTime for r in responses)
   return filter(None, details)
 

@@ -28,7 +28,7 @@ define(["backbone"], function(Backbone) {
     },
 
     nonadherenceDueToSideEffects: function() {
-      return (this.get("reason_for_missing") === "It makes me feel bad.") ? this.get("date") : false;
+      return (this.get("reason_for_missing") === "The side effects make me feel bad.") ? this.get("date") : false;
     }
   });
 
