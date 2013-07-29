@@ -14,7 +14,7 @@ define([
     };
 
     function contactResearchStaff() {
-      $.post(Resources[options.environment].urlRoot + options.appCode + "/contact_research_staff.json", function(data) {
+      $.post(Resources[options.environment].urlRoot + options.appCode + "/contact_research_staff", function(data) {
       });
       hideModal();
     }

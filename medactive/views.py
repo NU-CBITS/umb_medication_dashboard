@@ -131,7 +131,10 @@ def latest_action(request, participant_id):
 @login_required
 def contact_research_staff(request):
   from django.core.mail import send_mail
-  send_mail('Clinician requires assistance', 'A clinician requires assistance', 'from@example.com', ['to@example.com'], fail_silently=True)
+  from django.conf import settings
+  send_mail('Clinician requires assistance', 'A clinician requires assistance',
+    settings.DEFAULT_FROM_EMAIL, settings.RESEARCH_STAFF_EMAILS, fail_silently=True)
+
   return HttpResponse(status=200)
 
 @login_required
