@@ -29,19 +29,18 @@ class ParticipantModelManager(models.Manager):
     return result_list
 
   def all_column_names(self, cursor):
-    meta = self.model._meta
     db_col_names = self.raw_column_names(cursor)
     def alias(name):
       if self.PR_COLUMN_PREFIX + name in db_col_names:
         return '"%s%s" AS "%s"' % (self.PR_COLUMN_PREFIX, name, name)
       return '"%s"' % name
-    cols = (alias(name) for name in meta.get_all_field_names())
+    cols = (alias(name) for name in self.model._meta.get_all_field_names())
 
     return ', '.join(cols)
 
   def raw_column_names(self, cursor):
     col_name_query = 'SELECT column_name FROM information_schema.columns WHERE table_name=\'%s\';' % \
-      meta.db_table
+      self.model._meta.db_table
     cursor.execute(col_name_query)
 
     return list(name[0] for name in cursor.fetchall())
