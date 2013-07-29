@@ -52,7 +52,7 @@ class SymptomsSurveyResponse(models.Model):
   level_of_distress = models.TextField()
   date = models.TextField()
 
-  objects = SymptomsSurveyResponseModelManager()
+  objects = SymptomsSurveyResponseManager()
 
   class Meta:
     db_table = 'symptoms_survey_responses'
