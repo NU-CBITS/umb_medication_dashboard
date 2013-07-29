@@ -1,15 +1,10 @@
 define(["backbone"], function(Backbone) {
   var CompletedMedPrompt = Backbone.Model.extend({
-    COLUMN_PREFIX_LENGTH: "FEATURE_VALUE_DT_".length,
-
     parse: function(data, options) {
-      var self = this,
-          parsed = {};
+      var parsed = {};
 
       _.each(data.fields, function(v, k) {
-        var attr = k.substr(self.COLUMN_PREFIX_LENGTH);
-
-        parsed[attr] = v;
+        parsed[k] = v;
       });
 
       return parsed;
