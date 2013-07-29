@@ -1,14 +1,9 @@
-define(["backbone"], function(Backbone) {
+define([
+  "backbone",
+  "lib/django_model_parser"
+], function(Backbone, parser) {
   var CompletedMedPrompt = Backbone.Model.extend({
-    parse: function(data, options) {
-      var parsed = {};
-
-      _.each(data.fields, function(v, k) {
-        parsed[k] = v;
-      });
-
-      return parsed;
-    },
+    parse: parser,
 
     doseTime: function() {
       return this.get("doseTime");

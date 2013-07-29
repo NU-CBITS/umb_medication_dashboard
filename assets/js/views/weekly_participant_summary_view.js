@@ -2,7 +2,7 @@ define([
   "backbone",
   "../../survey_definitions/ma/med_prompt",
   "lib/date_formatter",
-  "models/user",
+  "models/participant",
   "collections/sent_messages",
   "views/weekly_med_prompt_summary_view",
   "views/weekly_survey_summary_view",
@@ -10,7 +10,7 @@ define([
   "text!templates/weekly_participant_summary.tpl.html",
   "text!templates/_weekly_survey_header.tpl.html",
   "text!templates/_weekly_survey_navigation.tpl.html"
-], function(Backbone, MA_MED_PROMPT, DateFormatter, User,
+], function(Backbone, MA_MED_PROMPT, DateFormatter, Participant,
             SentMessages, WeeklyMedPromptSummaryView, WeeklySurveySummaryView,
             HelpModalPartial, template, headerTpl, navTpl) {
   var WeeklyParticipantSummaryView = Backbone.View.extend({

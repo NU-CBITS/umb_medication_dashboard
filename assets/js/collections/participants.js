@@ -1,14 +1,14 @@
 define([
   "backbone",
   "../../config/resource_locations",
-  "models/user",
+  "models/participant",
   "models/participant_action",
   "collections/completed_med_prompts",
   "collections/completed_surveys",
   "collections/sent_messages",
   "collections/clinician_alerts",
   "collections/assigned_doses"
-], function(Backbone, Resources, User, ParticipantAction, CompletedMedPrompts,
+], function(Backbone, Resources, Participant, ParticipantAction, CompletedMedPrompts,
             CompletedSurveys, SentMessages, ClinicianAlerts, AssignedDoses) {
   var Participants = Backbone.Collection.extend({
     initialize: function(models, options) {
@@ -18,7 +18,7 @@ define([
       this.appCode = options.appCode;
     },
 
-    model: User,
+    model: Participant,
 
     url: function() {
       return Resources[this.environment].urlRoot + this.appCode + "/participants";
@@ -30,7 +30,7 @@ define([
       var req = $.getJSON(this.url())
       .then(function(participantIds) {
         var requests = _.map(participantIds, function(id) {
-          var participant = new User({
+          var participant = new self.model({
             id: id
           }, {
             environment: self.environment,
@@ -56,7 +56,7 @@ define([
 
     userConfigRequest: function(participant) {
       var self = this;
-      var participantReq = participant.fetch().then(function(p) {
+      var participantReq = participant.fetch({ parse: true }).then(function(p) {
         self.add(participant);
       });
 
