@@ -1,26 +1,18 @@
 define([
-  "backbone",
-  "../../config/resource_locations",
-  "models/dose"
-], function(Backbone, Resources, Dose) {
+  "backbone"
+], function(Backbone) {
   var Participant = Backbone.Model.extend({
     initialize: function(attributes, options) {
-      this.environment = options.environment;
-      this.appCode = options.appCode;
       this.latestAction = null;
       this.assignedDoses = [];
     },
 
-    url: function() {
-      return Resources[this.environment].urlRoot + this.appCode + "/participants/" + this.id + "/user_config";
-    },
-
     patientId: function() {
-      return this._patient().id;
+      return this.id;
     },
 
     patientName: function() {
-      return this._patient().name;
+      return this.id;
     },
 
     lastMissedDoseDueToSideEffects: function() {
@@ -49,10 +41,6 @@ define([
 
     setAssignedDoses: function(dosesByStartDate) {
       this.assignedDoses = dosesByStartDate;
-    },
-
-    _patient: function() {
-      return _.find(this.get("people"), { type: "patient" });
     }
   });
 

@@ -41,35 +41,6 @@ def sent_messages(request, participant_id):
   return respond_with_json(messages)
 
 @login_required
-def user_config(request, participant_id):
-  names = {'adam':'Adam','barbara':'Barbara','chris':'Chris','dalila':'Dalila','emmitt':'Emmitt'}
-  config = {
-    "people":[
-      {
-        "id":participant_id,
-        "type":"patient",
-        "name":names[participant_id]
-      }
-    ],
-    "doses":[
-      {
-        "time": "04:00:00",
-        "medication":"Med1",
-        "strength":"50",
-        "dispensationUnit":"mg"
-      },
-      {
-        "time":"18:15:00",
-        "medication":"Med1",
-        "strength":"50",
-        "dispensationUnit":"mg"
-      }
-    ]
-  }
-  user_config_json = json.dumps(config)
-  return HttpResponse(user_config_json, content_type="application/json")
-
-@login_required
 def update_clinician_alert(request, participant_id, alert_id):
   from django.core import serializers
   for alert in serializers.deserialize("json", request.body):

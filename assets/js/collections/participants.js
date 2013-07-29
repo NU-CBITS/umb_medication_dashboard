@@ -32,13 +32,10 @@ define([
         var requests = _.map(participants, function(participantAttrs) {
           var participant = new self.model({
             id: participantAttrs.fields.participant_id
-          }, {
-            environment: self.environment,
-            appCode: self.appCode
           });
+          self.add(participant);
 
           return [
-            self.userConfigRequest(participant),
             self.medPromptSurveysRequest(participant),
             self.surveysRequest(participant),
             self.messagesRequest(participant),
@@ -52,15 +49,6 @@ define([
       });
 
       return req.then(function() { return self; });
-    },
-
-    userConfigRequest: function(participant) {
-      var self = this;
-      var participantReq = participant.fetch().then(function(p) {
-        self.add(participant);
-      });
-
-      return participantReq;
     },
 
     medPromptSurveysRequest: function(participant) {
