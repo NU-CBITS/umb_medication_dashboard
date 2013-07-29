@@ -30,7 +30,7 @@ class ParticipantModelManager(models.Manager):
 
   def all_column_names(self, cursor):
     meta = self.model._meta
-    db_col_names = self.raw_col_names(cursor)
+    db_col_names = self.raw_column_names(cursor)
     def alias(name):
       if self.PR_COLUMN_PREFIX + name in db_col_names:
         return '"%s%s" AS "%s"' % (self.PR_COLUMN_PREFIX, name, name)
