@@ -5,3 +5,4 @@ class Participant(models.Model):
 
   class Meta:
     app_label = 'medactive'
+    db_table = 'participants'
