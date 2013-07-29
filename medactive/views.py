@@ -122,8 +122,7 @@ def pending_alert_details(last_alert_timestamp, participant_id, alert_type):
     return pending_negative_symptoms_responses(last_alert_timestamp, participant_id)
 
 def pending_negative_med_prompt_responses(last_alert_timestamp, participant_id):
-  responses = MedPromptResponse.objects\\
-    .negative_responses(participant_id, start_time=last_alert_timestamp)
+  responses = MedPromptResponse.objects.negative_responses(participant_id, start_time=last_alert_timestamp)
   details = (r.doseTime for r in responses)
 
   return filter(None, details)
