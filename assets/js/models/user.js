@@ -23,16 +23,12 @@ define([
       return this._patient().name;
     },
 
-    dataLastModifiedTimestamp: function() {
-      return _.max(this.medPromptSurveys.last().timestamp(),
-                   _.max(this.surveys, function(survey) { return survey.last().timestamp(); }),
-                   this.messages.last().timestamp());
-    },
-
     lastMissedDoseDueToSideEffects: function() {
-      return _.last(this.medPromptSurveys.filter(function(survey) {
+      var survey = _.last(this.medPromptSurveys.filter(function(survey) {
         return survey.nonadherenceDueToSideEffects();
-      })).doseTime();
+      }))
+
+      return survey ? survey.doseTime() : null;
     },
 
     getLatestAction: function() {
