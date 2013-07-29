@@ -25,7 +25,7 @@ class SideEffectsSurveyResponseManager(ParticipantModelManager):
       if re.match('_distress$', c)
     )
 
-    return '"eventDateTime" >= %s AND (%s)' %  \
+    return '"eventDateTime" >= \'%s\' AND (%s)' %  \
       (start_time, ' OR '.join(distress_conditions))
 
 class SideEffectsSurveyResponse(models.Model):

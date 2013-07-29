@@ -25,7 +25,7 @@ class SymptomsSurveyResponseManager(ParticipantModelManager):
       if re.match('_frequency$', c)
     )
 
-    return '"eventDateTime" >= %s AND (%s)' %  \
+    return '"eventDateTime" >= \'%s\' AND (%s)' %  \
       (start_time, ' OR '.join(frequency_conditions))
 
 class SymptomsSurveyResponse(models.Model):

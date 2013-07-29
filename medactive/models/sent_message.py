@@ -16,7 +16,7 @@ class SentMessageManager(ParticipantModelManager):
       (columns, self.model._meta.db_table, self._all_in_context_conditions(context, start_time))
 
   def _select_all_in_context_conditions(self, context, start_time):
-    return '"eventDateTime" >= %s AND "context" = \'%s\'' %  \
+    return '"eventDateTime" >= \'%s\' AND "context" = \'%s\'' %  \
       (start_time, context)
 
 class SentMessage(models.Model):
