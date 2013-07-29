@@ -5,7 +5,7 @@ import json
 from umb_dashboard.views import respond_with_json
 from medactive.models import MedPromptResponse, SideEffectsSurveyResponse, \
   SymptomsSurveyResponse, SentMessage, ClinicianAlert, DoseHistory, \
-  ParticipantAction
+  Participant, ParticipantAction
 
 @login_required
 def group_summary(request):
@@ -14,15 +14,7 @@ def group_summary(request):
 
 @login_required
 def participants(request):
-  participants = [
-    "adam",
-    "barbara",
-    "chris",
-    "dalila",
-    "emmitt"
-  ]
-  participants_json = json.dumps(participants)
-  return HttpResponse(participants_json, content_type="application/json")
+  return respond_with_json(Participant.objects.all())
 
 @login_required
 #@cache_page()
