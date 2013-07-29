@@ -1,9 +1,8 @@
 define([
   "backbone",
   "../../config/resource_locations",
-  "lib/django_model_parser",
   "models/dose"
-], function(Backbone, Resources, parser, Dose) {
+], function(Backbone, Resources, Dose) {
   var Participant = Backbone.Model.extend({
     initialize: function(attributes, options) {
       this.environment = options.environment;
@@ -11,8 +10,6 @@ define([
       this.latestAction = null;
       this.assignedDoses = [];
     },
-
-    parse: parser,
 
     url: function() {
       return Resources[this.environment].urlRoot + this.appCode + "/participants/" + this.id + "/user_config";

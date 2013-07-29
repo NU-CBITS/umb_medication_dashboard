@@ -28,10 +28,10 @@ define([
       var self = this;
 
       var req = $.getJSON(this.url())
-      .then(function(participantIds) {
-        var requests = _.map(participantIds, function(id) {
+      .then(function(participants) {
+        var requests = _.map(participants, function(participantAttrs) {
           var participant = new self.model({
-            id: id
+            id: participantAttrs.fields.participant_id
           }, {
             environment: self.environment,
             appCode: self.appCode
@@ -56,7 +56,7 @@ define([
 
     userConfigRequest: function(participant) {
       var self = this;
-      var participantReq = participant.fetch({ parse: true }).then(function(p) {
+      var participantReq = participant.fetch().then(function(p) {
         self.add(participant);
       });
 
