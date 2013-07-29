@@ -15,10 +15,11 @@ class SymptomsSurveyResponseManager(ParticipantModelManager):
     columns = self.all_column_names(cursor)
 
     return 'SELECT %s FROM "%s" WHERE (%s);' % \
-      (columns, self.model._meta.db_table, self._negative_conditions(columns, start_time))
+      (columns, self.model._meta.db_table, self._negative_conditions(cursor, start_time))
 
-  def _negative_conditions(self, columns, start_time):
+  def _negative_conditions(self, cursor, start_time):
     import re
+    columns = self.raw_column_names(cursor)
     frequency_conditions = (
       '"%s"=\'%s\'' % (c, self.HIGH_FREQ)
       for c in columns

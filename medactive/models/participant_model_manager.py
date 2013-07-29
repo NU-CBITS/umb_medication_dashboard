@@ -30,10 +30,7 @@ class ParticipantModelManager(models.Manager):
 
   def all_column_names(self, cursor):
     meta = self.model._meta
-    col_name_query = 'SELECT column_name FROM information_schema.columns WHERE table_name=\'%s\';' % \
-      meta.db_table
-    cursor.execute(col_name_query)
-    db_col_names = list(name[0] for name in cursor.fetchall())
+    db_col_names = self.raw_col_names(cursor)
     def alias(name):
       if self.PR_COLUMN_PREFIX + name in db_col_names:
         return '"%s%s" AS "%s"' % (self.PR_COLUMN_PREFIX, name, name)
@@ -41,6 +38,13 @@ class ParticipantModelManager(models.Manager):
     cols = (alias(name) for name in meta.get_all_field_names())
 
     return ', '.join(cols)
+
+  def raw_column_names(self, cursor):
+    col_name_query = 'SELECT column_name FROM information_schema.columns WHERE table_name=\'%s\';' % \
+      meta.db_table
+    cursor.execute(col_name_query)
+
+    return list(name[0] for name in cursor.fetchall())
 
   def _select_all_sql(self, cursor):
     return 'SELECT %s FROM "%s";' % \
