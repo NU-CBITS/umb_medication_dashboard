@@ -29,7 +29,7 @@ class MedPromptResponse(models.Model):
   reason_for_missing = models.TextField()
   doseTime = models.TextField()
 
-  objects = ParticipantModelManager()
+  objects = MedPromptResponseManager()
 
   class Meta:
     db_table = 'medication_survey_responses'
