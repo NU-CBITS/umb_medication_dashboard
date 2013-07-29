@@ -23,7 +23,7 @@ class SymptomsSurveyResponseManager(ParticipantModelManager):
     frequency_conditions = (
       '"%s"=\'%s\'' % (c, self.HIGH_FREQ)
       for c in columns
-      if re.match('_frequency$', c)
+      if re.match('.*_frequency$', c)
     )
 
     return '"eventDateTime" >= \'%s\' AND (%s)' %  \

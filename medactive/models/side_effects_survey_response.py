@@ -23,7 +23,7 @@ class SideEffectsSurveyResponseManager(ParticipantModelManager):
     distress_conditions = (
       '"%s"=\'%s\'' % (c, self.HIGH_FREQ)
       for c in columns
-      if re.match('_distress$', c)
+      if re.match('.*_distress$', c)
     )
 
     return '"eventDateTime" >= \'%s\' AND (%s)' %  \
