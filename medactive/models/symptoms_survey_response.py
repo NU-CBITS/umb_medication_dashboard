@@ -1,5 +1,32 @@
+import datetime
 from django.db import models
 from medactive.models.participant_model_manager import ParticipantModelManager
+
+class SymptomsSurveyResponseManager(ParticipantModelManager):
+  HIGH_FREQ = 'Almost all of the time'
+
+  def negative_responses(self, participant_id, start_time=datetime.datetime.min):
+    cursor = self.participant_db_cursor(participant_id)
+    sql = self._select_negative_sql(cursor, start_time)
+
+    return self.fetch_results(cursor, sql)
+
+  def _select_negative_sql(self, cursor, start_time):
+    columns = self.all_column_names(cursor)
+
+    return 'SELECT %s FROM "%s" WHERE (%s);' % \
+      (columns, self.model._meta.db_table, self._negative_conditions(columns, start_time))
+
+  def _negative_conditions(self, columns, start_time):
+    import re
+    frequency_conditions = (
+      '"%s"=\'%s\'' % (c, self.HIGH_FREQ)
+      for c in columns
+      if re.match('_frequency$', c)
+    )
+
+    return '"eventDateTime" >= %s AND (%s)' %  \
+      (start_time, ' OR '.join(distress_conditions))
 
 class SymptomsSurveyResponse(models.Model):
   id = models.TextField(primary_key=True)
@@ -25,7 +52,7 @@ class SymptomsSurveyResponse(models.Model):
   level_of_distress = models.TextField()
   date = models.TextField()
 
-  objects = ParticipantModelManager()
+  objects = SymptomsSurveyResponseModelManager()
 
   class Meta:
     db_table = 'symptoms_survey_responses'

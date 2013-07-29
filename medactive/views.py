@@ -1,6 +1,5 @@
 from django.http import HttpResponse
 from django.views.decorators.cache import cache_page
-from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 import json
 from umb_dashboard.views import respond_with_json
@@ -128,11 +127,7 @@ def pending_negative_med_prompt_responses(last_alert_timestamp, participant_id):
   return filter(None, details)
 
 def pending_negative_side_effects_responses(last_alert_timestamp, participant_id):
-  HIGH_FREQ = 'Always'
-  responses = SideEffectsSurveyResponse.objects.using(participant_id)
-  if last_alert_timestamp != None:
-    responses = responses.filter(eventDateTime__gte=last_alert_timestamp)
-  responses = responses.filter(Q(weight_concern_distress=HIGH_FREQ)|Q(sexual_problems_distress=HIGH_FREQ)|Q(insomnia_distress=HIGH_FREQ)|Q(restlessness_distress=HIGH_FREQ)|Q(low_energy_distress=HIGH_FREQ)|Q(not_like_self_distress=HIGH_FREQ)|Q(excess_sedation_distress=HIGH_FREQ)|Q(poor_concentration_distress=HIGH_FREQ)|Q(trembling_distress=HIGH_FREQ))
+  responses = SideEffectsSurveyResponse.objects.negative_responses(participant_id, last_alert_timestamp)
   details = []
   details.append(next(("index" for r in responses if r.weight_concern_distress == HIGH_FREQ), None))
   details.append(next(("sexual_problems" for r in responses if r.sexual_problems_distress == HIGH_FREQ), None))
@@ -143,14 +138,11 @@ def pending_negative_side_effects_responses(last_alert_timestamp, participant_id
   details.append(next(("excess_sedation" for r in responses if r.excess_sedation_distress == HIGH_FREQ), None))
   details.append(next(("poor_concentration" for r in responses if r.poor_concentration_distress == HIGH_FREQ), None))
   details.append(next(("trembling" for r in responses if r.trembling_distress == HIGH_FREQ), None))
+
   return filter(None, details)
 
 def pending_negative_symptoms_responses(last_alert_timestamp, participant_id):
-  HIGH_FREQ = 'Almost all of the time'
-  responses = SymptomsSurveyResponse.objects.using(participant_id)
-  if last_alert_timestamp != None:
-    responses = responses.filter(eventDateTime__gte=last_alert_timestamp)
-  responses = responses.filter(Q(paranoia_frequency=HIGH_FREQ)|Q(media_communication_frequency=HIGH_FREQ)|Q(thought_insertion_frequency=HIGH_FREQ)|Q(special_mission_frequency=HIGH_FREQ)|Q(thought_broadcasting_frequency=HIGH_FREQ)|Q(hallucinations_frequency=HIGH_FREQ)|Q(confused_frequency=HIGH_FREQ)|Q(thought_disorders_frequency=HIGH_FREQ))
+  responses = SymptomsSurveyResponse.objects.negative_responses(participant_id, last_alert_timestamp)
   details = []
   details.append(next(("index" for r in responses if r.paranoia_frequency == HIGH_FREQ), None))
   details.append(next(("media_communication" for r in responses if r.media_communication_frequency == HIGH_FREQ), None))
@@ -160,23 +152,18 @@ def pending_negative_symptoms_responses(last_alert_timestamp, participant_id):
   details.append(next(("hallucinations" for r in responses if r.hallucinations_frequency == HIGH_FREQ), None))
   details.append(next(("confused" for r in responses if r.confused_frequency == HIGH_FREQ), None))
   details.append(next(("thought_disorders" for r in responses if r.thought_disorders_frequency == HIGH_FREQ), None))
+
   return filter(None, details)
 
 def any_contact_requests(last_alert_timestamp, participant_id, alert_type):
-  messages = SentMessage.objects.using(participant_id).filter(context=alert_type)
-  if last_alert_timestamp != None:
-    messages = messages.filter(eventDateTime__gte=last_alert_timestamp)
+  messages = SentMessage.objects.all_in_context(participant_id, alert_type, last_alert_timestamp)
+
   return len(messages) > 0
 
 @login_required
 #@cache_page()
 def latest_action(request, participant_id):
-  actions = ParticipantAction.objects.raw('select "id", "eventDateTime" from "medication_survey_responses" '\
-    'union select "id", "eventDateTime" from "side_effects_survey_responses" '\
-    'union select "id", "eventDateTime" from "symptoms_survey_responses" '\
-    'union select "id", "eventDateTime" from "sent_messages" '\
-    'order by "eventDateTime" desc limit(1)').using(participant_id)
-  return respond_with_json(actions)
+  return respond_with_json(ParticipantAction.objects.latest(participant_id))
 
 @login_required
 def contact_research_staff(request):
@@ -186,5 +173,4 @@ def contact_research_staff(request):
 
 @login_required
 def dose_history(request, participant_id):
-  doses = DoseHistory.objects.using(participant_id).all()
-  return respond_with_json(doses)
+  return respond_with_json(DoseHistory.objects.all_for_participant(participant_id))
