@@ -1,6 +1,4 @@
-from django.conf import settings
 from django.db import models
-import psycopg2
 
 class ParticipantModelManager(models.Manager):
   PR_COLUMN_PREFIX = 'FEATURE_VALUE_DT_'
@@ -12,6 +10,8 @@ class ParticipantModelManager(models.Manager):
     return self.fetch_results(cursor, sql)
 
   def participant_db_cursor(self, participant_id):
+    from django.conf import settings
+    import psycopg2
     db_string = ('host=\'%(HOST)s\' dbname=\'' + self._db_name(participant_id) + \
       '\' user=\'%(USER)s\' password=\'%(PASSWORD)s\'') % settings.PARTICIPANT_DB
     connection = psycopg2.connect(db_string)
@@ -50,4 +50,5 @@ class ParticipantModelManager(models.Manager):
       (self.all_column_names(cursor), self.model._meta.db_table)
 
   def _db_name(self, participant_id):
-    return 'umb_' + participant_id
+    import hashlib
+    return hashlib.md5(participant_id).hexdigest()
