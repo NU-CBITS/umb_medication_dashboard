@@ -16,8 +16,8 @@ class MedPromptResponseManager(ParticipantModelManager):
       (self.all_column_names(cursor), self.model._meta.db_table, self._negative_conditions(start_time))
 
   def _negative_conditions(self, start_time):
-    return '"eventDateTime" >= \'%s\' AND "reason_for_missing" = \'%s\'' % \
-      (start_time, self.MAKES_ME_FEEL_BAD)
+    return '"eventDateTime" >= \'%s\' AND "%sreason_for_missing" = \'%s\'' % \
+      (start_time, self.PR_COLUMN_PREFIX, self.MAKES_ME_FEEL_BAD)
 
 class MedPromptResponse(models.Model):
   id = models.TextField(primary_key=True)
