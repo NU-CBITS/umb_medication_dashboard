@@ -26,7 +26,7 @@ class SymptomsSurveyResponseManager(ParticipantModelManager):
     )
 
     return '"eventDateTime" >= %s AND (%s)' %  \
-      (start_time, ' OR '.join(distress_conditions))
+      (start_time, ' OR '.join(frequency_conditions))
 
 class SymptomsSurveyResponse(models.Model):
   id = models.TextField(primary_key=True)
