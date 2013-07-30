@@ -31,7 +31,7 @@ define([
       }, this.helpModal.events);
     },
 
-    className: "span12",
+    className: "col-lg-12",
 
     template: _.template(template),
 

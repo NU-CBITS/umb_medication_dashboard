@@ -43,7 +43,7 @@ define([
       });
     },
 
-    className: "span12",
+    className: "col-lg-12",
 
     setParticipant: function(model) {
       this.model = model;
