@@ -1,26 +1,31 @@
-<div class="modal-header">
-  <h3>Symptoms survey</h3>
-</div>
-<div class="modal-body">
-  <p class="text-error"><strong>Alert: </strong> Patient reports always being bothered by one or more positive psychotic symptoms.</p>
-  <p><strong>Patient requests contact: </strong><%= alert.participantRequestsContact() ? "Yes" : "No" %></p>
-  <form>
-    <fieldset>
-      <legend>Action taken</legend>
-      <label class="checkbox">
-        <input type="checkbox"<%= alert.contactedPatient() ? " checked" : "" %> name="contacted_patient">contacted patient
-      </label>
-      <label class="checkbox">
-        <input type="checkbox"<%= alert.awareOfIssue() ? " checked" : "" %> name="aware_of_issue">aware of ongoing issue
-      </label>
-      <label class="checkbox">
-        <input type="checkbox"<%= alert.willDiscuss() ? " checked" : "" %> name="will_discuss">to discuss at next session
-      </label>
-  </form>
-  <hr>
-  <p><strong>Alert transmitted: </strong><%= DateFormatter.dateTimeString(alert.createdAt()) %></p>
-</div>
-<div class="modal-footer">
-  <a href="#" class="btn btn-default hide-alert" data-target="#symptoms-alert"><i class="icon-ok"></i> Save &amp; Do Not Clear</a>
-  <a href="#" class="btn btn-default clear-alert" data-target="#symptoms-alert"><i class="icon-remove"></i> Clear Alert</a>
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title">Symptoms survey</h4>
+    </div>
+    <div class="modal-body">
+      <p class="text-danger"><strong>Alert: </strong> Patient reports always being bothered by one or more positive psychotic symptoms.</p>
+      <p><strong>Patient requests contact: </strong><%= alert.participantRequestsContact() ? "Yes" : "No" %></p>
+      <form>
+        <fieldset>
+          <legend>Action taken</legend>
+          <label class="checkbox">
+            <input type="checkbox"<%= alert.contactedPatient() ? " checked" : "" %> name="contacted_patient">contacted patient
+          </label>
+          <label class="checkbox">
+            <input type="checkbox"<%= alert.awareOfIssue() ? " checked" : "" %> name="aware_of_issue">aware of ongoing issue
+          </label>
+          <label class="checkbox">
+            <input type="checkbox"<%= alert.willDiscuss() ? " checked" : "" %> name="will_discuss">to discuss at next session
+          </label>
+        </fieldset>
+      </form>
+      <hr>
+      <p><strong>Alert transmitted: </strong><%= DateFormatter.dateTimeString(alert.createdAt()) %></p>
+    </div>
+    <div class="modal-footer">
+      <a href="#" class="btn btn-default hide-alert" data-target="#symptoms-alert"><i class="icon-ok"></i> Save &amp; Do Not Clear</a>
+      <a href="#" class="btn btn-default clear-alert" data-target="#symptoms-alert"><i class="icon-remove"></i> Clear Alert</a>
+    </div>
+  </div>
 </div>
