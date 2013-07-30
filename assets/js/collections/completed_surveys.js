@@ -45,9 +45,11 @@ define([
       var self = this;
 
       return _.any(surveys, function(response) {
-        return (_.find(self.survey.pages[pageName].responses, {
+        var response = _.find(self.survey.pages[pageName].responses, {
           label: response.get(pageName)
-        }).is_positive === false);
+        });
+
+        return (response || {}).is_positive === false;
       });
     }
   });

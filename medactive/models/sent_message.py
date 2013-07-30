@@ -12,11 +12,11 @@ class SentMessageManager(ParticipantModelManager):
     columns = self.all_column_names(cursor)
 
     return 'SELECT %s FROM "%s" WHERE (%s);' % \
-      (columns, self.model._meta.db_table, self._all_in_context_conditions(context, start_time))
+      (columns, self.model._meta.db_table, self._select_all_in_context_conditions(context, start_time))
 
   def _select_all_in_context_conditions(self, context, start_time):
-    return '"eventDateTime" >= \'%s\' AND "context" = \'%s\'' %  \
-      (start_time, context)
+    return '"eventDateTime" >= \'%s\' AND "%scontext" = \'%s\'' %  \
+      (start_time, self.PR_COLUMN_PREFIX, context)
 
 class SentMessage(models.Model):
   id = models.TextField(primary_key=True)

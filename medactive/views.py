@@ -91,6 +91,7 @@ def pending_negative_med_prompt_responses(last_alert_timestamp, participant_id):
   return filter(None, details)
 
 def pending_negative_side_effects_responses(last_alert_timestamp, participant_id):
+  HIGH_FREQ = 'Always'
   responses = SideEffectsSurveyResponse.objects.negative_responses(participant_id, last_alert_timestamp)
   details = []
   details.append(next(("index" for r in responses if r.weight_concern_distress == HIGH_FREQ), None))
@@ -106,6 +107,7 @@ def pending_negative_side_effects_responses(last_alert_timestamp, participant_id
   return filter(None, details)
 
 def pending_negative_symptoms_responses(last_alert_timestamp, participant_id):
+  HIGH_FREQ = 'Almost all of the time'
   responses = SymptomsSurveyResponse.objects.negative_responses(participant_id, last_alert_timestamp)
   details = []
   details.append(next(("index" for r in responses if r.paranoia_frequency == HIGH_FREQ), None))

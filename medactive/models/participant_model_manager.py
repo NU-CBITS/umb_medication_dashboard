@@ -33,10 +33,11 @@ class ParticipantModelManager(models.Manager):
     def alias(name):
       if self.PR_COLUMN_PREFIX + name in db_col_names:
         return '"%s%s" AS "%s"' % (self.PR_COLUMN_PREFIX, name, name)
-      return '"%s"' % name
+      elif name in db_col_names:
+        return '"%s"' % name
     cols = (alias(name) for name in self.model._meta.get_all_field_names())
 
-    return ', '.join(cols)
+    return ', '.join(filter(None, cols))
 
   def raw_column_names(self, cursor):
     col_name_query = 'SELECT column_name FROM information_schema.columns WHERE table_name=\'%s\';' % \

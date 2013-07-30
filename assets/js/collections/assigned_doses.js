@@ -16,7 +16,7 @@ define([
         _.each(doseHistory, function(dosesAssignment) {
           self.values.push({
             startDate: isoDate(dosesAssignment.fields.eventDateTime),
-            doses: doses(dosesAssignment.fields.doses)
+            doses: doses(eval(dosesAssignment.fields.doses))
           });
         });
       });
@@ -33,7 +33,7 @@ define([
         return dosesAssignment.startDate <= date;
       });
 
-      return values ? values[0] : {};
+      return values.length === 0 ? this.values[0] : values[0];
     };
 
     function url() {
