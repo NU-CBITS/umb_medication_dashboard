@@ -4,8 +4,7 @@ define(function() {
       urlRoot: "mock_data/"
     },
     production: {
-      //urlRoot: "http://dashboard.cbits.northwestern.edu/umb/"
-      urlRoot: "http://192.168.56.101/umb/"
+      urlRoot: "http://165.124.171.65/umb/"
     }
   };
 });
