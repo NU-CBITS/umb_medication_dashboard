@@ -11,7 +11,7 @@ requirejs.config({
     }
   },
   paths: {
-    bootstrap: "vendor/bootstrap-2.3.2.min",
+    bootstrap: "vendor/bootstrap-3.0.0-rc1.min",
     backbone: "vendor/backbone-1.0.0.min",
     jquery: "vendor/jquery-2.0.3.min",
     lodash: "vendor/lodash-1.3.1.min",

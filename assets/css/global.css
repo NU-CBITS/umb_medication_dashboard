@@ -47,3 +47,8 @@ td.date-column, th.date-column {
 .status-indicator.na,.status-indicator.na:before,.status-indicator.na:after {
   background-color: gray;
 }
+
+/* Bootstrap cusomization */
+.table-striped tbody>tr:nth-child(odd)>td, .table-striped tbody>tr:nth-child(odd)>th {
+  background-color: #eee;
+}
