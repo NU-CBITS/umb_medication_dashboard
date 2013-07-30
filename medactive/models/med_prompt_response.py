@@ -1,11 +1,10 @@
-import datetime
 from django.db import models
 from medactive.models.participant_model_manager import ParticipantModelManager
 
 class MedPromptResponseManager(ParticipantModelManager):
   MAKES_ME_FEEL_BAD = 'The side effects make me feel bad.'
 
-  def negative_responses(self, participant_id, start_time=datetime.datetime.min):
+  def negative_responses(self, participant_id, start_time):
     cursor = self.participant_db_cursor(participant_id)
     sql = self._select_negative_sql(cursor, start_time)
 

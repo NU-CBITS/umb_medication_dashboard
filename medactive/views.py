@@ -58,11 +58,12 @@ def uncleared_clinician_alerts(request, participant_id):
   return respond_with_json(alerts)
 
 def find_uncleared_alert(participant_id, alert_type):
+  import datetime
   alert_manager = ClinicianAlert.objects
   alerts = alert_manager.filter(participant_id=participant_id, type=alert_type, is_cleared=False) or []
   if len(alerts) == 0:
     last_cleared_alerts = alert_manager.filter(participant_id=participant_id, type=alert_type, is_cleared=True).order_by('-created_at')[:1]
-    last_alert_timestamp = None
+    last_alert_timestamp = datetime.datetime.min
     if len(last_cleared_alerts) == 1:
       last_alert_timestamp = last_cleared_alerts[0].updated_at
     details = pending_alert_details(last_alert_timestamp, participant_id, alert_type)

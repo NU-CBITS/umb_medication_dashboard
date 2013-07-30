@@ -1,9 +1,8 @@
-import datetime
 from django.db import models
 from medactive.models.participant_model_manager import ParticipantModelManager
 
 class SentMessageManager(ParticipantModelManager):
-  def all_in_context(self, participant_id, context, start_time=datetime.datetime.min):
+  def all_in_context(self, participant_id, context, start_time):
     cursor = self.participant_db_cursor(participant_id)
     sql = self._select_all_in_context_sql(cursor, context, start_time)
 
