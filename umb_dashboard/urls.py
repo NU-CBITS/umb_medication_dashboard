@@ -7,6 +7,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^medactive$', 'medactive.views.group_summary'),
     url(r'^accounts/login/$', 'django.contrib.auth.views.login'),
+    url(r'^accounts/logout$', 'django.contrib.auth.views.logout', { 'next_page': '/umb/medactive' }),
     url(r'^medactive/participants$', 'medactive.views.participants'),
     url(r'^medactive/participants/([^/]+)/med_prompt_survey_responses$', 'medactive.views.med_prompt_survey_responses'),
     url(r'^medactive/participants/([^/]+)/side_effects_survey_responses$', 'medactive.views.side_effects_survey_responses'),
