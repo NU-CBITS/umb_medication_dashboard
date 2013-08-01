@@ -1,5 +1,5 @@
 from django.db import models
-from medactive.models.participant_model_manager import ParticipantModelManager
+from umb_dashboard.models import ParticipantModelManager
 
 class SymptomsSurveyResponseManager(ParticipantModelManager):
   HIGH_FREQ = 'Almost all of the time'
