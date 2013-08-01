@@ -4,48 +4,19 @@ td.date-column, th.date-column {
   width: 4em;
 }
 
-.status-indicator,
-.status-indicator:before,
-.status-indicator:after {
-	width:  1.5em;
-	height: 1.5em;
-	position: relative;
-	border-top-right-radius: 30%;
-	margin: 0 auto 0;
-}
-.status-indicator:before,
-.status-indicator:after {
-	content: '';
-	position: absolute;
-	margin: 0;
-}
-
 .status-indicator {
-	-webkit-transform: rotate(-60deg) skewX(-30deg) scale(1,.866);
-  cursor: pointer;
-  margin-top: 1em;
-}
-.status-indicator:before {
-	-webkit-transform: rotate(-135deg) skewX(-45deg) scale(1.414,.707) translate(0,-50%);
-}
-.status-indicator:after {
-	-webkit-transform: rotate(135deg) skewY(-45deg) scale(.707,1.414) translate(50%);
-}
-.status-indicator .excl {
-  position: absolute;
-  color: white;
-  top: 4px;
-  left: 4px;
-  z-index: 1;
-  -webkit-transform: rotate(45deg);
-  font-weight: bold;
+  width: 40px;
+  height: 35px;
+  background-size: 40px;
+  background-repeat: no-repeat;
 }
 
-.status-indicator.bad,.status-indicator.bad:before,.status-indicator.bad:after {
-  background-color: red;
+.status-indicator.bad {
+  background-image: url(../img/bad-alert.png);
 }
-.status-indicator.na,.status-indicator.na:before,.status-indicator.na:after {
-  background-color: gray;
+
+.status-indicator.na {
+  background-image: url(../img/na-alert.png);
 }
 
 /* Bootstrap cusomization */
