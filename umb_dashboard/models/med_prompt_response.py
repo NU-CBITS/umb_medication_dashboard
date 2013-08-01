@@ -1,5 +1,5 @@
 from django.db import models
-from medactive.models.participant_model_manager import ParticipantModelManager
+from .participant_model_manager import ParticipantModelManager
 
 class MedPromptResponseManager(ParticipantModelManager):
   MAKES_ME_FEEL_BAD = 'The side effects make me feel bad.'

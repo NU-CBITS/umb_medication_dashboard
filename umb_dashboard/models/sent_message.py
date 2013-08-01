@@ -1,5 +1,5 @@
 from django.db import models
-from medactive.models.participant_model_manager import ParticipantModelManager
+from .participant_model_manager import ParticipantModelManager
 
 class SentMessageManager(ParticipantModelManager):
   def all_in_context(self, participant_id, context, start_time):

@@ -1,5 +1,5 @@
 from django.db import models
-from medactive.models.participant_model_manager import ParticipantModelManager
+from .participant_model_manager import ParticipantModelManager
 
 class DoseHistory(models.Model):
   id = models.TextField(primary_key=True)
