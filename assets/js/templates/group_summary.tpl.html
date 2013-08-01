@@ -28,17 +28,17 @@
       </td>
       <td>
         <% if (nonadherenceDueToSideEffects(participant)) { %>
-        <div class="status-indicator bad" data-target="#non-adherence-alert" data-participant-id="<%= participant.id %>" data-alert-type="non_adherence"><div class="excl">!</div></div>
+        <div class="status-indicator bad" data-target="#non-adherence-alert" data-participant-id="<%= participant.id %>" data-alert-type="non_adherence">&nbsp;</div>
         <% } %>
       </td>
       <td>
         <% if (alwaysBotheredBy(participant, "symptoms")) { %>
-        <div class="status-indicator bad" data-target="#symptoms-alert" data-participant-id="<%= participant.id %>" data-alert-type="symptoms"><div class="excl">!</div></div>
+        <div class="status-indicator bad" data-target="#symptoms-alert" data-participant-id="<%= participant.id %>" data-alert-type="symptoms">&nbsp;</div>
         <% } %>
       </td>
       <td>
         <% if (alwaysBotheredBy(participant, "side_effects")) { %>
-        <div class="status-indicator bad" data-target="#side-effects-alert" data-participant-id="<%= participant.id %>" data-alert-type="side_effects"><div class="excl">!</div></div>
+        <div class="status-indicator bad" data-target="#side-effects-alert" data-participant-id="<%= participant.id %>" data-alert-type="side_effects">&nbsp;</div>
         <% } %>
       </td>
       <td>
