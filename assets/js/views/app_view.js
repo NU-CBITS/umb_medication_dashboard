@@ -51,9 +51,11 @@ define([
 
     function groupSummary() {
       replaceView(views.group);
+      $("#group-summary-menu-item").addClass("active");
     }
 
     function replaceView(view) {
+      $(".nav.navbar-nav > li").removeClass("active");
       emptyAlertBlock();
       currentView && currentView.$el.detach();
       $("#main").append(view.$el);

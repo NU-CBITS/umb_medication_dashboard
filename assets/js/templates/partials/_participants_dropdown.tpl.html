@@ -1,0 +1,5 @@
+<% participants.each(function(participant) { %>
+<li>
+  <a href="#weekly_summaries/<%= participant.patientId() %>" class="view-details"><%= participant.patientName() %></a>
+</li>
+<% }) %>
