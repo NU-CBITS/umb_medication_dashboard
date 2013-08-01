@@ -25,7 +25,9 @@ define([
 
       this.medPromptView = new WeeklyMedPromptSummaryView({
         survey: MA_MED_PROMPT,
-        calendar: options.calendar
+        calendar: options.calendar,
+        environment: this.options.environment,
+        appCode: this.options.appCode
       });
       this.medPromptView.$el.addClass("active");
       this.medPromptView.$el.attr("id", "medication");

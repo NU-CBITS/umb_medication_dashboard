@@ -2,8 +2,10 @@ define([
   "backbone",
   "lib/date_formatter",
   "views/survey_summary_view",
+  "views/change_medication_view",
   "text!templates/_weekly_med_prompt_summary.tpl.html",
-], function(Backbone, DateFormatter, SurveySummaryView, template) {
+], function(Backbone, DateFormatter, SurveySummaryView, ChangeMedicationView,
+            template) {
   var WeeklyMedPromptSummaryView = Backbone.View.extend(
     _.extend(_.clone(SurveySummaryView), {
       template: _.template(template),
@@ -19,6 +21,11 @@ define([
           DateFormatter: DateFormatter
         }));
         this._renderSentMessages();
+        new ChangeMedicationView({
+          environment: this.options.environment,
+          appCode: this.options.appCode,
+          getUserId: function() { return self.model.id; }
+        });
       }
     })
   );

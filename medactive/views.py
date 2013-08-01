@@ -5,7 +5,7 @@ import json
 from umb_dashboard.views import respond_with_json
 from medactive.models import MedPromptResponse, SideEffectsSurveyResponse, \
   SymptomsSurveyResponse, SentMessage, ClinicianAlert, DoseHistory, \
-  Participant, ParticipantAction
+  Participant, ParticipantAction, ChangeMedicationRequest
 
 @login_required
 def group_summary(request):
@@ -143,3 +143,11 @@ def contact_research_staff(request):
 @login_required
 def dose_history(request, participant_id):
   return respond_with_json(DoseHistory.objects.all_for_participant(participant_id))
+
+@login_required
+def create_change_medication_request(request, participant_id):
+  input = json.loads(request.body)
+  change_request = ChangeMedicationRequest(participant_id, input['message'])
+  change_request.save()
+
+  return HttpResponse(change_request.status)

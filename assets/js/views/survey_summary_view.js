@@ -30,7 +30,7 @@ define([
       var surveyKey = this.survey.name,
           self = this;
 
-      this.$el.find("#sent-messages").html(this._sentMessagesTemplate({
+      this.$("#sent-messages").html(this._sentMessagesTemplate({
         messageCounts: _.map(this.options.calendar.dates("iso8601"), function(date) {
           return self.model.messages.countByContextAndDate(surveyKey, date);
         })

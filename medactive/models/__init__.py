@@ -1,3 +1,4 @@
+from .change_medication_request import ChangeMedicationRequest
 from .clinician_alert import ClinicianAlert
 from .dose_history import DoseHistory
 from .med_prompt_response import MedPromptResponse
