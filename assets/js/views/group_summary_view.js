@@ -3,10 +3,11 @@ define([
   "lib/date_formatter",
   "models/calendar",
   "views/help_modal_partial",
+  "views/title_row_partial",
   "views/clinician_alert_view",
   "text!templates/group_summary.tpl.html",
 ], function(Backbone, DateFormatter, Calendar, HelpModalPartial,
-            ClinicianAlertView, template) {
+            titleRowPartial, ClinicianAlertView, template) {
   var GroupSummaryView = Backbone.View.extend({
     initialize: function(options) {
       _.bindAll(this, "_nonadherenceDueToSideEffects", "_alwaysBotheredBy");
@@ -42,7 +43,8 @@ define([
         alwaysBotheredBy: this._alwaysBotheredBy,
         previousSpanAdherencePct: this._previousSpanAdherencePct,
         helpModal: this.helpModal,
-        DateFormatter: DateFormatter
+        DateFormatter: DateFormatter,
+        titleRow: titleRowPartial
       }));
 
       return this;

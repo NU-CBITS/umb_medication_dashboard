@@ -1,6 +1,4 @@
-<div>
-  <h2 class="pull-left">MedActive Users Summary</h2>
-</div>
+<%= titleRow.render("MedActive Users Summary") %>
 
 <%= helpModal.render() %>
 
@@ -21,7 +19,7 @@
     <% participants.each(function(participant) { %>
     <tr>
       <td>
-        <a href="/weekly_summaries/<%= participant.patientId() %>" class="view-details"><%= participant.patientName() %></a>
+        <a href="#weekly_summaries/<%= participant.patientId() %>" class="view-details"><%= participant.patientName() %></a>
       </td>
       <td><%= participant.getCurrentDoses()[0].summary() %></td>
       <td><%= _.map(participant.getCurrentDoses(), function(dose) { return dose.time(); }).join(", ") %></td>

@@ -149,5 +149,6 @@ def create_change_medication_request(request, participant_id):
   input = json.loads(request.body)
   change_request = ChangeMedicationRequest(participant_id, input['message'])
   change_request.save()
+  status = { 'status': change_request.status }
 
-  return HttpResponse(change_request.status)
+  return HttpResponse(json.dumps(status), content_type="application/json")

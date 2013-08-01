@@ -1,29 +1,42 @@
 define([
+  "lodash",
   "models/calendar",
   "views/group_summary_view",
   "views/weekly_participant_summary_view"
-], function(Calendar, GroupSummaryView, WeeklyParticipantSummaryView) {
+], function(_, Calendar, GroupSummaryView, WeeklyParticipantSummaryView) {
   function AppView(options) {
-    var groupView, participantView;
+    var views = {},
+        currentView;
 
     createViews();
+    setupAlertListeners();
     setupRouteListeners();
-    setupDocumentListeners();
 
     function createViews() {
       var calendar = new Calendar();
-      groupView = new GroupSummaryView({
+      views.group = new GroupSummaryView({
         environment: options.environment,
         appCode: options.appCode,
         calendar: calendar,
         collection: options.participants
       });
-      participantView = new WeeklyParticipantSummaryView({
+      views.participant = new WeeklyParticipantSummaryView({
         environment: options.environment,
         appCode: options.appCode,
         calendar: calendar,
         surveys: options.surveys
       });
+    }
+
+    function setupAlertListeners() {
+      _.each(views, function(view, name) {
+        view.on("alert", renderAlert);
+      });
+    }
+
+    function renderAlert(type, message) {
+      $("#alert-container")
+      .html("<div class=\"alert alert-block alert-" + type + "\">" + message + "</div>");
     }
 
     function setupRouteListeners() {
@@ -32,25 +45,23 @@ define([
     }
 
     function participantWeeklySummary(participantId) {
-      groupView.$el.detach();
-      participantView.setParticipant(options.participants.get(participantId));
-      $("#main").append(participantView.$el);
+      views.participant.setParticipant(options.participants.get(participantId));
+      replaceView(views.participant);
     }
 
     function groupSummary() {
-      participantView.$el.detach();
-      $("#main").append(groupView.$el);
+      replaceView(views.group);
     }
 
-    function setupDocumentListeners() {
-      $(document).on("click", "#view-all", function(event) {
-        event.preventDefault();
-        options.router.navigate("/", { trigger: true });
-      });
-      $(document).on("click", ".view-details", function(event) {
-        event.preventDefault();
-        options.router.navigate($(event.target).attr("href"), { trigger: true });
-      });
+    function replaceView(view) {
+      emptyAlertBlock();
+      currentView && currentView.$el.detach();
+      $("#main").append(view.$el);
+      currentView = view;
+    }
+
+    function emptyAlertBlock() {
+      $("#alert-container").html("");
     }
   };
 
