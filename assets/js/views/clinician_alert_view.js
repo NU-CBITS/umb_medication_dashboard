@@ -46,10 +46,18 @@ define([
     },
 
     _changedInput: function(event) {
-      var field = $(event.target).attr("name");
-      var value = $(event.target).is(":checked");
+      var self = this,
+          field = $(event.target).attr("name"),
+          value = $(event.target).is(":checked");
+
       this.model.set(field, value);
-      this.model.save();
+      this.model.save()
+      .done(function() {
+        self.trigger("alert", "success", "Saved.");
+      })
+      .fail(function() {
+        self.trigger("alert", "danger", "Error saving.");
+      });
     },
 
     _hideAlert: function(event) {
@@ -57,9 +65,19 @@ define([
     },
 
     _clearAlert: function(event) {
-      this.model.save({ is_cleared: true });
-      this._hideAlert(event);
-      this.trigger("cleared");
+      var self = this;
+
+      this.model.save({ is_cleared: true })
+      .done(function() {
+        self.trigger("alert", "success", "Saved.");
+        this.trigger("cleared");
+      })
+      .fail(function() {
+        self.trigger("alert", "danger", "Error saving.");
+      })
+      .always(function() {
+        this._hideAlert(event);
+      });
     }
   });
 

@@ -13,8 +13,19 @@ define([
       "click #help-cancel": hideModal
     };
 
+    function url() {
+      return Resources[options.environment].urlRoot + options.appCode + "/contact_research_staff";
+    }
+
     function contactResearchStaff() {
-      $.post(Resources[options.environment].urlRoot + options.appCode + "/contact_research_staff", function(data) {
+      var self = this;
+
+      $.post(url())
+      .done(function(data) {
+        self.trigger("alert", "success", "Message sent.");
+      })
+      .error(function(data) {
+        self.trigger("alert", "danger", "Error sending message.");
       });
       hideModal();
     }

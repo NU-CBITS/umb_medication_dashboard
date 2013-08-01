@@ -14,11 +14,21 @@ define([
     },
 
     _sendRequest: function() {
+      var self = this;
+
       this.model.save({
         message: $("#change-request-message").val()
+      })
+      .done(function() {
+        self.trigger("alert", "success", "Request sent.");
+      })
+      .fail(function() {
+        self.trigger("alert", "danger", "Error sending request.");
+      })
+      .always(function() {
+        $("#change-request-message").val("");
+        $("#change-medication-modal").modal("hide");
       });
-      $("#change-request-message").val("");
-      $("#change-medication-modal").modal("hide");
     }
   });
 

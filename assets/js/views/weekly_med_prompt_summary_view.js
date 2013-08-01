@@ -21,10 +21,13 @@ define([
           DateFormatter: DateFormatter
         }));
         this._renderSentMessages();
-        new ChangeMedicationView({
+        this.changeMedicationView = new ChangeMedicationView({
           environment: this.options.environment,
           appCode: this.options.appCode,
           getUserId: function() { return self.model.id; }
+        });
+        this.changeMedicationView.on("alert", function(type, message) {
+          self.trigger("alert", type, message);
         });
       }
     })

@@ -7,12 +7,13 @@ define([
   "views/weekly_med_prompt_summary_view",
   "views/weekly_survey_summary_view",
   "views/help_modal_partial",
+  "views/title_row_partial",
   "text!templates/weekly_participant_summary.tpl.html",
   "text!templates/_weekly_survey_header.tpl.html",
   "text!templates/_weekly_survey_navigation.tpl.html"
 ], function(Backbone, MA_MED_PROMPT, DateFormatter, Participant,
             SentMessages, WeeklyMedPromptSummaryView, WeeklySurveySummaryView,
-            HelpModalPartial, template, headerTpl, navTpl) {
+            HelpModalPartial, titleRowPartial, template, headerTpl, navTpl) {
   var WeeklyParticipantSummaryView = Backbone.View.extend({
     initialize: function(options) {
       _.bindAll(this, "_renderNavigation");
@@ -28,6 +29,9 @@ define([
         calendar: options.calendar,
         environment: this.options.environment,
         appCode: this.options.appCode
+      });
+      this.medPromptView.on("alert", function(type, message) {
+        self.trigger("alert", type, message);
       });
       this.medPromptView.$el.addClass("active");
       this.medPromptView.$el.attr("id", "medication");
@@ -88,7 +92,8 @@ define([
 
     _renderHeader: function() {
       this.$("#participant-header").before(this.headerTemplate({
-        helpModal: this.helpModal
+        helpModal: this.helpModal,
+        titleRow: titleRowPartial
       }));
     },
 
