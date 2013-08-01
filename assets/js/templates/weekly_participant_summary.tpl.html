@@ -3,10 +3,27 @@
   </thead>
 </table>
 
-<ul class="nav nav-tabs">
-  <li class="active"><a href="#medication" data-toggle="tab">Medication Adherence</a></li>
-  <li><a href="#side_effects" data-toggle="tab">Side Effects</a></li>
-  <li><a href="#symptoms" data-toggle="tab">Symptoms</a></li>
-</ul>
+<div class="row">
+  <div class="col-lg-8">
+    <ul class="nav nav-tabs">
+      <li class="active"><a href="#medication" data-toggle="tab">Medication Adherence</a></li>
+      <li><a href="#side_effects" data-toggle="tab">Side Effects</a></li>
+      <li><a href="#symptoms" data-toggle="tab">Symptoms</a></li>
+    </ul>
+  </div>
+  <div class="col-lg-4">
+    <a href="#"
+       class="btn btn-link pull-right"
+       data-toggle="popover"
+       data-placement="left"
+       data-trigger="click"
+       data-content="<div class='status-indicator bad'><div class='excl'>!</div></div> <br /><p>side effects / depressive symptoms reported</p><div class='status-indicator na'><div class='excl'>!</div></div> <br /><p>not all doses taken / not all info available</p><p>no symbol: all doses taken / no symptoms or side effects reported</p>"
+       data-html="true"
+       id="legend"
+       onclick="javascript:$('#legend').text($('#legend').text() == 'Show Legend' ? 'Hide Legend' : 'Show Legend'); return false;"
+    >Show Legend</a>
+    <script>$("#legend").popover();</script>
+  </div>
+</div>
 
 <div class="tab-content" id="participant-summary"></div>
