@@ -6,8 +6,10 @@ define([
   "views/title_row_partial",
   "views/clinician_alert_view",
   "text!templates/group_summary.tpl.html",
+  "text!templates/partials/_participants_dropdown.tpl.html",
 ], function(Backbone, DateFormatter, Calendar, HelpModalPartial,
-            titleRowPartial, ClinicianAlertView, template) {
+            titleRowPartial, ClinicianAlertView, template,
+            ParticipantsDropdownTpl) {
   var GroupSummaryView = Backbone.View.extend({
     initialize: function(options) {
       _.bindAll(this, "_nonadherenceDueToSideEffects", "_alwaysBotheredBy");
@@ -36,6 +38,8 @@ define([
 
     template: _.template(template),
 
+    participantsDropdownTpl: _.template(ParticipantsDropdownTpl),
+
     render: function() {
       this.$el.html(this.template({
         participants: this.collection,
@@ -45,6 +49,9 @@ define([
         helpModal: this.helpModal,
         DateFormatter: DateFormatter,
         titleRow: titleRowPartial
+      }));
+      $("#participants-dropdown").html(this.participantsDropdownTpl({
+        participants: this.collection
       }));
 
       return this;
