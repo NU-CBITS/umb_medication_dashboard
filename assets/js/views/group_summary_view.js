@@ -5,10 +5,11 @@ define([
   "views/help_modal_partial",
   "views/title_row_partial",
   "views/clinician_alert_view",
-  "text!templates/group_summary.tpl.html",
+  "text!h2h/templates/group_summary.tpl.html",
+  "text!ma/templates/group_summary.tpl.html",
   "text!templates/partials/_participants_dropdown.tpl.html",
 ], function(Backbone, DateFormatter, Calendar, HelpModalPartial,
-            titleRowPartial, ClinicianAlertView, template,
+            titleRowPartial, ClinicianAlertView, h2hTpl, maTpl,
             ParticipantsDropdownTpl) {
   var GroupSummaryView = Backbone.View.extend({
     initialize: function(options) {
@@ -19,13 +20,14 @@ define([
       });
       this.render();
       this.alertViews = {
-        non_adherence: new ClinicianAlertView({ alertType: "non_adherence" }),
-        symptoms: new ClinicianAlertView({ alertType: "symptoms" }),
-        side_effects: new ClinicianAlertView({ alertType: "side_effects" })
+        non_adherence: new ClinicianAlertView({ alertType: "non_adherence" })
       };
       this.$("#non-adherence-alert").html(this.alertViews.non_adherence.$el);
-      this.$("#symptoms-alert").html(this.alertViews.symptoms.$el);
-      this.$("#side-effects-alert").html(this.alertViews.side_effects.$el);
+      var self = this;
+      _.each(options.surveys, function(surveyName) {
+        self.alertViews[surveyName] = new ClinicianAlertView({ alertType: surveyName });
+        self.$("#" + surveyName + "-alert").html(self.alertViews[surveyName].$el);
+      });
     },
 
     events: function() {
@@ -36,19 +38,24 @@ define([
 
     className: "col-lg-12",
 
-    template: _.template(template),
+    templates: {
+      heart2haart: _.template(h2hTpl),
+      medactive: _.template(maTpl)
+    },
 
     participantsDropdownTpl: _.template(ParticipantsDropdownTpl),
 
     render: function() {
-      this.$el.html(this.template({
+      this.$el.html(this.templates[this.options.appCode]({
         participants: this.collection,
         nonadherenceDueToSideEffects: this._nonadherenceDueToSideEffects,
         alwaysBotheredBy: this._alwaysBotheredBy,
         previousSpanAdherencePct: this._previousSpanAdherencePct,
         helpModal: this.helpModal,
         DateFormatter: DateFormatter,
-        titleRow: titleRowPartial
+        titleRow: titleRowPartial,
+        appCode: this.options.appCode,
+        surveys: this.options.surveys
       }));
       $("#participants-dropdown").html(this.participantsDropdownTpl({
         participants: this.collection

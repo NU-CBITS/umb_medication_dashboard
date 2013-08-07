@@ -22,7 +22,7 @@ define([
 
       $.post(url())
       .done(function(data) {
-        self.trigger("alert", "success", "Message sent.");
+        self.trigger("alert", "success", "Thank you, your message has been sent. You will be contacted within 1 business day.");
       })
       .error(function(data) {
         self.trigger("alert", "danger", "Error sending message.");

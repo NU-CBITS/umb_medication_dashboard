@@ -18,7 +18,8 @@ define([
         environment: options.environment,
         appCode: options.appCode,
         calendar: calendar,
-        collection: options.participants
+        collection: options.participants,
+        surveys: options.surveys
       });
       views.participant = new WeeklyParticipantSummaryView({
         environment: options.environment,

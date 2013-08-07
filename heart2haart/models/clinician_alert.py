@@ -13,4 +13,4 @@ class ClinicianAlert(models.Model):
   participant_requests_contact = models.BooleanField()
 
   class Meta:
-    app_label = 'medactive'
+    app_label = 'heart2haart'
