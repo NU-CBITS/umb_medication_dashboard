@@ -1,4 +1,5 @@
-<%= titleRow.render("MedActive Users Summary") %>
+<% titles = {medactive:'MedActive',heart2haart:'Heart2HAART'} %>
+<%= titleRow.render(titles[appCode] + " Users Summary") %>
 
 <%= helpModal.render() %>
 
@@ -38,7 +39,7 @@
       </td>
       <td>
         <% if (alwaysBotheredBy(participant, "side_effects")) { %>
-        <div class="status-indicator bad" data-target="#side-effects-alert" data-participant-id="<%= participant.id %>" data-alert-type="side_effects">&nbsp;</div>
+        <div class="status-indicator bad" data-target="#side_effects-alert" data-participant-id="<%= participant.id %>" data-alert-type="side_effects">&nbsp;</div>
         <% } %>
       </td>
       <td>
@@ -50,7 +51,7 @@
   </tbody>
 </table>
 
-<div id="side-effects-alert" class="modal fade"></div>
+<div id="side_effects-alert" class="modal fade"></div>
 
 <div id="symptoms-alert" class="modal fade"></div>
 

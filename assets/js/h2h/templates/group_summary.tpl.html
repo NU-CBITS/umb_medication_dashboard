@@ -1,0 +1,58 @@
+<% titles = {medactive:'MedActive',heart2haart:'Heart2HAART'} %>
+<%= titleRow.render(titles[appCode] + " Users Summary") %>
+
+<%= helpModal.render() %>
+
+<table class="table table-striped table-bordered" id="group-summary">
+  <thead>
+    <tr>
+      <th>Patient Name</th>
+      <th>Medication</th>
+      <th>Administration Times</th>
+      <th><span title="Adherence calculations are based only on patients' responses to the prompts. Non-responses to prompts are not included in the denominator of these adherence calculations.">7/28 day adherence</span></th>
+      <th>Non Adherence<br />Due to Side Effects</th>
+      <th>Depression Survey</th>
+      <th>Side Effects Survey</th>
+      <th>Last update</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% participants.each(function(participant) { %>
+    <tr>
+      <td>
+        <a href="#weekly_summaries/<%= participant.patientId() %>" class="view-details"><%= participant.patientName() %></a>
+      </td>
+      <td><%= participant.getCurrentDoses()[0].summary() %></td>
+      <td><%= _.map(participant.getCurrentDoses(), function(dose) { return dose.time(); }).join(", ") %></td>
+      <td>
+        <%= previousSpanAdherencePct(participant, 7) %>% / <%= previousSpanAdherencePct(participant, 28) %>%
+      </td>
+      <td>
+        <% if (nonadherenceDueToSideEffects(participant)) { %>
+        <div class="status-indicator bad" data-target="#non-adherence-alert" data-participant-id="<%= participant.id %>" data-alert-type="non_adherence">&nbsp;</div>
+        <% } %>
+      </td>
+      <td>
+        <% if (alwaysBotheredBy(participant, "mood")) { %>
+        <div class="status-indicator bad" data-target="#mood-alert" data-participant-id="<%= participant.id %>" data-alert-type="mood">&nbsp;</div>
+        <% } %>
+      </td>
+      <td>
+        <% if (alwaysBotheredBy(participant, "side_effects")) { %>
+        <div class="status-indicator bad" data-target="#side_effects-alert" data-participant-id="<%= participant.id %>" data-alert-type="side_effects">&nbsp;</div>
+        <% } %>
+      </td>
+      <td>
+        <% timeStamp = participant.getLatestAction().getEventDateTime() %>
+        <%= DateFormatter.dateTimeString(timeStamp) %>
+      </td>
+    </tr>
+    <% }); %>
+  </tbody>
+</table>
+
+<div id="side_effects-alert" class="modal fade"></div>
+
+<div id="mood-alert" class="modal fade"></div>
+
+<div id="non-adherence-alert" class="modal fade"></div>
