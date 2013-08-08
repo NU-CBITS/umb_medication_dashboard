@@ -51,7 +51,7 @@ define(["lib/hash"], function(Hash) {
           {
             label: "No",
             next_page: "insomnia",
-            is_positive: false
+            is_positive: true
           },
           {
             label: "Yes",

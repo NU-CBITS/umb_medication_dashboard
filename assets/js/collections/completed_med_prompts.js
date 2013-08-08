@@ -26,9 +26,20 @@ define([
       var surveys, negative;
 
       surveys = this._surveysForDoseOnDate(dose, date);
-      negative = this._isNegative(surveys, "index");
+      negative = this._negativeDetail(surveys, "index");
 
-      return surveys.length ? (negative ? "negative" : "positive") : "missing";
+      if (surveys.length) {
+        if  (negative) {
+          return {
+            status: "negative",
+            explain: "Patient reports not taking this dose because " + negative.get("reason_for_missing")
+          };
+        } else {
+          return { status: "positive" };
+        }
+      } else {
+        return { status: "missing", explain: "Patient did not respond to this query." };
+      }
     },
 
     nonadherenceDueToSideEffects: function(options) {
@@ -45,10 +56,10 @@ define([
       });
     },
 
-    _isNegative: function(surveys, pageName) {
+    _negativeDetail: function(surveys, pageName) {
       var self = this;
 
-      return _.any(surveys, function(response) {
+      return _.find(surveys, function(response) {
         return (_.find(self.surveyPages[pageName].responses, {
           label: response.get(pageName)
         }).is_positive === false);

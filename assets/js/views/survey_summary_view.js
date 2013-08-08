@@ -4,7 +4,7 @@ define([
 ], function(statusTpl, sentMsgsTpl) {
   var HOVER_TEXT = {
     negative: "Adherence calculation is based only on patients' responses to the prompts. Non-responses to prompts are not included in the denominator of this adherence calculation.",
-    missing: "Adherence calculation includes patients' non-responses to prompts. Non-responses are considered nonadherence."
+    missing: "Patient did not respond to this query."
   };
 
   var SurveySummaryView = {
@@ -41,9 +41,9 @@ define([
 
     _statusIndicator: function(question, date) {
       var responseStatus = this.collection.responseStatus(question, date);
-      var elClass = { negative: "bad", missing: "na" }[responseStatus];
+      var elClass = { negative: "bad", missing: "na" }[responseStatus.status];
 
-      return elClass ? _.template(statusTpl, { elClass: elClass, text: HOVER_TEXT[responseStatus] }) : "";
+      return elClass ? _.template(statusTpl, { elClass: elClass, text: responseStatus.explain }) : "";
     }
   };
 
