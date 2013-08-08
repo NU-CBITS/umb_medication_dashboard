@@ -60,7 +60,7 @@ define([
         var responseLabel = survey.get(pageName);
         response = self._findResponse(self.survey, pageName, responseLabel);
 
-        return response.is_positive === false;
+        return response && response.is_positive === false;
       });
 
       if (negativeSurvey) {
