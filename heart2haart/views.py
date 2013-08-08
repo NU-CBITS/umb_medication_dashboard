@@ -1,6 +1,5 @@
 from django.http import HttpResponse
-from django.views.decorators.cache import cache_page
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test
 import json
 from umb_dashboard.views import respond_with_json
 from umb_dashboard.models import MedPromptResponse, SentMessage
@@ -8,36 +7,36 @@ from heart2haart.models import SideEffectsSurveyResponse, \
   MoodSurveyResponse, CravingsSurveyResponse, ClinicianAlert, Participant, \
   ParticipantAction
 
-@login_required
+def is_clinician(user):
+  return user.groups.filter(name='Heart2HAART Clinicians').exists()
+
+@user_passes_test(is_clinician)
 def participants(request):
   return respond_with_json(Participant.objects.all())
 
-@login_required
-#@cache_page()
+@user_passes_test(is_clinician)
 def side_effects_survey_responses(request, participant_id):
   responses = SideEffectsSurveyResponse.objects.all_for_participant(participant_id)
   return respond_with_json(responses)
 
-@login_required
-#@cache_page()
+@user_passes_test(is_clinician)
 def mood_survey_responses(request, participant_id):
   responses = MoodSurveyResponse.objects.all_for_participant(participant_id)
   return respond_with_json(responses)
 
-@login_required
-#@cache_page()
+@user_passes_test(is_clinician)
 def cravings_survey_responses(request, participant_id):
   responses = CravingsSurveyResponse.objects.all_for_participant(participant_id)
   return respond_with_json(responses)
 
-@login_required
+@user_passes_test(is_clinician)
 def update_clinician_alert(request, participant_id, alert_id):
   from django.core import serializers
   for alert in serializers.deserialize("json", request.body):
     alert.save()
   return HttpResponse()
 
-@login_required
+@user_passes_test(is_clinician)
 def uncleared_clinician_alerts(request, participant_id):
   alerts = []
   alert_types = ["non_adherence", "side_effects", "mood", "cravings"]
@@ -133,7 +132,6 @@ def any_contact_requests(last_alert_timestamp, participant_id, alert_type):
 
   return len(messages) > 0
 
-@login_required
-#@cache_page()
+@user_passes_test(is_clinician)
 def latest_action(request, participant_id):
   return respond_with_json(ParticipantAction.objects.latest(participant_id))
