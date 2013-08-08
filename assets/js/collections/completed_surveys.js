@@ -25,9 +25,20 @@ define([
       var self = this, negative, surveys;
 
       surveys = this._surveysOnDate(date);
-      negative = this._isNegative(surveys, pageName);
+      negative = this._negativeDetail(surveys, pageName);
 
-      return surveys.length ? (negative ? "negative" : "positive") : "missing";
+      if (surveys.length) {
+        if (negative) {
+          return {
+            status: "negative",
+            explain: negative === true ? null : "Patient reports " + negative
+          };
+        } else {
+          return { status: "positive" };
+        }
+      } else {
+        return { status: "missing", explain: "Patient did not respond to this query." };
+      }
     },
 
     alwaysBotheredBy: function(options) {
@@ -41,15 +52,30 @@ define([
       return this.where({ date: date });
     },
 
-    _isNegative: function(surveys, pageName) {
-      var self = this;
+    _negativeDetail: function(takenSurveys, pageName) {
+      var self = this,
+          response = null;
 
-      return _.any(surveys, function(response) {
-        var response = _.find(self.survey.pages[pageName].responses, {
-          label: response.get(pageName)
-        });
+      var negativeSurvey = _.find(takenSurveys, function(survey) {
+        var responseLabel = survey.get(pageName);
+        response = self._findResponse(self.survey, pageName, responseLabel);
 
-        return (response || {}).is_positive === false;
+        return response.is_positive === false;
+      });
+
+      if (negativeSurvey) {
+        var nextPage = response.next_page;
+
+        if (nextPage && nextPage.match(/_frequency$|_distress$/)) {
+          return negativeSurvey.get(nextPage);
+        }
+        return true;
+      }
+    },
+
+    _findResponse: function(survey, pageName, responseLabel) {
+      return _.find(survey.pages[pageName].responses, {
+        label: responseLabel
       });
     }
   });
