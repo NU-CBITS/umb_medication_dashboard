@@ -55,105 +55,40 @@
             </tr>
           </thead>
           <tbody>
+            {% for participant in participants %}
             <tr>
-              <td>3</td>
-              <td>Clinician One</td>
-              <td>MA352</td>
-              <td>Aug 5, 5:43pm</td>
+              <td>{{ participant.clinician_alerts|length }}</td>
+              <td>{{ participant.clinician }}</td>
+              <td>{{ participant.participant_id }}</td>
+              <td>{{ participant.latest_clinician_check_in }}</td>
               <td>
                 <div class="sparkline">
+                  {% for day in dates %}
+                    {% if day in participant.dates_with_data_last_week %}
+                  <div class="x-unit good">
+                    {% else %}
                   <div class="x-unit bad">
+                    {% endif %}
                     <div class="upper-bar"></div>
                     <div class="lower-bar"></div>
                   </div>
-                  <div class="x-unit bad">
-                    <div class="upper-bar"></div>
-                    <div class="lower-bar"></div>
-                  </div>
-                  <div class="x-unit good">
-                    <div class="upper-bar"></div>
-                    <div class="lower-bar"></div>
-                  </div>
-                  <div class="x-unit bad">
-                    <div class="upper-bar"></div>
-                    <div class="lower-bar"></div>
-                  </div>
-                  <div class="x-unit good">
-                    <div class="upper-bar"></div>
-                    <div class="lower-bar"></div>
-                  </div>
-                  <div class="x-unit good">
-                    <div class="upper-bar"></div>
-                    <div class="lower-bar"></div>
-                  </div>
-                  <div class="x-unit good">
-                    <div class="upper-bar"></div>
-                    <div class="lower-bar"></div>
-                  </div>
+                  {% endfor %}
                 </div>
               </td>
               <td>
-                <div class="sparkline">
-                  <div class="x-unit bad">
-                    <div class="upper-bar"></div>
-                    <div class="lower-bar"></div>
-                  </div>
-                  <div class="x-unit good">
-                    <div class="upper-bar"></div>
-                    <div class="lower-bar"></div>
-                  </div>
-                  <div class="x-unit bad">
-                    <div class="upper-bar"></div>
-                    <div class="lower-bar"></div>
-                  </div>
-                  <div class="x-unit bad">
-                    <div class="upper-bar"></div>
-                    <div class="lower-bar"></div>
-                  </div>
-                  <div class="x-unit good">
-                    <div class="upper-bar"></div>
-                    <div class="lower-bar"></div>
-                  </div>
-                  <div class="x-unit good">
-                    <div class="upper-bar"></div>
-                    <div class="lower-bar"></div>
-                  </div>
-                  <div class="x-unit bad">
-                    <div class="upper-bar"></div>
-                    <div class="lower-bar"></div>
-                  </div>
               </td>
               <td>
                 <div class="sparkline">
+                  {% for day in dates %}
+                    {% if day in participant.dates_with_actions_last_week %}
+                  <div class="x-unit good">
+                    {% else %}
                   <div class="x-unit bad">
+                    {% endif %}
                     <div class="upper-bar"></div>
                     <div class="lower-bar"></div>
                   </div>
-                  <div class="x-unit bad">
-                    <div class="upper-bar"></div>
-                    <div class="lower-bar"></div>
-                  </div>
-                  <div class="x-unit good">
-                    <div class="upper-bar"></div>
-                    <div class="lower-bar"></div>
-                  </div>
-                  <div class="x-unit bad">
-                    <div class="upper-bar"></div>
-                    <div class="lower-bar"></div>
-                  </div>
-                  <div class="x-unit good">
-                    <div class="upper-bar"></div>
-                    <div class="lower-bar"></div>
-                  </div>
-                  <div class="x-unit good">
-                    <div class="upper-bar"></div>
-                    <div class="lower-bar"></div>
-                  </div>
-                  <div class="x-unit good">
-                    <div class="upper-bar"></div>
-                    <div class="lower-bar"></div>
-                  </div>
-                </div>
+                  {% endfor %}
               </td>
               <td>
                 <div class="sparkline">
@@ -187,10 +122,11 @@
                   </div>
                 </div>
               </td>
-              <td>Aug 2</td>
-              <td>Aug 1</td>
-              <td>Aug 31</td>
+              <td>{{ participant.latest_clinician_help_request|date:"M j" }}</td>
+              <td>{{ participant.earliest_action|date:"M j" }}</td>
+              <td>{{ participant.latest_action|date:"M j" }}</td>
             </tr>
+            {% endfor %}
           </tbody>
         </table>
       </div>

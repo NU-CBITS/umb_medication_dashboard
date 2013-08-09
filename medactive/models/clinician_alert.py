@@ -1,7 +1,10 @@
 from django.db import models
+from django.contrib.auth.models import User
+from .participant import Participant
 
 class ClinicianAlert(models.Model):
-  participant_id = models.CharField(max_length=255)
+  clinician = models.ForeignKey(User, related_name='+')
+  participant = models.ForeignKey(Participant, related_name='medactive_clinician_alerts')
   type = models.CharField(max_length=255)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)

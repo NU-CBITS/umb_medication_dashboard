@@ -2,8 +2,6 @@ from django.db import models
 from umb_dashboard.models import ParticipantModelManager
 
 class CravingsSurveyResponseManager(ParticipantModelManager):
-  HIGH_FREQ = 'Almost all of the time'
-
   def negative_responses(self, participant_id, start_time):
     cursor = self.participant_db_cursor(participant_id)
     sql = self._select_negative_sql(cursor, start_time)
@@ -17,16 +15,7 @@ class CravingsSurveyResponseManager(ParticipantModelManager):
       (columns, self.model._meta.db_table, self._negative_conditions(cursor, start_time))
 
   def _negative_conditions(self, cursor, start_time):
-    import re
-    columns = self.raw_column_names(cursor)
-    frequency_conditions = (
-      '"%s"=\'%s\'' % (c, self.HIGH_FREQ)
-      for c in columns
-      if re.match('.*_frequency$', c)
-    )
-
-    return '"eventDateTime" >= \'%s\' AND (%s)' %  \
-      (start_time, ' OR '.join(frequency_conditions) or False)
+    return '"eventDateTime" >= \'%s\' AND "FEATURE_VALUE_DT_index" = \'Yes\'' %  start_time
 
 class CravingsSurveyResponse(models.Model):
   id = models.TextField(primary_key=True)
