@@ -1,16 +1,16 @@
 import datetime
 from django.db import models
-from .participant_model_manager import ParticipantModelManager
+from umb_dashboard.models import ParticipantModelManager
 
-class DoseHistoryManager(ParticipantModelManager):
-    def dates_with_dose_changes_last_week(self, participant_id):
+class ParticipantCheckInManager(ParticipantModelManager):
+    def dates_with_check_ins_last_week(self, participant_id):
         cursor = self.participant_db_cursor(participant_id)
-        sql = self.__select_dates_with_dose_changes_last_week_sql()
+        sql = self.__select_dates_with_check_ins_last_week_sql()
 
         return self.fetch_results(cursor, sql) 
 
-    def __select_dates_with_dose_changes_last_week_sql(self):
-        select = 'SELECT "id", "eventDateTime" FROM "doseHistory"'
+    def __select_dates_with_check_ins_last_week_sql(self):
+        select = 'SELECT "id", "eventDateTime" FROM "participant_check_in"'
         today = datetime.date.today()
 
         return 'SELECT "eventDateTime" '\
@@ -19,13 +19,11 @@ class DoseHistoryManager(ParticipantModelManager):
             'WHERE x.row = 1 AND "x"."eventDateTime" < \'%s\' AND "x"."eventDateTime" >= \'%s\';' % \
             (select, today, today - datetime.timedelta(days=7))
 
-class DoseHistory(models.Model):
-    id = models.TextField(primary_key=True)
+class ParticipantCheckIn(models.Model):
     eventDateTime = models.DateTimeField()
-    doses = models.TextField()
 
-    objects = DoseHistoryManager()
+    objects = ParticipantCheckInManager()
 
     class Meta:
-        db_table = 'doseHistory'
         managed = False
+

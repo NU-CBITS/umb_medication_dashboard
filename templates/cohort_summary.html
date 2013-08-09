@@ -30,9 +30,9 @@
     <div class="navbar">
       <div class="container">
         <div class="pull-left">
-          <img src="/umb/assets/img/medactive-icon.png">
+          <img src="/umb/assets/img/{{ app_name|lower }}-icon.png">
         </div>
-        <a class="navbar-brand" href="#">MedActive</a>
+        <a class="navbar-brand pull-left" style="margin-left: 10px;" href="#">{{ app_name }}</a>
       </div>
     </div>
     <div class="container">
@@ -76,6 +76,18 @@
                 </div>
               </td>
               <td>
+                <div class="sparkline">
+                  {% for day in dates %}
+                    {% if day in participant.dates_with_check_ins_last_week %}
+                  <div class="x-unit good">
+                    {% else %}
+                  <div class="x-unit bad">
+                    {% endif %}
+                    <div class="upper-bar"></div>
+                    <div class="lower-bar"></div>
+                  </div>
+                  {% endfor %}
+                </div>
               </td>
               <td>
                 <div class="sparkline">
@@ -89,37 +101,20 @@
                     <div class="lower-bar"></div>
                   </div>
                   {% endfor %}
+                </div>
               </td>
               <td>
                 <div class="sparkline">
+                  {% for day in dates %}
+                    {% if day in participant.dates_with_dose_changes_last_week %}
                   <div class="x-unit good">
+                    {% else %}
+                  <div class="x-unit bad">
+                    {% endif %}
                     <div class="upper-bar"></div>
                     <div class="lower-bar"></div>
                   </div>
-                  <div class="x-unit good">
-                    <div class="upper-bar"></div>
-                    <div class="lower-bar"></div>
-                  </div>
-                  <div class="x-unit good">
-                    <div class="upper-bar"></div>
-                    <div class="lower-bar"></div>
-                  </div>
-                  <div class="x-unit good">
-                    <div class="upper-bar"></div>
-                    <div class="lower-bar"></div>
-                  </div>
-                  <div class="x-unit good">
-                    <div class="upper-bar"></div>
-                    <div class="lower-bar"></div>
-                  </div>
-                  <div class="x-unit good">
-                    <div class="upper-bar"></div>
-                    <div class="lower-bar"></div>
-                  </div>
-                  <div class="x-unit good">
-                    <div class="upper-bar"></div>
-                    <div class="lower-bar"></div>
-                  </div>
+                  {% endfor %}
                 </div>
               </td>
               <td>{{ participant.latest_clinician_help_request|date:"M j" }}</td>

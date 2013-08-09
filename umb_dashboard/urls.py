@@ -27,6 +27,7 @@ urlpatterns = patterns('',
     # MedActive
     url(r'^heart2haart/logout$', 'django.contrib.auth.views.logout', { 'next_page': '/umb/accounts/login/?next=/umb/heart2haart' }),
     url(r'^heart2haart$', TemplateView.as_view(template_name='heart2haart_index.html')),
+    url(r'^heart2haart/cohort_summary$', 'heart2haart.views.cohort_summary'),
     url(r'^heart2haart/participants$', 'heart2haart.views.participants'),
     url(r'^heart2haart/participants/([^/]+)/med_prompt_survey_responses$', 'umb_dashboard.views.med_prompt_survey_responses'),
     url(r'^heart2haart/participants/([^/]+)/side_effects_survey_responses$', 'heart2haart.views.side_effects_survey_responses'),
