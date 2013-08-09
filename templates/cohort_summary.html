@@ -76,6 +76,18 @@
                 </div>
               </td>
               <td>
+                <div class="sparkline">
+                  {% for day in dates %}
+                    {% if day in participant.dates_with_check_ins_last_week %}
+                  <div class="x-unit good">
+                    {% else %}
+                  <div class="x-unit bad">
+                    {% endif %}
+                    <div class="upper-bar"></div>
+                    <div class="lower-bar"></div>
+                  </div>
+                  {% endfor %}
+                </div>
               </td>
               <td>
                 <div class="sparkline">
@@ -89,6 +101,7 @@
                     <div class="lower-bar"></div>
                   </div>
                   {% endfor %}
+                </div>
               </td>
               <td>
                 <div class="sparkline">

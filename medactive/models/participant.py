@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from .participant_action import ParticipantAction
 from .participant_datum import ParticipantDatum
+from .participant_check_in import ParticipantCheckIn
 from .clinician_profile import ClinicianProfile
 
 class Participant(models.Model):
@@ -33,6 +34,13 @@ class Participant(models.Model):
             self.dates_with_actions_last_week_memo = [a.eventDateTime for a in actions]
 
         return self.dates_with_actions_last_week_memo
+
+    def dates_with_check_ins_last_week(self):
+        if not hasattr(self, 'dates_with_check_ins_last_week_memo'):
+            check_ins = ParticipantCheckIn.objects.dates_with_check_ins_last_week(self.participant_id)
+            self.dates_with_check_ins_last_week_memo = [c.eventDateTime for c in check_ins]
+
+        return self.dates_with_check_ins_last_week_memo
 
     def latest_clinician_check_in(self):
         try:
