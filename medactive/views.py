@@ -1,5 +1,4 @@
-import datetime
-import json
+import datetime, json
 from django.http import HttpResponse
 from django.contrib.auth.decorators import user_passes_test
 from umb_dashboard.views import respond_with_json
@@ -132,7 +131,8 @@ def cohort_summary(request):
   dates = [today - datetime.timedelta(days=x) for x in range(1, 8)]
   params = {
     'participants': participants,
-    'dates': dates
+    'dates': dates,
+    'app_name': 'MedActive'
   }
 
   return render(request, 'cohort_summary.html', params)

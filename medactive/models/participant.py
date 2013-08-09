@@ -4,6 +4,7 @@ from .participant_action import ParticipantAction
 from .participant_datum import ParticipantDatum
 from .participant_check_in import ParticipantCheckIn
 from .clinician_profile import ClinicianProfile
+from umb_dashboard.models import DoseHistory
 
 class Participant(models.Model):
     participant_id = models.CharField(max_length=255)
@@ -41,6 +42,13 @@ class Participant(models.Model):
             self.dates_with_check_ins_last_week_memo = [c.eventDateTime for c in check_ins]
 
         return self.dates_with_check_ins_last_week_memo
+
+    def dates_with_dose_changes_last_week(self):
+        if not hasattr(self, 'dates_with_dose_changes_last_week_memo'):
+            dose_changes = ParticipantCheckIn.objects.dates_with_dose_changes_last_week(self.participant_id)
+            self.dates_with_dose_changes_last_week_memo = [d.eventDateTime for d in dose_changes]
+
+        return self.dates_with_dose_changes_last_week_memo
 
     def latest_clinician_check_in(self):
         try:

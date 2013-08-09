@@ -1,6 +1,6 @@
+import datetime, json
 from django.http import HttpResponse
 from django.contrib.auth.decorators import user_passes_test
-import json
 from umb_dashboard.views import respond_with_json
 from umb_dashboard.models import MedPromptResponse, SentMessage
 from heart2haart.models import SideEffectsSurveyResponse, \
@@ -9,6 +9,9 @@ from heart2haart.models import SideEffectsSurveyResponse, \
 
 def is_clinician(user):
   return user.groups.filter(name='Heart2HAART Clinicians').exists()
+
+def is_researcher(user):
+  return user.groups.filter(name='Heart2HAART Researchers').exists()
 
 @user_passes_test(is_clinician)
 def participants(request):
@@ -115,3 +118,27 @@ def any_contact_requests(last_alert_timestamp, participant, alert_type):
 @user_passes_test(is_clinician)
 def latest_action(request, participant_id):
   return respond_with_json(ParticipantAction.objects.latest(participant_id))
+
+@user_passes_test(is_researcher)
+def cohort_summary(request):
+  from django.shortcuts import render
+  participants = Participant.objects.all()
+  today = datetime.date.today()
+  dates = [today - datetime.timedelta(days=x) for x in range(1, 8)]
+  params = {
+    'participants': participants,
+    'dates': dates,
+    'app_name': 'Heart2HAART'
+  }
+
+  return render(request, 'cohort_summary.html', params)
+
+@user_passes_test(is_clinician)
+def contact_research_staff(request):
+  from django.core.mail import send_mail
+  from django.conf import settings
+  send_mail('Clinician requires assistance', 'A clinician requires assistance',
+    settings.DEFAULT_FROM_EMAIL, settings.RESEARCH_STAFF_EMAILS, fail_silently=True)
+  request.user.heart2haart_help_request.create()
+
+  return HttpResponse(status=200)
