@@ -11,7 +11,7 @@ urlpatterns = patterns('',
     # MedActive
     url(r'^medactive/logout$', 'django.contrib.auth.views.logout', { 'next_page': '/umb/accounts/login/?next=/umb/medactive' }),
     url(r'^medactive$', TemplateView.as_view(template_name='medactive_index.html')),
-    url(r'^medactive/cohort_summary$', TemplateView.as_view(template_name='cohort_summary.html')),
+    url(r'^medactive/cohort_summary$', 'medactive.views.cohort_summary'),
     url(r'^medactive/participants$', 'medactive.views.participants'),
     url(r'^medactive/participants/([^/]+)/med_prompt_survey_responses$', 'umb_dashboard.views.med_prompt_survey_responses'),
     url(r'^medactive/participants/([^/]+)/side_effects_survey_responses$', 'medactive.views.side_effects_survey_responses'),
@@ -22,7 +22,7 @@ urlpatterns = patterns('',
     url(r'^medactive/participants/([^/]+)/latest_action$', 'medactive.views.latest_action'),
     url(r'^medactive/participants/([^/]+)/dose_history$', 'umb_dashboard.views.dose_history'),
     url(r'^medactive/participants/([^/]+)/change_medication_requests$', 'umb_dashboard.views.create_change_medication_request'),
-    url(r'^medactive/contact_research_staff$', 'umb_dashboard.views.contact_research_staff'),
+    url(r'^medactive/contact_research_staff$', 'medactive.views.contact_research_staff'),
 
     # MedActive
     url(r'^heart2haart/logout$', 'django.contrib.auth.views.logout', { 'next_page': '/umb/accounts/login/?next=/umb/heart2haart' }),

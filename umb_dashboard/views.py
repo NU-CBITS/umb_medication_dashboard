@@ -34,12 +34,3 @@ def med_prompt_survey_responses(request, participant_id):
 def sent_messages(request, participant_id):
   messages = SentMessage.objects.all_for_participant(participant_id)
   return respond_with_json(messages)
-
-@user_passes_test(is_clinician)
-def contact_research_staff(request):
-  from django.core.mail import send_mail
-  from django.conf import settings
-  send_mail('Clinician requires assistance', 'A clinician requires assistance',
-    settings.DEFAULT_FROM_EMAIL, settings.RESEARCH_STAFF_EMAILS, fail_silently=True)
-
-  return HttpResponse(status=200)

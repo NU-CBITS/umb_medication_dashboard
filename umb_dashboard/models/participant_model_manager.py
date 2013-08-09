@@ -46,6 +46,12 @@ class ParticipantModelManager(models.Manager):
 
     return list(name[0] for name in cursor.fetchall())
 
+  def all_table_names(self, cursor):
+    query = 'SELECT table_name FROM information_schema.tables WHERE table_schema = \'public\';'
+    cursor.execute(query)
+
+    return list(name[0] for name in cursor.fetchall())
+
   def _select_all_sql(self, cursor):
     return 'SELECT %s FROM "%s";' % \
       (self.all_column_names(cursor), self.model._meta.db_table)

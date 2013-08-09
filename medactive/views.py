@@ -1,17 +1,28 @@
+import datetime
+import json
 from django.http import HttpResponse
 from django.contrib.auth.decorators import user_passes_test
-import json
 from umb_dashboard.views import respond_with_json
 from umb_dashboard.models import MedPromptResponse, SentMessage
 from medactive.models import SideEffectsSurveyResponse, \
-  SymptomsSurveyResponse, ClinicianAlert, Participant, ParticipantAction
+  SymptomsSurveyResponse, ClinicianAlert, ClinicianProfile, Participant, \
+  ParticipantAction
 
 def is_clinician(user):
   return user.groups.filter(name='MedActive Clinicians').exists()
 
+def is_researcher(user):
+  return user.groups.filter(name='MedActive Researchers').exists()
+
 @user_passes_test(is_clinician)
 def participants(request):
+  __check_in_clinician(request.user)
   return respond_with_json(Participant.objects.all())
+
+def __check_in_clinician(clinician):
+  profile, created = ClinicianProfile.objects.get_or_create(clinician_id=clinician.id)
+  if created == False:
+    profile.save()
 
 @user_passes_test(is_clinician)
 def side_effects_survey_responses(request, participant_id):
@@ -42,7 +53,6 @@ def uncleared_clinician_alerts(request, participant_id):
   return respond_with_json(alerts)
 
 def find_uncleared_alert(clinician_id, participant, alert_type):
-  import datetime
   alert_manager = ClinicianAlert.objects
   alerts = alert_manager.filter(participant_id=participant.id, type=alert_type, is_cleared=False) or []
   if len(alerts) == 0:
@@ -113,3 +123,26 @@ def any_contact_requests(last_alert_timestamp, participant, alert_type):
 @user_passes_test(is_clinician)
 def latest_action(request, participant_id):
   return respond_with_json(ParticipantAction.objects.latest(participant_id))
+
+@user_passes_test(is_researcher)
+def cohort_summary(request):
+  from django.shortcuts import render
+  participants = Participant.objects.all()
+  today = datetime.date.today()
+  dates = [today - datetime.timedelta(days=x) for x in range(1, 8)]
+  params = {
+    'participants': participants,
+    'dates': dates
+  }
+
+  return render(request, 'cohort_summary.html', params)
+
+@user_passes_test(is_clinician)
+def contact_research_staff(request):
+  from django.core.mail import send_mail
+  from django.conf import settings
+  send_mail('Clinician requires assistance', 'A clinician requires assistance',
+    settings.DEFAULT_FROM_EMAIL, settings.RESEARCH_STAFF_EMAILS, fail_silently=True)
+  request.user.medactive_help_request.create()
+
+  return HttpResponse(status=200)

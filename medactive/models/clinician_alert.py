@@ -4,7 +4,7 @@ from .participant import Participant
 
 class ClinicianAlert(models.Model):
   clinician = models.ForeignKey(User, related_name='+')
-  participant = models.ForeignKey(Participant, related_name='+')
+  participant = models.ForeignKey(Participant, related_name='medactive_clinician_alerts')
   type = models.CharField(max_length=255)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
