@@ -25,7 +25,7 @@
       <td><%= participant.getCurrentDoses()[0].summary() %></td>
       <td><%= _.map(participant.getCurrentDoses(), function(dose) { return dose.time(); }).join(", ") %></td>
       <td>
-        <%= previousSpanAdherencePct(participant, 7) %>% / <%= previousSpanAdherencePct(participant, 28) %>%
+        <%= participant.previousSpanAdherencePct(7) %>% / <%= participant.previousSpanAdherencePct(28) %>%
       </td>
       <td>
         <% if (nonadherenceDueToSideEffects(participant)) { %>

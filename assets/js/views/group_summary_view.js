@@ -1,14 +1,13 @@
 define([
   "backbone",
   "lib/date_formatter",
-  "models/calendar",
   "views/help_modal_partial",
   "views/title_row_partial",
   "views/clinician_alert_view",
   "text!h2h/templates/group_summary.tpl.html",
   "text!ma/templates/group_summary.tpl.html",
   "text!templates/partials/_participants_dropdown.tpl.html",
-], function(Backbone, DateFormatter, Calendar, HelpModalPartial,
+], function(Backbone, DateFormatter, HelpModalPartial,
             titleRowPartial, ClinicianAlertView, h2hTpl, maTpl,
             ParticipantsDropdownTpl) {
   var GroupSummaryView = Backbone.View.extend({
@@ -50,7 +49,6 @@ define([
         participants: this.collection,
         nonadherenceDueToSideEffects: this._nonadherenceDueToSideEffects,
         alwaysBotheredBy: this._alwaysBotheredBy,
-        previousSpanAdherencePct: this._previousSpanAdherencePct,
         helpModal: this.helpModal,
         DateFormatter: DateFormatter,
         titleRow: titleRowPartial,
@@ -83,23 +81,6 @@ define([
         self.alertViews[options.alertType].off();
       });
       $(options.target).modal("show");
-    },
-
-    _previousSpanAdherencePct: function(participant, days) {
-      var dates = (new Calendar()).dates("iso8601", { days: days });
-      var adherentDates = _.filter(dates, function(date) {
-        return allDosesTaken(date);
-      });
-
-      function allDosesTaken(date) {
-        var dosesOnDate = participant.getAssignedDoses().getValuesOnDate(date).doses;
-
-        return _.all(dosesOnDate, function(dose) {
-          return participant.medPromptSurveys.responseStatus(dose, date) === "positive";
-        });
-      }
-
-      return Math.round(100 * adherentDates.length / dates.length);
     }
   });
 
