@@ -31,7 +31,7 @@ define([
         if (negative) {
           return {
             status: "negative",
-            explain: negative === true ? null : "Patient reports " + negative
+            explain: negative === true ? null : negative
           };
         } else {
           return { status: "positive" };
