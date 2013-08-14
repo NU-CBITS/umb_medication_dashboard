@@ -55,7 +55,7 @@ define([
     setParticipant: function(model) {
       this.model = model;
 
-      this.$("#header").html(this.model.patientName());
+      this.$("#header").html("Summary for " + this.model.patientName());
 
       this.medPromptView.collection = model.medPromptSurveys;
       this.medPromptView.model = model;

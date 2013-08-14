@@ -10,7 +10,7 @@
         Current doses
         <ul>
         <% _.each(dosesOnDate(DateFormatter.iso8601(new Date())), function(dose) { %>
-          <li><%= dose.time() %> <%= dose.summary() %></li>
+          <li><%= dose.summary() %> <%= dose.time() %></li>
         <% }) %>
         </ul>
         <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#change-medication-modal">Change Medication</button>

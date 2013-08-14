@@ -1,6 +1,7 @@
 import datetime, json
 from django.http import HttpResponse
 from django.contrib.auth.decorators import user_passes_test
+from django.shortcuts import render
 from umb_dashboard.views import respond_with_json
 from umb_dashboard.models import MedPromptResponse, SentMessage
 from medactive.models import SideEffectsSurveyResponse, \
@@ -14,14 +15,19 @@ def is_researcher(user):
   return user.groups.filter(name='MedActive Researchers').exists()
 
 @user_passes_test(is_clinician)
-def participants(request):
+def index(request):
   __check_in_clinician(request.user)
-  return respond_with_json(Participant.objects.all())
+
+  return render(request, 'medactive_index.html')
 
 def __check_in_clinician(clinician):
   profile, created = ClinicianProfile.objects.get_or_create(clinician_id=clinician.id)
   if created == False:
     profile.save()
+
+@user_passes_test(is_clinician)
+def participants(request):
+  return respond_with_json(Participant.objects.all())
 
 @user_passes_test(is_clinician)
 def side_effects_survey_responses(request, participant_id):
@@ -125,7 +131,6 @@ def latest_action(request, participant_id):
 
 @user_passes_test(is_researcher)
 def cohort_summary(request):
-  from django.shortcuts import render
   participants = Participant.objects.all()
   today = datetime.date.today()
   dates = [today - datetime.timedelta(days=x) for x in range(1, 8)]
