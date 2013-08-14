@@ -18,7 +18,8 @@ define([
           dosesOnDate: function(date) { return self.model.getAssignedDoses().getValuesOnDate(date).doses; },
           dates: this.options.calendar.dates("iso8601"),
           statusIndicator: this._statusIndicator,
-          DateFormatter: DateFormatter
+          DateFormatter: DateFormatter,
+          participant: this.model
         }));
         this._renderSentMessages();
         this.changeMedicationView = new ChangeMedicationView({

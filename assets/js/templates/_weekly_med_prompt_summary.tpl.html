@@ -17,6 +17,8 @@
       </th>
       <th>
         7/28 day adherence
+        <br />
+        <%= participant.previousSpanAdherencePct(7) %>% / <%= participant.previousSpanAdherencePct(28) %>%
       </th>
       <% _.each(dates, function(date) { %>
       <td class="date-column">
