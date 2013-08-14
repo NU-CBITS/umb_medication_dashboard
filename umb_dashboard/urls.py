@@ -10,7 +10,7 @@ urlpatterns = patterns('',
 
     # MedActive
     url(r'^medactive/logout$', 'django.contrib.auth.views.logout', { 'next_page': '/umb/accounts/login/?next=/umb/medactive' }),
-    url(r'^medactive$', TemplateView.as_view(template_name='medactive_index.html')),
+    url(r'^medactive/?$', 'medactive.views.index'),
     url(r'^medactive/cohort_summary$', 'medactive.views.cohort_summary'),
     url(r'^medactive/participants$', 'medactive.views.participants'),
     url(r'^medactive/participants/([^/]+)/med_prompt_survey_responses$', 'umb_dashboard.views.med_prompt_survey_responses'),
@@ -24,7 +24,7 @@ urlpatterns = patterns('',
     url(r'^medactive/participants/([^/]+)/change_medication_requests$', 'umb_dashboard.views.create_change_medication_request'),
     url(r'^medactive/contact_research_staff$', 'medactive.views.contact_research_staff'),
 
-    # MedActive
+    # Heart2HAART
     url(r'^heart2haart/logout$', 'django.contrib.auth.views.logout', { 'next_page': '/umb/accounts/login/?next=/umb/heart2haart' }),
     url(r'^heart2haart$', TemplateView.as_view(template_name='heart2haart_index.html')),
     url(r'^heart2haart/cohort_summary$', 'heart2haart.views.cohort_summary'),
@@ -39,7 +39,7 @@ urlpatterns = patterns('',
     url(r'^heart2haart/participants/([^/]+)/latest_action$', 'heart2haart.views.latest_action'),
     url(r'^heart2haart/participants/([^/]+)/dose_history$', 'umb_dashboard.views.dose_history'),
     url(r'^heart2haart/participants/([^/]+)/change_medication_requests$', 'umb_dashboard.views.create_change_medication_request'),
-    url(r'^heart2haart/contact_research_staff$', 'umb_dashboard.views.contact_research_staff'),
+    url(r'^heart2haart/contact_research_staff$', 'heart2haart.views.contact_research_staff'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

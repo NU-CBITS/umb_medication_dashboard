@@ -1,7 +1,7 @@
 <div class="modal-dialog">
   <div class="modal-content">
     <div class="modal-header">
-      <h4 class="modal-title">Side effects survey</h4>
+      <h4 class="modal-title">Depression survey</h4>
     </div>
     <div class="modal-body">
       <p class="text-danger"><strong>Alert: </strong> Patient reports always being bothered by <%= _.map(alert.problemDetails(), function(d) { return survey.pages[d].summary }).join(", ") %></p>
@@ -24,8 +24,8 @@
       <p><strong>Alert transmitted: </strong><%= DateFormatter.dateTimeString(alert.createdAt()) %></p>
     </div>
     <div class="modal-footer">
-      <a href="#" class="btn btn-default hide-alert" data-target="#side_effects-alert"><i class="glyphicon glyphicon-ok"></i> Save &amp; Do Not Clear</a>
-      <a href="#" class="btn btn-default clear-alert" data-target="#side_effects-alert"><i class="glyphicon glyphicon-remove"></i> Clear Alert</a>
+      <a href="#" class="btn btn-default hide-alert" data-target="#mood-alert"><i class="glyphicon glyphicon-ok"></i> Save &amp; Do Not Clear</a>
+      <a href="#" class="btn btn-default clear-alert" data-target="#mood-alert"><i class="glyphicon glyphicon-remove"></i> Clear Alert</a>
     </div>
   </div>
 </div>
