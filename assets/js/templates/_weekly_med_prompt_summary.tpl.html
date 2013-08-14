@@ -10,10 +10,14 @@
         Current doses
         <ul class="list-unstyled">
         <% _.each(dosesOnDate(DateFormatter.iso8601(new Date())), function(dose) { %>
-          <li><%= dose.summary() %> <%= dose.time() %></li>
+          <li>
+            <a href="#" class="btn btn-warning btn-xs" data-dose-description="<%= dose.summary() + " " + dose.time() %>" id="discontinue-medication">dc</a>
+            <a href="#" class="btn btn-default btn-xs" data-dose-description="<%= dose.summary() + " " + dose.time() %>" data-dose-time="<%= dose.time() %>" data-dose-medication="<%= dose.medication %>" data-dose-strength="<%= dose.strength %>" data-dose-dispensationUnit="<%= dose.dispensationUnit %>" data-dose-route="<%= dose.route %>" id="edit-medication">edit</a>
+            <%= dose.summary() %> <%= dose.time() %>
+          </li>
         <% }) %>
         </ul>
-        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#change-medication-modal">Change Medication</button>
+        <a href="#" class="btn btn-default btn-sm" id="add-medication">Add New Med</a>
       </th>
       <th>
         7/28 day adherence
@@ -31,20 +35,110 @@
   </tbody>
 </table>
 
-<div class="modal fade" id="change-medication-modal">
+<div class="modal fade" id="discontinue-medication-modal">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Request Medication Change</h4>
+        <h4 class="modal-title">Discontinue Med</h4>
       </div>
       <div class="modal-body">
-        <form>
-          <textarea class="form-control" rows="3" id="change-request-message"></textarea>
+        Would you like to discontinue this medication?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="send-discontinue-request">Yes</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  form.change-medication .col-lg-1, form.change-medication .col-lg-2, form.change-medication .col-lg-3 { padding-right: 0; }
+</style>
+
+<div class="modal fade" id="edit-medication-modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Edit Med</h4>
+      </div>
+      <div class="modal-body">
+        <form class="change-medication">
+          <div class="row">
+            <div class="col-lg-3">
+              <select class="form-control" name="dose-medication">
+                <option>med1</option>
+                <option>med2</option>
+              </select>
+            </div>
+            <div class="col-lg-1" style="width:15%;">
+              <input type="number" class="form-control" name="dose-strength">
+            </div>
+            <div class="col-lg-3" style="width:18%;">
+              <select class="form-control" name="dose-dispensationUnit">
+                <option>dose</option>
+                <option>mg</option>
+              </select>
+            </div>
+            <div class="col-lg-3" style="width:19%;">
+              <select class="form-control" name="dose-route">
+                <option>oral</option>
+                <option>injection</option>
+              </select>
+            </div>
+            <div class="col-lg-3" style="width:23%;">
+              <input type="text" class="form-control" name="dose-time">
+            </div>
+          </div>
         </form>
       </div>
       <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="send-edit-request">Save</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary" id="send-change-request">Send</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="add-medication-modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Add New Med</h4>
+      </div>
+      <div class="modal-body">
+        <form class="change-medication">
+          <div class="row">
+            <div class="col-lg-3">
+              <select class="form-control" name="dose-medication">
+                <option>med1</option>
+                <option>med2</option>
+              </select>
+            </div>
+            <div class="col-lg-1" style="width:15%;">
+              <input type="text" class="form-control" name="dose-strength" placeholder="strength">
+            </div>
+            <div class="col-lg-3" style="width:18%;">
+              <select class="form-control" name="dose-dispensationUnit">
+                <option>dose</option>
+                <option>mg</option>
+              </select>
+            </div>
+            <div class="col-lg-3" style="width:19%;">
+              <select class="form-control" name="dose-route">
+                <option>oral</option>
+                <option>injection</option>
+              </select>
+            </div>
+            <div class="col-lg-3" style="width:23%;">
+              <input type="text" class="form-control" name="dose-time" placeholder="time">
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="send-add-request">Save</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
       </div>
     </div>
   </div>

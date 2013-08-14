@@ -1,14 +1,13 @@
 define(["lib/date_formatter"], function(DateFormatter) {
   function Dose(attrs) {
-    var medication, strength, dispensationUnit, time;
+    var time = attrs.time;
 
-    medication = attrs.medication;
-    strength = attrs.strength;
-    dispensationUnit = attrs.dispensationUnit;
-    time = attrs.time;
+    this.medication = attrs.medication;
+    this.strength = attrs.strength;
+    this.dispensationUnit = attrs.dispensationUnit;
 
     this.summary = function() {
-      return medication + ", " + strength + " " + dispensationUnit;
+      return this.medication + ", " + this.strength + " " + this.dispensationUnit;
     }
 
     this.time = function() {
