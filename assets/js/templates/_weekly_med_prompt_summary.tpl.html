@@ -12,7 +12,7 @@
         <% _.each(dosesOnDate(DateFormatter.iso8601(new Date())), function(dose) { %>
           <li>
             <a href="#" class="btn btn-warning btn-xs" data-dose-description="<%= dose.summary() + " " + dose.time() %>" id="discontinue-medication">dc</a>
-            <a href="#" class="btn btn-default btn-xs" data-dose-description="<%= dose.summary() + " " + dose.time() %>" data-dose-time="<%= dose.time() %>" data-dose-medication="<%= dose.medication %>" data-dose-strength="<%= dose.strength %>" data-dose-dispensationUnit="<%= dose.dispensationUnit %>" data-dose-route="<%= dose.route %>" id="edit-medication">edit</a>
+            <a href="#" class="btn btn-default btn-xs" data-dose-description="<%= dose.summary() + " " + dose.time() %>" data-dose-time="<%= dose.time() %>" data-dose-medication="<%= dose.medication %>" data-dose-strength="<%= dose.strength %>" data-dose-dispensationUnit="<%= dose.dispensationUnit %>" id="edit-medication">edit</a>
             <%= dose.summary() %> <%= dose.time() %>
           </li>
         <% }) %>
@@ -81,12 +81,6 @@
                 <option>mg</option>
               </select>
             </div>
-            <div class="col-lg-3" style="width:19%;">
-              <select class="form-control" name="dose-route">
-                <option>oral</option>
-                <option>injection</option>
-              </select>
-            </div>
             <div class="col-lg-3" style="width:23%;">
               <input type="text" class="form-control" name="dose-time">
             </div>
@@ -123,12 +117,6 @@
               <select class="form-control" name="dose-dispensationUnit">
                 <option>dose</option>
                 <option>mg</option>
-              </select>
-            </div>
-            <div class="col-lg-3" style="width:19%;">
-              <select class="form-control" name="dose-route">
-                <option>oral</option>
-                <option>injection</option>
               </select>
             </div>
             <div class="col-lg-3" style="width:23%;">

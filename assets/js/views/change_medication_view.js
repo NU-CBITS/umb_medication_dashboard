@@ -23,7 +23,6 @@ define([
         $("#edit-medication-modal [name=dose-medication]").val($(this).data("dose-medication"));
         $("#edit-medication-modal [name=dose-strength]").val($(this).data("dose-strength"));
         $("#edit-medication-modal [name=dose-dispensationUnit]").val($(this).data("doseDispensationunit"));
-        $("#edit-medication-modal [name=dose-route]").val($(this).data("dose-route"));
         $("#edit-medication-modal")
         .data("dose-description", $(this).data("dose-description"))
         .modal("show");
@@ -63,10 +62,9 @@ define([
           medication = $m.find("[name=dose-medication]").val(),
           strength = $m.find("[name=dose-strength]").val(),
           dispensationUnit = $m.find("[name=dose-dispensationUnit]").val(),
-          route = $m.find("[name=dose-route]").val();
 
       this.model.save({
-        message: "change: '" + $m.data("dose-description") + "' to '" + medication + ", " + strength + " " + dispensationUnit + " " + route + " " + time + "'"
+        message: "change: '" + $m.data("dose-description") + "' to '" + medication + ", " + strength + " " + dispensationUnit + " " + time + "'"
       })
       .done(function() {
         self.trigger("alert", "success", "The researcher staff has been notified about the medication change.");
@@ -86,10 +84,9 @@ define([
           medication = $m.find("[name=dose-medication]").val(),
           strength = $m.find("[name=dose-strength]").val(),
           dispensationUnit = $m.find("[name=dose-dispensationUnit]").val(),
-          route = $m.find("[name=dose-route]").val();
 
       this.model.save({
-        message: "add: " + medication + ", " + strength + " " + dispensationUnit + " " + route + " " + time
+        message: "add: " + medication + ", " + strength + " " + dispensationUnit + " " + time
       })
       .done(function() {
         self.trigger("alert", "success", "The researcher staff has been notified about the medication addition.");
