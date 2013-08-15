@@ -95,7 +95,7 @@ define([
     },
 
     _renderHeader: function() {
-      this.$("#participant-header").before(this.headerTemplate({
+      this.$(".nav-tabs").before(this.headerTemplate({
         helpModal: this.helpModal,
         titleRow: titleRowPartial
       }));
