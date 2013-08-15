@@ -20,7 +20,8 @@
         <a href="#" class="btn btn-default btn-sm" id="add-medication">Add New Med</a>
       </th>
       <th>
-        7/28 day adherence
+        <a href="#" class="has-popover" data-trigger="hover" data-content="Adherence calculations are based only on patients' responses to the prompts. Non-responses to prompts are not included in the denominator of these adherence calculations.">7/28 day adherence</a>
+        <script>$(".has-popover").popover();</script>
         <br />
         <%= participant.previousSpanAdherencePct(7) %>% / <%= participant.previousSpanAdherencePct(28) %>%
       </th>
