@@ -69,7 +69,7 @@ define([
         message: "change: '" + $m.data("dose-description") + "' to '" + medication + ", " + strength + " " + dispensationUnit + " " + route + " " + time + "'"
       })
       .done(function() {
-        self.trigger("alert", "success", "The researcher staff has been notified for the medication change.");
+        self.trigger("alert", "success", "The researcher staff has been notified about the medication change.");
       })
       .fail(function() {
         self.trigger("alert", "danger", "Error sending request.");
@@ -92,7 +92,7 @@ define([
         message: "add: " + medication + ", " + strength + " " + dispensationUnit + " " + route + " " + time
       })
       .done(function() {
-        self.trigger("alert", "success", "The researcher staff has been notified for the medication addition.");
+        self.trigger("alert", "success", "The researcher staff has been notified about the medication addition.");
       })
       .fail(function() {
         self.trigger("alert", "danger", "Error sending request.");
