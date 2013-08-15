@@ -83,7 +83,7 @@ define([
           time = $m.find("[name=dose-time]").val(),
           medication = $m.find("[name=dose-medication]").val(),
           strength = $m.find("[name=dose-strength]").val(),
-          dispensationUnit = $m.find("[name=dose-dispensationUnit]").val(),
+          dispensationUnit = $m.find("[name=dose-dispensationUnit]").val();
 
       this.model.save({
         message: "add: " + medication + ", " + strength + " " + dispensationUnit + " " + time
