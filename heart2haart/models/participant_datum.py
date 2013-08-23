@@ -19,14 +19,14 @@ class ParticipantDatumManager(ParticipantModelManager):
         ]
         today = datetime.date.today()
 
-        return 'SELECT date '\
+        return 'SELECT "eventDateTime" '\
             'FROM (SELECT ROW_NUMBER() OVER (PARTITION BY "eventDateTime"::date) AS row, '\
-            '"t"."eventDateTime"::date AS date FROM (%s) t) x '\
-            'WHERE x.row = 1 AND x.date < \'%s\' AND x.date >= \'%s\';' % \
+            '"t"."eventDateTime" FROM (%s) t) x '\
+            'WHERE x.row = 1 AND "x"."eventDateTime" < \'%s\' AND "x"."eventDateTime" >= \'%s\';' % \
             (' UNION '.join(selects), today, today - datetime.timedelta(days=7))
 
 class ParticipantDatum(models.Model):
-    date = models.DateField()
+    eventDateTime = models.DateTimeField()
 
     objects = ParticipantDatumManager()
 

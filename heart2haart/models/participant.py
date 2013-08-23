@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 from django.contrib.auth.models import User
 from .participant_action import ParticipantAction
@@ -9,6 +10,7 @@ from umb_dashboard.models import DoseHistory
 class Participant(models.Model):
     participant_id = models.CharField(max_length=255)
     clinician = models.ForeignKey(User, related_name='+')
+    last_viewed_at = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
         return self.participant_id
@@ -19,13 +21,19 @@ class Participant(models.Model):
     def earliest_action(self):
         return ParticipantAction.objects.earliest(self.participant_id)[0].eventDateTime
 
+    def end_of_trial(self):
+        return self.earliest_action() + datetime.timedelta(days=14)
+
     def latest_action(self):
         return ParticipantAction.objects.latest(self.participant_id)[0].eventDateTime
+
+    def latest_contact_page_message(self):
+        return ParticipantAction.objects.latest_contact_page_message(self.participant_id)[0].eventDateTime
 
     def dates_with_data_last_week(self):
         if not hasattr(self, 'dates_with_data_last_week_memo'):
             data = ParticipantDatum.objects.dates_with_data_last_week(self.participant_id)
-            self.dates_with_data_last_week_memo = [d.date for d in data]
+            self.dates_with_data_last_week_memo = [d.eventDateTime for d in data]
 
         return self.dates_with_data_last_week_memo
 
@@ -45,12 +53,12 @@ class Participant(models.Model):
 
     def dates_with_dose_changes_last_week(self):
         if not hasattr(self, 'dates_with_dose_changes_last_week_memo'):
-            dose_changes = ParticipantCheckIn.objects.dates_with_dose_changes_last_week(self.participant_id)
+            dose_changes = DoseHistory.objects.dates_with_dose_changes_last_week(self.participant_id)
             self.dates_with_dose_changes_last_week_memo = [d.eventDateTime for d in dose_changes]
 
         return self.dates_with_dose_changes_last_week_memo
 
-    def latest_clinician_check_in(self):
+    def latest_clinician_login(self):
         try:
             profile = ClinicianProfile.objects.get(clinician_id=self.clinician_id)
         except ClinicianProfile.DoesNotExist:
