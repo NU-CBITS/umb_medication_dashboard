@@ -4,7 +4,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+    ('Eric Carty-Fickes', 'ericcf@northwestern.edu'),
 )
 
 MANAGERS = ADMINS
@@ -18,6 +18,12 @@ DATABASES = {
         'HOST': '127.0.0.1',
         'PORT': '',
     }
+}
+
+PARTICIPANT_DB = {
+    'USER': 'postgres',
+    'PASSWORD': 'mohrLab1',
+    'HOST': 'db2.cbits.northwestern.edu'
 }
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
@@ -125,7 +131,8 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-    'medactive'
+    'medactive',
+    'heart2haart',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -169,3 +176,12 @@ CACHES = {
 }
 
 LOGIN_URL = '/umb/accounts/login/'
+
+RESEARCH_STAFF_EMAILS = []
+
+DEFAULT_FROM_EMAIL = ''
+EMAIL_HOST = 'mail.chicago.northwestern.edu'
+EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST_USER = ''
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True

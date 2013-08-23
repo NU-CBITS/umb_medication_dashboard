@@ -18,6 +18,12 @@ class ParticipantActionManager(ParticipantModelManager):
 
         return self.fetch_results(cursor, sql)
 
+    def latest_contact_page_message(self, participant_id):
+        cursor = self.participant_db_cursor(participant_id)
+        sql = 'SELECT "eventDateTime" FROM sent_messages WHERE "FEATURE_VALUE_DT_context" = \'contact_page\';'
+
+        return self.fetch_results(cursor, sql)
+
     def dates_with_actions_last_week(self, participant_id):
         cursor = self.participant_db_cursor(participant_id)
         sql = self.__select_dates_with_actions_last_week_sql()

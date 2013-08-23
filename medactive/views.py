@@ -151,3 +151,10 @@ def contact_research_staff(request):
   request.user.medactive_help_request.create()
 
   return HttpResponse(status=200)
+
+@user_passes_test(is_clinician)
+def log_clinician_view(request, participant_id):
+  participant = Participant.objects.get(participant_id=participant_id)
+  participant.save()
+
+  return HttpResponse(status=200)

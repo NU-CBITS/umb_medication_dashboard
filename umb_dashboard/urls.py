@@ -22,6 +22,7 @@ urlpatterns = patterns('',
     url(r'^medactive/participants/([^/]+)/latest_action$', 'medactive.views.latest_action'),
     url(r'^medactive/participants/([^/]+)/dose_history$', 'umb_dashboard.views.dose_history'),
     url(r'^medactive/participants/([^/]+)/change_medication_requests$', 'umb_dashboard.views.create_change_medication_request'),
+    url(r'^medactive/participants/([^/]+)/log_view', 'medactive.views.log_clinician_view'),
     url(r'^medactive/contact_research_staff$', 'medactive.views.contact_research_staff'),
 
     # Heart2HAART
@@ -39,6 +40,7 @@ urlpatterns = patterns('',
     url(r'^heart2haart/participants/([^/]+)/latest_action$', 'heart2haart.views.latest_action'),
     url(r'^heart2haart/participants/([^/]+)/dose_history$', 'umb_dashboard.views.dose_history'),
     url(r'^heart2haart/participants/([^/]+)/change_medication_requests$', 'umb_dashboard.views.create_change_medication_request'),
+    url(r'^heart2haart/participants/([^/]+)/log_view', 'heart2haart.views.log_clinician_view'),
     url(r'^heart2haart/contact_research_staff$', 'heart2haart.views.contact_research_staff'),
 
     # Uncomment the admin/doc line below to enable admin documentation:

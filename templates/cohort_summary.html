@@ -4,26 +4,6 @@
     <link href="/umb/assets/css/vendor/bootstrap-3.0.0-rc2.min.css" media="screen" rel="stylesheet">
     <link href="/umb/assets/css/vendor/bootstrap-glyphicons-1.0.0.css" media="screen" rel="stylesheet">
     <link href="/umb/assets/css/global.css" media="screen" rel="stylesheet">
-    <script src="/umb/assets/js/vendor/jquery-2.0.3.min.js"></script>
-    <script src="/umb/assets/js/vendor/bootstrap-3.0.0-rc1.min.js"></script>
-    <style>
-      .sparkline {
-        width: 100%;
-      }
-      .sparkline .x-unit {
-        float: left;
-        width: 14%;
-      }
-      .sparkline .upper-bar, .sparkline .lower-bar {
-        height: 10px;
-      }
-      .sparkline .bad .lower-bar {
-        background-color: red;
-      }
-      .sparkline .good .upper-bar {
-        background-color: green;
-      }
-    </style>
   </head>
 
   <body>
@@ -41,90 +21,177 @@
         <table class="table">
           <thead>
             <tr>
-              <th># times contacted</th>
               <th>Clinician ID</th>
               <th>Patient ID</th>
-              <th>Last Clinician Check</th>
-              <th>Data Received</th>
-              <th>User Check In</th>
-              <th>App Last Use</th>
-              <th>MedChange</th>
-              <th>Tech Help</th>
+              <th>Last Viewed Pt. on Clinician Dash.</th>
+              <th>Last Login to Clinician Dash.</th>
+              <th>Clinician Tech Support</th>
+              <th>Phone Connectivity</th>
+              <th>App Last Used</th>
+              <th>Med Change</th>
+              <th>Pt. Tech Support</th>
               <th>Start Date</th>
               <th>End Date</th>
             </tr>
           </thead>
           <tbody>
             {% for participant in participants %}
-            <tr>
-              <td>{{ participant.clinician_alerts|length }}</td>
+            <tr class="participant" data-participant-id="{{ participant.id }}">
               <td>{{ participant.clinician }}</td>
               <td>{{ participant.participant_id }}</td>
-              <td>{{ participant.latest_clinician_check_in }}</td>
-              <td>
-                <div class="sparkline">
-                  {% for day in dates %}
-                    {% if day in participant.dates_with_data_last_week %}
-                  <div class="x-unit good">
-                    {% else %}
-                  <div class="x-unit bad">
-                    {% endif %}
-                    <div class="upper-bar"></div>
-                    <div class="lower-bar"></div>
-                  </div>
-                  {% endfor %}
-                </div>
-              </td>
-              <td>
-                <div class="sparkline">
-                  {% for day in dates %}
-                    {% if day in participant.dates_with_check_ins_last_week %}
-                  <div class="x-unit good">
-                    {% else %}
-                  <div class="x-unit bad">
-                    {% endif %}
-                    <div class="upper-bar"></div>
-                    <div class="lower-bar"></div>
-                  </div>
-                  {% endfor %}
-                </div>
-              </td>
-              <td>
-                <div class="sparkline">
-                  {% for day in dates %}
-                    {% if day in participant.dates_with_actions_last_week %}
-                  <div class="x-unit good">
-                    {% else %}
-                  <div class="x-unit bad">
-                    {% endif %}
-                    <div class="upper-bar"></div>
-                    <div class="lower-bar"></div>
-                  </div>
-                  {% endfor %}
-                </div>
-              </td>
-              <td>
-                <div class="sparkline">
-                  {% for day in dates %}
-                    {% if day in participant.dates_with_dose_changes_last_week %}
-                  <div class="x-unit good">
-                    {% else %}
-                  <div class="x-unit bad">
-                    {% endif %}
-                    <div class="upper-bar"></div>
-                    <div class="lower-bar"></div>
-                  </div>
-                  {% endfor %}
-                </div>
-              </td>
-              <td>{{ participant.latest_clinician_help_request|date:"M j" }}</td>
+              <td>{{ participant.last_viewed_at }}</td>
+              <td>{{ participant.latest_clinician_login }}</td>
+              <td class="clinician-help-req" data-timestamp="{{ participant.latest_clinician_help_request }}"></td>
+<div class="modal fade" id="{{ participant.id }}clinician-help-req">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Alert</h4>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Save</button>
+        <button type="button" class="btn btn-primary" onclick="javascript:clearAlert({{ participant.id }}, 'clinician-help-req', '{{ participant.latest_clinician_help_request }}'); $('#{{ participant.id }}clinician-help-req').modal('hide');">Clear</button>
+      </div>
+    </div>
+  </div>
+</div>
+              <td class="phone-connect" data-timestamp="{{ participant.dates_with_data_last_week|last }}"></td>
+<div class="modal fade" id="{{ participant.id }}phone-connect">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Alert</h4>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Save</button>
+        <button type="button" class="btn btn-primary" onclick="javascript:clearAlert({{ participant.id }}, 'phone-connect', '{{ participant.dates_with_data_last_week|last }}'); $('#{{ participant.id }}phone-connect').modal('hide');">Clear</button>
+      </div>
+    </div>
+  </div>
+</div>
+              <td class="app-use" data-timestamp="{{ participant.dates_with_actions_last_week|last }}"></td>
+<div class="modal fade" id="{{ participant.id }}app-use">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Alert</h4>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Save</button>
+        <button type="button" class="btn btn-primary" onclick="javascript:clearAlert({{ participant.id }}, 'app-use', '{{ participant.dates_with_actions_last_week|last }}'); $('#{{ participant.id }}app-use').modal('hide');">Clear</button>
+      </div>
+    </div>
+  </div>
+</div>
+              <td class="med-change" data-timestamp="{{ participant.dates_with_dose_changes_last_week|last }}"></td>
+<div class="modal fade" id="{{ participant.id }}med-change">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Alert</h4>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Save</button>
+        <button type="button" class="btn btn-primary" onclick="javascript:clearAlert({{ participant.id }}, 'med-change', '{{ participant.dates_with_dose_changes_last_week|last }}'); $('#{{ participant.id }}med-change').modal('hide');">Clear</button>
+      </div>
+    </div>
+  </div>
+</div>
+              <td class="pt-support" data-timestamp="{{ participant.latest_contact_page_message }}"></td>
+<div class="modal fade" id="{{ participant.id }}pt-support">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Alert</h4>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Save</button>
+        <button type="button" class="btn btn-primary" onclick="javascript:clearAlert({{ participant.id }}, 'pt-support', '{{ participant.latest_contact_page_message }}'); $('#{{ participant.id }}pt-support').modal('hide');">Clear</button>
+      </div>
+    </div>
+  </div>
+</div>
               <td>{{ participant.earliest_action|date:"M j" }}</td>
-              <td>{{ participant.latest_action|date:"M j" }}</td>
+              <td>{{ participant.end_of_trial|date:"M j" }}</td>
             </tr>
             {% endfor %}
           </tbody>
         </table>
       </div>
     </div>
+    <script src="/umb/assets/js/vendor/jquery-2.0.3.min.js"></script>
+    <script src="/umb/assets/js/vendor/bootstrap-3.0.0-rc1.min.js"></script>
+    <script src="/umb/assets/js/vendor/lodash-1.3.1.min.js"></script>
+<script>
+  function renderAlerts() {
+    $(".participant").each(function(i, p) {
+      var participantId = $(p).data("participantId");
+      _.each(['clinician-help-req', 'phone-connect', 'app-use', 'med-change', 'pt-support'], function(item) {
+        var timestamp = $(p).find("." + item).data("timestamp");
+        if (requiresAlert(participantId, item, timestamp)) {
+          renderAlert(participantId, item, timestamp);
+          setUncleared(participantId, item, timestamp);
+        }
+      });
+    });
+  }
+
+  function requiresAlert(participantId, item, timestamp) {
+    var ONE_DAY = 24 * 60 * 60 * 1000,
+        TWO_DAYS = 2 * ONE_DAY;
+
+    switch(item) {
+      case 'phone-connect':
+        return isUncleared(participantId, item, timestamp) && timeElapsed(timestamp) > ONE_DAY;
+      case 'app-use':
+        return isUncleared(participantId, item, timestamp) && timeElapsed(timestamp) > TWO_DAYS;
+      default:
+        return isUncleared(participantId, item, timestamp);
+    }
+  }
+
+  function isUncleared(participantId, item, timestamp) {
+    return timestamp && (localStorage[key(participantId, item)] !== (timestamp + "=cleared"));
+  }
+
+  function timeElapsed(timestamp) {
+    return new Date() - new Date(timestamp);
+  }
+
+  function key(participantId, item) {
+    return item + '--' + participantId;
+  }
+
+  function setUncleared(participantId, item, timestamp) {
+    localStorage[key(participantId, item)] = (timestamp + "=uncleared");
+  }
+
+  function clearAlert(participantId, item, timestamp) {
+    localStorage[key(participantId, item)] = (timestamp + "=cleared");
+    $(".participant[data-participant-id=" + participantId + "] ." + item).html('');
+  }
+
+  function renderAlert(participantId, item, timestamp) {
+    $(".participant[data-participant-id=" + participantId + "] ." + item)
+    .html('<a data-toggle="modal" href="#' + participantId + item + '"><div class="status-indicator bad" title="' + timestamp + '"></div></a>');
+  }
+
+  renderAlerts();
+</script>
   </body>
 </html>

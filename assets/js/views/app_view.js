@@ -46,6 +46,7 @@ define([
     }
 
     function participantWeeklySummary(participantId) {
+      $.post(options.appCode + "/participants/" + participantId + "/log_view");
       views.participant.setParticipant(options.participants.get(participantId));
       replaceView(views.participant);
     }
