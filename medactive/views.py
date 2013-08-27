@@ -3,10 +3,11 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render
 from umb_dashboard.views import respond_with_json
-from umb_dashboard.models import MedPromptResponse, SentMessage
+from umb_dashboard.models import ChangeMedicationRequest, MedPromptResponse, \
+  SentMessage
 from medactive.models import SideEffectsSurveyResponse, \
   SymptomsSurveyResponse, ClinicianAlert, ClinicianProfile, Participant, \
-  ParticipantAction
+  ParticipantAction, DoseChangeRequest
 
 def is_clinician(user):
   return user.groups.filter(name='MedActive Clinicians').exists()
@@ -128,6 +129,17 @@ def any_contact_requests(last_alert_timestamp, participant, alert_type):
 @user_passes_test(is_clinician)
 def latest_action(request, participant_id):
   return respond_with_json(ParticipantAction.objects.latest(participant_id))
+
+@user_passes_test(is_clinician)
+def create_change_medication_request(request, participant_id):
+  input = json.loads(request.body)
+  change_request = ChangeMedicationRequest(participant_id, input['message'])
+  change_request.save()
+  status = { 'status': change_request.status }
+  participant = Participant.objects.get(participant_id=participant_id)
+  DoseChangeRequest.objects.create(clinician=request.user, participant=participant, message=input['message'])
+
+  return HttpResponse(json.dumps(status), content_type="application/json")
 
 @user_passes_test(is_researcher)
 def cohort_summary(request):

@@ -50,9 +50,9 @@
         <h4 class="modal-title">Alert</h4>
       </div>
       <div class="modal-body">
+        <p>{{ participant.latest_clinician_help_request }}</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Save</button>
         <button type="button" class="btn btn-primary" onclick="javascript:clearAlert({{ participant.id }}, 'clinician-help-req', '{{ participant.latest_clinician_help_request }}'); $('#{{ participant.id }}clinician-help-req').modal('hide');">Clear</button>
       </div>
     </div>
@@ -67,15 +67,15 @@
         <h4 class="modal-title">Alert</h4>
       </div>
       <div class="modal-body">
+        <p>{{ participant.dates_with_data_last_week|last }}</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Save</button>
         <button type="button" class="btn btn-primary" onclick="javascript:clearAlert({{ participant.id }}, 'phone-connect', '{{ participant.dates_with_data_last_week|last }}'); $('#{{ participant.id }}phone-connect').modal('hide');">Clear</button>
       </div>
     </div>
   </div>
 </div>
-              <td class="app-use" data-timestamp="{{ participant.dates_with_actions_last_week|last }}"></td>
+              <td class="app-use" data-timestamp="{{ participant.dates_with_actions_last_week|last }}" data-message="It has been longer than 48 hours since the patient used the app"></td>
 <div class="modal fade" id="{{ participant.id }}app-use">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -84,15 +84,15 @@
         <h4 class="modal-title">Alert</h4>
       </div>
       <div class="modal-body">
+        <p>It has been longer than 48 hours since the patient used the app</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Save</button>
         <button type="button" class="btn btn-primary" onclick="javascript:clearAlert({{ participant.id }}, 'app-use', '{{ participant.dates_with_actions_last_week|last }}'); $('#{{ participant.id }}app-use').modal('hide');">Clear</button>
       </div>
     </div>
   </div>
 </div>
-              <td class="med-change" data-timestamp="{{ participant.dates_with_dose_changes_last_week|last }}"></td>
+              <td class="med-change" data-timestamp="{{ participant.latest_dose_change.created_at }}"></td>
 <div class="modal fade" id="{{ participant.id }}med-change">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -101,10 +101,11 @@
         <h4 class="modal-title">Alert</h4>
       </div>
       <div class="modal-body">
+        {{ participant.latest_dose_change.message }}
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Save</button>
-        <button type="button" class="btn btn-primary" onclick="javascript:clearAlert({{ participant.id }}, 'med-change', '{{ participant.dates_with_dose_changes_last_week|last }}'); $('#{{ participant.id }}med-change').modal('hide');">Clear</button>
+        <button type="button" class="btn btn-primary" onclick="javascript:clearAlert({{ participant.id }}, 'med-change', '{{ participant.latest_dose_change.created_at }}'); $('#{{ participant.id }}med-change').modal('hide');">Clear</button>
       </div>
     </div>
   </div>
@@ -118,9 +119,9 @@
         <h4 class="modal-title">Alert</h4>
       </div>
       <div class="modal-body">
+        <p>{{ participant.latest_contact_page_message }}</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Save</button>
         <button type="button" class="btn btn-primary" onclick="javascript:clearAlert({{ participant.id }}, 'pt-support', '{{ participant.latest_contact_page_message }}'); $('#{{ participant.id }}pt-support').modal('hide');">Clear</button>
       </div>
     </div>
@@ -143,8 +144,9 @@
       var participantId = $(p).data("participantId");
       _.each(['clinician-help-req', 'phone-connect', 'app-use', 'med-change', 'pt-support'], function(item) {
         var timestamp = $(p).find("." + item).data("timestamp");
+        var message = $(p).find("." + item).data("message");
         if (requiresAlert(participantId, item, timestamp)) {
-          renderAlert(participantId, item, timestamp);
+          renderAlert(participantId, item, timestamp, message);
           setUncleared(participantId, item, timestamp);
         }
       });
@@ -186,9 +188,9 @@
     $(".participant[data-participant-id=" + participantId + "] ." + item).html('');
   }
 
-  function renderAlert(participantId, item, timestamp) {
+  function renderAlert(participantId, item, timestamp, message) {
     $(".participant[data-participant-id=" + participantId + "] ." + item)
-    .html('<a data-toggle="modal" href="#' + participantId + item + '"><div class="status-indicator bad" title="' + timestamp + '"></div></a>');
+    .html('<a data-toggle="modal" href="#' + participantId + item + '"><div class="status-indicator bad" title="' + (message || timestamp) + '"></div></a>');
   }
 
   renderAlerts();

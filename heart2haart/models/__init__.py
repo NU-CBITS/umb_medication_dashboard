@@ -1,5 +1,7 @@
 from .clinician_alert import ClinicianAlert
 from .clinician_help_request import ClinicianHelpRequest
+from .clinician_profile import ClinicianProfile
+from .dose_change_request import DoseChangeRequest
 from .participant import Participant
 from .participant_action import ParticipantAction
 from .side_effects_survey_response import SideEffectsSurveyResponse

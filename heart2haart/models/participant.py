@@ -1,11 +1,10 @@
-import datetime
+import datetime, json
 from django.db import models
 from django.contrib.auth.models import User
 from .participant_action import ParticipantAction
 from .participant_datum import ParticipantDatum
 from .participant_check_in import ParticipantCheckIn
 from .clinician_profile import ClinicianProfile
-from umb_dashboard.models import DoseHistory
 
 class Participant(models.Model):
     participant_id = models.CharField(max_length=255)
@@ -51,12 +50,13 @@ class Participant(models.Model):
 
         return self.dates_with_check_ins_last_week_memo
 
-    def dates_with_dose_changes_last_week(self):
-        if not hasattr(self, 'dates_with_dose_changes_last_week_memo'):
-            dose_changes = DoseHistory.objects.dates_with_dose_changes_last_week(self.participant_id)
-            self.dates_with_dose_changes_last_week_memo = [d.eventDateTime for d in dose_changes]
+    def latest_dose_change(self):
+        try:
+            dose_change = self.heart2haart_dose_change_requests.order_by('-created_at')[0]
+        except IndexError:
+            dose_change = None
 
-        return self.dates_with_dose_changes_last_week_memo
+        return dose_change
 
     def latest_clinician_login(self):
         try:
