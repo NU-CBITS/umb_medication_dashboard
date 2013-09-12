@@ -19,14 +19,18 @@ class ParticipantModelManager(models.Manager):
     return connection.cursor()
 
   def fetch_results(self, cursor, sql):
-    cursor.execute(sql)
-    desc = cursor.description
-    result_list = [
-      self.model(**dict(zip([col[0] for col in desc], row)))
-      for row in cursor.fetchall()
-    ]
+    try:
+      cursor.execute(sql)
+    except Exception:
+      return []
+    else:
+      desc = cursor.description
+      result_list = [
+        self.model(**dict(zip([col[0] for col in desc], row)))
+        for row in cursor.fetchall()
+      ]
 
-    return result_list
+      return result_list
 
   def all_column_names(self, cursor):
     db_col_names = self.raw_column_names(cursor)

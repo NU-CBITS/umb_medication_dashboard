@@ -18,7 +18,9 @@ class Participant(models.Model):
         return self.medactive_clinician_alerts.all()
 
     def earliest_action(self):
-        return ParticipantAction.objects.earliest(self.participant_id)[0].eventDateTime
+        action = ParticipantAction.objects.earliest(self.participant_id)
+
+        return action[0].eventDateTime if action else None
 
     def end_of_trial(self):
         return self.earliest_action() + datetime.timedelta(days=14)
@@ -27,7 +29,9 @@ class Participant(models.Model):
         return ParticipantAction.objects.latest(self.participant_id)[0].eventDateTime
 
     def latest_contact_page_message(self):
-        return ParticipantAction.objects.latest_contact_page_message(self.participant_id)[0].eventDateTime
+        message = ParticipantAction.objects.latest_contact_page_message(self.participant_id)
+
+        return message[0].eventDateTime if message else None
 
     def dates_with_data_last_week(self):
         if not hasattr(self, 'dates_with_data_last_week_memo'):

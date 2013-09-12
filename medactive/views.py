@@ -28,7 +28,7 @@ def __check_in_clinician(clinician):
 
 @user_passes_test(is_clinician)
 def participants(request):
-  return respond_with_json(Participant.objects.all())
+  return respond_with_json(Participant.objects.filter(clinician_id=request.user.id))
 
 @user_passes_test(is_clinician)
 def side_effects_survey_responses(request, participant_id):
