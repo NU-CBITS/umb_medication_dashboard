@@ -14,9 +14,12 @@ class ParticipantModelManager(models.Manager):
     import psycopg2
     db_string = ('host=\'%(HOST)s\' dbname=\'' + self._db_name(participant_id) + \
       '\' user=\'%(USER)s\' password=\'%(PASSWORD)s\'') % settings.PARTICIPANT_DB
-    connection = psycopg2.connect(db_string)
-    
-    return connection.cursor()
+    try:
+      connection = psycopg2.connect(db_string)
+    except Exception:
+      return None
+    else:
+      return connection.cursor()
 
   def fetch_results(self, cursor, sql):
     try:
@@ -51,10 +54,13 @@ class ParticipantModelManager(models.Manager):
     return list(name[0] for name in cursor.fetchall())
 
   def all_table_names(self, cursor):
-    query = 'SELECT table_name FROM information_schema.tables WHERE table_schema = \'public\';'
-    cursor.execute(query)
+    if cursor:
+      query = 'SELECT table_name FROM information_schema.tables WHERE table_schema = \'public\';'
+      cursor.execute(query)
 
-    return list(name[0] for name in cursor.fetchall())
+      return list(name[0] for name in cursor.fetchall())
+    else:
+      return []
 
   def _select_all_sql(self, cursor):
     return 'SELECT %s FROM "%s";' % \

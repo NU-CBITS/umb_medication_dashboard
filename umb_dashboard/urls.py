@@ -7,9 +7,11 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^accounts/login/$', 'django.contrib.auth.views.login'),
+    url(r'^medactive/login/$', 'django.contrib.auth.views.login', { 'template_name': 'medactive_login.html' }),
+    url(r'^heart2haart/login/$', 'django.contrib.auth.views.login', { 'template_name': 'heart2haart_login.html' }),
 
     # MedActive
-    url(r'^medactive/logout$', 'django.contrib.auth.views.logout', { 'next_page': '/umb/accounts/login/?next=/umb/medactive' }),
+    url(r'^medactive/logout$', 'django.contrib.auth.views.logout', { 'next_page': '/umb/medactive/login/?next=/umb/medactive' }),
     url(r'^medactive/?$', 'medactive.views.index'),
     url(r'^medactive/cohort_summary$', 'medactive.views.cohort_summary'),
     url(r'^medactive/participants$', 'medactive.views.participants'),
@@ -26,7 +28,7 @@ urlpatterns = patterns('',
     url(r'^medactive/contact_research_staff$', 'medactive.views.contact_research_staff'),
 
     # Heart2HAART
-    url(r'^heart2haart/logout$', 'django.contrib.auth.views.logout', { 'next_page': '/umb/accounts/login/?next=/umb/heart2haart' }),
+    url(r'^heart2haart/logout$', 'django.contrib.auth.views.logout', { 'next_page': '/umb/heart2haart/login/?next=/umb/heart2haart' }),
     url(r'^heart2haart$', TemplateView.as_view(template_name='heart2haart_index.html')),
     url(r'^heart2haart/cohort_summary$', 'heart2haart.views.cohort_summary'),
     url(r'^heart2haart/participants$', 'heart2haart.views.participants'),
