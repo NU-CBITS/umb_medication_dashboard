@@ -3,7 +3,7 @@ from .clinician_help_request import ClinicianHelpRequest
 from .clinician_profile import ClinicianProfile
 from .dose_change_request import DoseChangeRequest
 from .participant import Participant
-from .participant_action import ParticipantAction
+from .hh_participant_action import HhParticipantAction
 from .side_effects_survey_response import SideEffectsSurveyResponse
 from .mood_survey_response import MoodSurveyResponse
 from .cravings_survey_response import CravingsSurveyResponse

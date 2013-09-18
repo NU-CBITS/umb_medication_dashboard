@@ -11,6 +11,7 @@ define(function() {
 
     // convert either HH:MM or YYYY-MM-DDTHH:MM:SSZ to HH:MM[AM|PM]
     timeStringToMeridian: function(timeStr) {
+      if (!timeStr) return "";
       var date, hours, minutes, ampm;
 
       date = Date.parse(timeStr);

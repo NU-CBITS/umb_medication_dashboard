@@ -8,13 +8,13 @@ class ParticipantActionManager(ParticipantModelManager):
 
     def earliest(self, participant_id):
         cursor = self.participant_db_cursor(participant_id)
-        sql = self.__select_earliest_sql()
+        sql = self.__select_earliest_sql(cursor)
 
         return self.fetch_results(cursor, sql)
 
     def latest(self, participant_id):
         cursor = self.participant_db_cursor(participant_id)
-        sql = self.__select_latest_sql()
+        sql = self.__select_latest_sql(cursor)
 
         return self.fetch_results(cursor, sql)
 
@@ -26,18 +26,18 @@ class ParticipantActionManager(ParticipantModelManager):
 
     def dates_with_actions_last_week(self, participant_id):
         cursor = self.participant_db_cursor(participant_id)
-        sql = self.__select_dates_with_actions_last_week_sql()
+        sql = self.__select_dates_with_actions_last_week_sql(cursor)
 
         return self.fetch_results(cursor, sql) 
 
-    def __select_earliest_sql(self):
-        return self.__select_actions_sql() + ' ORDER BY "eventDateTime" LIMIT(1);'
+    def __select_earliest_sql(self, cursor):
+        return self.__select_actions_sql(cursor) + ' ORDER BY "eventDateTime" LIMIT(1);'
 
-    def __select_latest_sql(self):
-        return self.__select_actions_sql() + ' ORDER BY "eventDateTime" DESC LIMIT(1);'
+    def __select_latest_sql(self, cursor):
+        return self.__select_actions_sql(cursor) + ' ORDER BY "eventDateTime" DESC LIMIT(1);'
 
-    def __select_dates_with_actions_last_week_sql(self):
-        selects = self.__select_actions_sql()
+    def __select_dates_with_actions_last_week_sql(self, cursor):
+        selects = self.__select_actions_sql(cursor)
         today = datetime.date.today()
 
         return 'SELECT "eventDateTime" '\
@@ -46,13 +46,15 @@ class ParticipantActionManager(ParticipantModelManager):
             'WHERE x.row = 1 AND "x"."eventDateTime" < \'%s\' AND "x"."eventDateTime" >= \'%s\';' % \
             (selects, today, today - datetime.timedelta(days=7))
 
-    def __select_actions_sql(self):
+    def __select_actions_sql(self, cursor):
+        all_tables = self.all_table_names(cursor)
+
         return ' UNION '.join([
             'SELECT "id", "eventDateTime" FROM "%s"' % table
-            for table in self.TABLES
+            for table in (t for t in self.TABLES if t in all_tables)
         ])
 
-class ParticipantAction(models.Model):
+class HhParticipantAction(models.Model):
     eventDateTime = models.DateTimeField()
 
     objects = ParticipantActionManager()

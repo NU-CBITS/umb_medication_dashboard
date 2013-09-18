@@ -1,14 +1,18 @@
 define([
   "backbone",
-  "../../survey_definitions/ma/med_prompt",
-  "../../survey_definitions/ma/side_effects_survey",
-  "../../survey_definitions/ma/symptoms_survey",
+  "../../../survey_definitions/h2h/cravings_survey",
+  "../../../survey_definitions/h2h/med_prompt",
+  "../../../survey_definitions/h2h/mood_survey",
+  "../../../survey_definitions/h2h/side_effects_survey",
   "lib/date_formatter",
   "text!templates/clinician_alerts/_non_adherence.tpl.html",
   "text!templates/clinician_alerts/_symptoms.tpl.html",
-  "text!templates/clinician_alerts/_side_effects.tpl.html"
-], function(Backbone, medPromptSurvey, sideEffectsSurvey, symptomsSurvey,
-            DateFormatter, nonAdherenceTpl, symptomsTpl, sideEffectsTpl) {
+  "text!templates/clinician_alerts/_side_effects.tpl.html",
+  "text!templates/clinician_alerts/_cravings.tpl.html",
+  "text!templates/clinician_alerts/_mood.tpl.html"
+], function(Backbone,
+            h2hCravingsSurvey, h2hMedPromptSurvey, h2hMoodSurvey, h2hSideEffectsSurvey,
+            DateFormatter, nonAdherenceTpl, symptomsTpl, sideEffectsTpl, cravingsTpl, moodTpl) {
   var ClinicianAlertView = Backbone.View.extend({
     events: {
       "change input": "_changedInput",
@@ -36,13 +40,16 @@ define([
     _templates: {
       non_adherence: _.template(nonAdherenceTpl),
       symptoms: _.template(symptomsTpl),
-      side_effects: _.template(sideEffectsTpl)
+      side_effects: _.template(sideEffectsTpl),
+      cravings: _.template(cravingsTpl),
+      mood: _.template(moodTpl)
     },
 
     _surveys: {
-      non_adherence: medPromptSurvey,
-      symptoms: symptomsSurvey,
-      side_effects: sideEffectsSurvey
+      non_adherence: h2hMedPromptSurvey,
+      side_effects: h2hSideEffectsSurvey,
+      mood: h2hMoodSurvey,
+      cravings: h2hCravingsSurvey
     },
 
     _changedInput: function(event) {
@@ -68,15 +75,14 @@ define([
       var self = this;
 
       this.model.save({ is_cleared: true })
-      .done(function() {
-        self.trigger("alert", "success", "Saved.");
-        this.trigger("cleared");
-      })
-      .fail(function() {
-        self.trigger("alert", "danger", "Error saving.");
-      })
-      .always(function() {
-        this._hideAlert(event);
+      .always(function(response) {
+        if (response.status === 200) {
+          self.trigger("alert", "success", "Saved.");
+          self.trigger("cleared");
+        } else {
+          self.trigger("alert", "danger", "Error saving.");
+        }
+        self._hideAlert(event);
       });
     }
   });

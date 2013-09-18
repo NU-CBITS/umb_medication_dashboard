@@ -6,7 +6,8 @@ from umb_dashboard.models import ChangeMedicationRequest, MedPromptResponse, \
   SentMessage
 from heart2haart.models import SideEffectsSurveyResponse, \
   MoodSurveyResponse, CravingsSurveyResponse, ClinicianAlert, Participant, \
-  ParticipantAction, DoseChangeRequest
+  DoseChangeRequest
+from heart2haart.models.hh_participant_action import HhParticipantAction
 
 def is_clinician(user):
   return user.groups.filter(name='Heart2HAART Clinicians').exists()
@@ -118,7 +119,7 @@ def any_contact_requests(last_alert_timestamp, participant, alert_type):
 
 @user_passes_test(is_clinician)
 def latest_action(request, participant_id):
-  return respond_with_json(ParticipantAction.objects.latest(participant_id))
+  return respond_with_json(HhParticipantAction.objects.latest(participant_id))
 
 @user_passes_test(is_clinician)
 def create_change_medication_request(request, participant_id):

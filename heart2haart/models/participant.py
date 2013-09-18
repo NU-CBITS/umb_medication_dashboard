@@ -1,7 +1,7 @@
 import datetime, json
 from django.db import models
 from django.contrib.auth.models import User
-from .participant_action import ParticipantAction
+from .hh_participant_action import HhParticipantAction
 from .participant_datum import ParticipantDatum
 from .participant_check_in import ParticipantCheckIn
 from .clinician_profile import ClinicianProfile
@@ -18,17 +18,17 @@ class Participant(models.Model):
         return self.heart2haart_clinician_alerts.all()
 
     def earliest_action(self):
-        action = ParticipantAction.objects.earliest(self.participant_id)
+        action = HhParticipantAction.objects.earliest(self.participant_id)
         return action[0].eventDateTime if action else None
 
     def end_of_trial(self):
         return self.earliest_action() + datetime.timedelta(days=14)
 
     def latest_action(self):
-        return ParticipantAction.objects.latest(self.participant_id)[0].eventDateTime
+        return HhParticipantAction.objects.latest(self.participant_id)[0].eventDateTime
 
     def latest_contact_page_message(self):
-        message = ParticipantAction.objects.latest_contact_page_message(self.participant_id)
+        message = HhParticipantAction.objects.latest_contact_page_message(self.participant_id)
 
         return message[0].eventDateTime if message else None
 
@@ -41,7 +41,7 @@ class Participant(models.Model):
 
     def dates_with_actions_last_week(self):
         if not hasattr(self, 'dates_with_actions_last_week_memo'):
-            actions = ParticipantAction.objects.dates_with_actions_last_week(self.participant_id)
+            actions = HhParticipantAction.objects.dates_with_actions_last_week(self.participant_id)
             self.dates_with_actions_last_week_memo = [a.eventDateTime for a in actions]
 
         return self.dates_with_actions_last_week_memo

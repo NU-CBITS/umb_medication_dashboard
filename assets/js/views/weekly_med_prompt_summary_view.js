@@ -19,7 +19,15 @@ define([
           dates: this.options.calendar.dates("iso8601"),
           statusIndicator: this._statusIndicator,
           DateFormatter: DateFormatter,
-          participant: this.model
+          participant: this.model,
+          unitChoices: {
+            medactive: ['mg','g','mcg'],
+            heart2haart: ['dose','mg']
+          }[this.options.appCode],
+          medChoices: {
+            medactive: ['Thorazine','Prolixin','Haldol','Loxitane','Serentil','Trilafon','Mellaril','Navane','Stelazine','Saphris','Clozaril','Fanapt','Zyprexa','Invega','Seroquel','Risperdal','Geodon','Abilify','Latuda'],
+            heart2haart: ['Atripla']
+          }[this.options.appCode]
         }));
         this._renderSentMessages();
         this.changeMedicationView = new ChangeMedicationView({

@@ -68,8 +68,9 @@
           <div class="row">
             <div class="col-lg-3">
               <select class="form-control" name="dose-medication">
-                <option>med1</option>
-                <option>med2</option>
+                <% _.each(medChoices, function(c) { %>
+                <option><%= c %></option>
+                <% }) %>
               </select>
             </div>
             <div class="col-lg-1" style="width:15%;">
@@ -77,8 +78,9 @@
             </div>
             <div class="col-lg-3" style="width:18%;">
               <select class="form-control" name="dose-dispensationUnit">
-                <option>dose</option>
-                <option>mg</option>
+                <% _.each(unitChoices, function(c) { %>
+                <option><%= c %></option>
+                <% }) %>
               </select>
             </div>
             <div class="col-lg-3" style="width:23%;">
@@ -106,8 +108,9 @@
           <div class="row">
             <div class="col-lg-3">
               <select class="form-control" name="dose-medication">
-                <option>med1</option>
-                <option>med2</option>
+                <% _.each(medChoices, function(c) { %>
+                <option><%= c %></option>
+                <% }) %>
               </select>
             </div>
             <div class="col-lg-1" style="width:15%;">
@@ -115,8 +118,9 @@
             </div>
             <div class="col-lg-3" style="width:18%;">
               <select class="form-control" name="dose-dispensationUnit">
-                <option>dose</option>
-                <option>mg</option>
+                <% _.each(unitChoices, function(c) { %>
+                <option><%= c %></option>
+                <% }) %>
               </select>
             </div>
             <div class="col-lg-3" style="width:23%;">

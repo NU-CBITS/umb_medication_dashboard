@@ -3,12 +3,13 @@ define([
   "lib/date_formatter",
   "views/help_modal_partial",
   "views/title_row_partial",
-  "views/clinician_alert_view",
+  "h2h/views/clinician_alert_view",
+  "ma/views/clinician_alert_view",
   "text!h2h/templates/group_summary.tpl.html",
   "text!ma/templates/group_summary.tpl.html",
   "text!templates/partials/_participants_dropdown.tpl.html",
 ], function(Backbone, DateFormatter, HelpModalPartial,
-            titleRowPartial, ClinicianAlertView, h2hTpl, maTpl,
+            titleRowPartial, h2hClinicianAlertView, maClinicianAlertView, h2hTpl, maTpl,
             ParticipantsDropdownTpl) {
   var GroupSummaryView = Backbone.View.extend({
     initialize: function(options) {
@@ -18,13 +19,23 @@ define([
         appCode: this.options.appCode
       });
       this.render();
-      this.alertViews = {
-        non_adherence: new ClinicianAlertView({ alertType: "non_adherence" })
-      };
+      if (this.options.appCode === 'medactive') {
+        this.alertViews = {
+          non_adherence: new maClinicianAlertView({ alertType: "non_adherence" })
+        };
+      } else {
+        this.alertViews = {
+          non_adherence: new h2hClinicianAlertView({ alertType: "non_adherence" })
+        };
+      }
       this.$("#non-adherence-alert").html(this.alertViews.non_adherence.$el);
       var self = this;
       _.each(options.surveys, function(surveyName) {
-        self.alertViews[surveyName] = new ClinicianAlertView({ alertType: surveyName });
+        if (self.options.appCode === 'medactive') {
+          self.alertViews[surveyName] = new maClinicianAlertView({ alertType: surveyName });
+        } else {
+          self.alertViews[surveyName] = new h2hClinicianAlertView({ alertType: surveyName });
+        }
         self.$("#" + surveyName + "-alert").html(self.alertViews[surveyName].$el);
       });
     },

@@ -16,9 +16,11 @@ define([
     parse: function(data, options) {
       var parsed = {};
 
-      _.each(data[0].fields, function(v, k) {
-        parsed[k] = v;
-      });
+      if (data && data[0]) {
+        _.each(data[0].fields, function(v, k) {
+          parsed[k] = v;
+        });
+      }
 
       return parsed;
     },

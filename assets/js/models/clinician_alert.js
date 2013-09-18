@@ -9,10 +9,12 @@ define([
       var fields = _.clone(this.attributes);
       delete fields.id;
       fields.updated_at = (new Date()).toISOString();
+      var model = fields.model;
+      delete fields.model;
 
       return [{
         pk: this.id,
-        model: "medactive.clinicianalert",
+        model: model,
         fields: fields
       }];
     },

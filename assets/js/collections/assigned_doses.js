@@ -33,7 +33,7 @@ define([
         return dosesAssignment.startDate <= date;
       });
 
-      return values.length === 0 ? this.values[0] : values[0];
+      return values.length === 0 ? this.values[0] : values[values.length - 1];
     };
 
     function url() {
