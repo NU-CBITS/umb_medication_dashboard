@@ -25,7 +25,7 @@ define([
             heart2haart: ['dose','mg']
           }[this.options.appCode],
           medChoices: {
-            medactive: ['Thorazine','Prolixin','Haldol','Loxitane','Serentil','Trilafon','Mellaril','Navane','Stelazine','Saphris','Clozaril','Fanapt','Zyprexa','Invega','Seroquel','Risperdal','Geodon','Abilify','Latuda'],
+            medactive: ['Chlorpromazine (Thorazine)','Fluphenazine (Prolixin)','Haloperidol (Haldol)','Loxapine (Loxitane)','Mesoridazine (Serentil)','Perphenazine (Trilafon)','Thioridazine (Mellaril)','Thiothixene (Navane)','Trifluoperazine (Stelazine)','Asenapine (Saphris)','Clozapine (Clozaril)','Iloperidone (Fanapt)','Olanzapine (Zyprexa)','Paliperidone (Invega)','Quetiapine (Seroquel)','Risperidone (Risperdal)','Ziprasidone (Geodon)','Aripiprazole (Abilify)','Lurasidone (Latuda)'],
             heart2haart: ['Atripla']
           }[this.options.appCode]
         }));

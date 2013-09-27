@@ -101,6 +101,7 @@
         <h4 class="modal-title">Alert</h4>
       </div>
       <div class="modal-body">
+        <b>{{ participant.latest_dose_change.created_at }}</b>
         {{ participant.latest_dose_change.message }}
       </div>
       <div class="modal-footer">
@@ -168,7 +169,7 @@
   }
 
   function isUncleared(participantId, item, timestamp) {
-    return timestamp && (localStorage[key(participantId, item)] !== (timestamp + "=cleared"));
+    return timestamp && timestamp !== "None" && (localStorage[key(participantId, item)] !== (timestamp + "=cleared"));
   }
 
   function timeElapsed(timestamp) {
