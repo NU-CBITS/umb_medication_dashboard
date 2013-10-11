@@ -6,7 +6,7 @@ from umb_dashboard.models import DoseHistory, \
   MedPromptResponse, SentMessage
 
 def is_clinician(user):
-  return user.groups.extra(where=["name LIKE %s"], params=['%Clinicians']).exists()
+  return user.is_superuser or user.groups.extra(where=["name LIKE %s"], params=['%Clinicians']).exists()
 
 def respond_with_json(query_set):
   json = serializers.serialize("json", query_set)

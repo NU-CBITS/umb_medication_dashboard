@@ -10,14 +10,17 @@ from heart2haart.models import SideEffectsSurveyResponse, \
 from heart2haart.models.hh_participant_action import HhParticipantAction
 
 def is_clinician(user):
-  return user.groups.filter(name='Heart2HAART Clinicians').exists()
+  return user.is_superuser or user.groups.filter(name='Heart2HAART Clinicians').exists()
 
 def is_researcher(user):
   return user.groups.filter(name='Heart2HAART Researchers').exists()
 
 @user_passes_test(is_clinician)
 def participants(request):
-  return respond_with_json(Participant.objects.filter(clinician_id=request.user.id))
+  if request.user.is_superuser:
+    return respond_with_json(Participant.objects.filter(clinician_id__isnull=False))
+  else:
+    return respond_with_json(Participant.objects.filter(clinician_id=request.user.id))
 
 @user_passes_test(is_clinician)
 def side_effects_survey_responses(request, participant_id):

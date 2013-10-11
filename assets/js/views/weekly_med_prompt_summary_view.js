@@ -26,7 +26,7 @@ define([
           }[this.options.appCode],
           medChoices: {
             medactive: ['Chlorpromazine (Thorazine)','Fluphenazine (Prolixin)','Haloperidol (Haldol)','Loxapine (Loxitane)','Mesoridazine (Serentil)','Perphenazine (Trilafon)','Thioridazine (Mellaril)','Thiothixene (Navane)','Trifluoperazine (Stelazine)','Asenapine (Saphris)','Clozapine (Clozaril)','Iloperidone (Fanapt)','Olanzapine (Zyprexa)','Paliperidone (Invega)','Quetiapine (Seroquel)','Risperidone (Risperdal)','Ziprasidone (Geodon)','Aripiprazole (Abilify)','Lurasidone (Latuda)'],
-            heart2haart: ['Atripla']
+            heart2haart: ['Atripla','Complera','Stribild','Combivir','Emtriva','Epivir','Epzicom','Hivid','Retrovir','Trizivir','Truvada','Videx EC','Videx','Viread','Zerit','Ziagen','Edurant','Intelence','Rescriptor','Sustiva','Viramune','Agenerase','Aptivus','Crixivan','Fortovase','Invirase','Kaletra','Lexiva','Norvir','Prezista','Reyataz','Viracept','Selzentry','Isentress','Tivicay']
           }[this.options.appCode]
         }));
         this._renderSentMessages();
