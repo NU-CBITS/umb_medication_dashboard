@@ -412,7 +412,7 @@ define(["lib/hash"], function(Hash) {
         }
       },
       offer_information: {
-        question: "Would you like to see some information on common side effects of antipsychotic medications?",
+        question: "Would you like to see some information on common side effects of medications like <strong><%= dose.medication %></strong>?",
         responses: [
           {
             label: "Yes, view information now",
@@ -425,7 +425,7 @@ define(["lib/hash"], function(Hash) {
         ]
       },
       ask_to_notify: {
-        question: "Would you like to let your doctor know that you are always bothered by some side effects so you can discuss it at your next appointment?",
+        question: "Would you like to let your doctor know that you are always bothered by <%= alwaysBotheredCount() %> side effects so you can discuss it at your next appointment?",
         responses: [
           {
             label: "Yes",

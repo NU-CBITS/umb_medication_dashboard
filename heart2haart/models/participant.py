@@ -8,8 +8,11 @@ from .clinician_profile import ClinicianProfile
 
 class Participant(models.Model):
     participant_id = models.CharField(max_length=255)
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
     clinician = models.ForeignKey(User, related_name='+')
     last_viewed_at = models.DateTimeField(auto_now=True)
+    enrollment_date = models.DateField()
 
     def __unicode__(self):
         return self.participant_id

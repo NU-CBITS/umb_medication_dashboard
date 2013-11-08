@@ -32,7 +32,11 @@ define(function() {
     },
 
     dateTimeString: function(timeStampStr) {
-      return DateFormatter.monthSlashDate(new Date(timeStampStr)) + " " + DateFormatter.timeStringToMeridian(timeStampStr);
+      if (timeStampStr === null || typeof timeStampStr === 'undefined') {
+        return '';
+      } else {
+        return DateFormatter.monthSlashDate(new Date(timeStampStr)) + " " + DateFormatter.timeStringToMeridian(timeStampStr);
+      }
     }
   };
 

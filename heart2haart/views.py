@@ -1,11 +1,12 @@
 import datetime, json
 from django.http import HttpResponse
 from django.contrib.auth.decorators import user_passes_test
+from django.shortcuts import render
 from umb_dashboard.views import respond_with_json
 from umb_dashboard.models import ChangeMedicationRequest, MedPromptResponse, \
   SentMessage
 from heart2haart.models import SideEffectsSurveyResponse, \
-  MoodSurveyResponse, CravingsSurveyResponse, ClinicianAlert, Participant, \
+  MoodSurveyResponse, CravingsSurveyResponse, ClinicianAlert, ClinicianProfile, Participant, \
   DoseChangeRequest
 from heart2haart.models.hh_participant_action import HhParticipantAction
 
@@ -14,6 +15,17 @@ def is_clinician(user):
 
 def is_researcher(user):
   return user.groups.filter(name='Heart2HAART Researchers').exists()
+
+@user_passes_test(is_clinician)
+def index(request):
+  __check_in_clinician(request.user)
+
+  return render(request, 'heart2haart_index.html')
+
+def __check_in_clinician(clinician):
+  profile, created = ClinicianProfile.objects.get_or_create(clinician_id=clinician.id)
+  if created == False:
+    profile.save()
 
 @user_passes_test(is_clinician)
 def participants(request):
@@ -42,7 +54,7 @@ def update_clinician_alert(request, participant_id, alert_id):
   from django.core import serializers
   for alert in serializers.deserialize("json", request.body):
     alert.save()
-  return HttpResponse()
+  return HttpResponse("{}", content_type="application/json")
 
 @user_passes_test(is_clinician)
 def uncleared_clinician_alerts(request, participant_id):

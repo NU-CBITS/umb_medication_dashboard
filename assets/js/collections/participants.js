@@ -31,7 +31,10 @@ define([
       .then(function(participants) {
         var requests = _.map(participants, function(participantAttrs) {
           var participant = new self.model({
-            id: participantAttrs.fields.participant_id
+            id: participantAttrs.fields.participant_id,
+            first_name: participantAttrs.fields.first_name,
+            last_name: participantAttrs.fields.last_name,
+            enrollment_date: participantAttrs.fields.enrollment_date
           });
           self.add(participant);
 

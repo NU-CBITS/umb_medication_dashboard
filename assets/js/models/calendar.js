@@ -2,7 +2,7 @@ define(["backbone", "lib/date_formatter"], function(Backbone, DateFormatter) {
   var Calendar = function(date) {
     var self = this;
 
-    this.referenceDate = date || Calendar.addDays(new Date(), -1);
+    this.referenceDate = date || Calendar.addDays(new Date(), 0);
 
     this.dates = function(format, options) {
       var days = (options || {}).days || Calendar.WEEK;

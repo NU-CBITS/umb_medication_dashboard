@@ -41,7 +41,7 @@
               <td>{{ participant.participant_id }}</td>
               <td>{{ participant.last_viewed_at }}</td>
               <td>{{ participant.latest_clinician_login }}</td>
-              <td class="clinician-help-req" data-timestamp="{{ participant.latest_clinician_help_request }}"></td>
+              <td class="clinician-help-req" data-timestamp="{{ participant.latest_clinician_help_request|date:'c' }}"></td>
 <div class="modal fade" id="{{ participant.id }}clinician-help-req">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -58,7 +58,7 @@
     </div>
   </div>
 </div>
-              <td class="phone-connect" data-timestamp="{{ participant.dates_with_data_last_week|last }}"></td>
+              <td class="phone-connect" data-timestamp="{{ participant.dates_with_data_last_week|last|date:'c' }}">{{ participant.dates_with_data_last_week|last }}</td>
 <div class="modal fade" id="{{ participant.id }}phone-connect">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -75,7 +75,7 @@
     </div>
   </div>
 </div>
-              <td class="app-use" data-timestamp="{{ participant.dates_with_actions_last_week|last }}" data-message="It has been longer than 48 hours since the patient used the app"></td>
+              <td class="app-use" data-timestamp="{{ participant.dates_with_actions_last_week|last|date:'c' }}" data-message="It has been longer than 48 hours since the patient used the app">{{ participant.dates_with_actions_last_week|last }}</td>
 <div class="modal fade" id="{{ participant.id }}app-use">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -92,7 +92,7 @@
     </div>
   </div>
 </div>
-              <td class="med-change" data-timestamp="{{ participant.latest_dose_change.created_at }}"></td>
+              <td class="med-change" data-timestamp="{{ participant.latest_dose_change.created_at|date:'c' }}"></td>
 <div class="modal fade" id="{{ participant.id }}med-change">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -111,7 +111,7 @@
     </div>
   </div>
 </div>
-              <td class="pt-support" data-timestamp="{{ participant.latest_contact_page_message }}"></td>
+              <td class="pt-support" data-timestamp="{{ participant.latest_contact_page_message|date:'c' }}"></td>
 <div class="modal fade" id="{{ participant.id }}pt-support">
   <div class="modal-dialog">
     <div class="modal-content">

@@ -7,8 +7,7 @@
   <thead>
     <tr>
       <th>Patient Name</th>
-      <th>Medication</th>
-      <th>Administration Times</th>
+      <th>Medications</th>
       <th><a href="#" class="has-popover" data-trigger="hover" data-content="Adherence calculations are based only on patients' responses to the prompts. Non-responses to prompts are not included in the denominator of these adherence calculations.">7/28 day adherence</a></th>
       <script>$(".has-popover").popover();</script>
       <th>Non Adherence<br />Due to Side Effects</th>
@@ -23,8 +22,11 @@
       <td>
         <a href="#weekly_summaries/<%= participant.patientId() %>" class="view-details"><%= participant.patientName() %></a>
       </td>
-      <td><%= participant.getCurrentDoses()[0].summary() %></td>
-      <td><%= _.map(participant.getCurrentDoses(), function(dose) { return dose.time(); }).join(", ") %></td>
+      <td>
+        <% _.each(participant.getCurrentDoses(), function(dose) { %>
+        <p><%= dose.summary() + " " + dose.time() %></p>
+        <% }) %>
+      </td>
       <td>
         <%= participant.previousSpanAdherencePct(7) %>% / <%= participant.previousSpanAdherencePct(28) %>%
       </td>

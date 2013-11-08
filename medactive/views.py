@@ -9,13 +9,15 @@ from medactive.models import SideEffectsSurveyResponse, \
   SymptomsSurveyResponse, ClinicianAlert, ClinicianProfile, Participant, \
   ParticipantAction, DoseChangeRequest
 
+LOGIN_URL = '/umb/accounts/login/?next=/umb/medactive'
+
 def is_clinician(user):
   return user.is_superuser or user.groups.filter(name='MedActive Clinicians').exists()
 
 def is_researcher(user):
   return user.groups.filter(name='MedActive Researchers').exists()
 
-@user_passes_test(is_clinician)
+@user_passes_test(is_clinician, login_url=LOGIN_URL)
 def index(request):
   __check_in_clinician(request.user)
 
@@ -26,31 +28,31 @@ def __check_in_clinician(clinician):
   if created == False:
     profile.save()
 
-@user_passes_test(is_clinician)
+@user_passes_test(is_clinician, login_url=LOGIN_URL)
 def participants(request):
   if request.user.is_superuser:
     return respond_with_json(Participant.objects.filter(clinician_id__isnull=False))
   else:
     return respond_with_json(Participant.objects.filter(clinician_id=request.user.id))
 
-@user_passes_test(is_clinician)
+@user_passes_test(is_clinician, login_url=LOGIN_URL)
 def side_effects_survey_responses(request, participant_id):
   responses = SideEffectsSurveyResponse.objects.all_for_participant(participant_id)
   return respond_with_json(responses)
 
-@user_passes_test(is_clinician)
+@user_passes_test(is_clinician, login_url=LOGIN_URL)
 def symptoms_survey_responses(request, participant_id):
   responses = SymptomsSurveyResponse.objects.all_for_participant(participant_id)
   return respond_with_json(responses)
 
-@user_passes_test(is_clinician)
+@user_passes_test(is_clinician, login_url=LOGIN_URL)
 def update_clinician_alert(request, participant_id, alert_id):
   from django.core import serializers
   for alert in serializers.deserialize("json", request.body):
     alert.save()
-  return HttpResponse()
+  return HttpResponse("{}", content_type="application/json")
 
-@user_passes_test(is_clinician)
+@user_passes_test(is_clinician, login_url=LOGIN_URL)
 def uncleared_clinician_alerts(request, participant_id):
   alerts = []
   alert_types = ["non_adherence", "side_effects", "symptoms"]
@@ -119,7 +121,8 @@ def pending_negative_symptoms_responses(last_alert_timestamp, participant):
   details.append(next(("special_mission" for r in responses if r.special_mission_frequency == HIGH_FREQ), None))
   details.append(next(("thought_broadcasting" for r in responses if r.thought_broadcasting_frequency == HIGH_FREQ), None))
   details.append(next(("hallucinations" for r in responses if r.hallucinations_frequency == HIGH_FREQ), None))
-  details.append(next(("confused" for r in responses if r.confused_frequency == HIGH_FREQ), None))
+  details.append(next(("confused_thinking" for r in responses if r.confused_thinking_frequency == HIGH_FREQ), None))
+  details.append(next(("paranoia" for r in responses if r.paranoia_frequency == HIGH_FREQ), None))
   details.append(next(("thought_disorders" for r in responses if r.thought_disorders_frequency == HIGH_FREQ), None))
 
   return filter(None, details)
@@ -129,11 +132,11 @@ def any_contact_requests(last_alert_timestamp, participant, alert_type):
 
   return len(messages) > 0
 
-@user_passes_test(is_clinician)
+@user_passes_test(is_clinician, login_url=LOGIN_URL)
 def latest_action(request, participant_id):
   return respond_with_json(ParticipantAction.objects.latest(participant_id))
 
-@user_passes_test(is_clinician)
+@user_passes_test(is_clinician, login_url=LOGIN_URL)
 def create_change_medication_request(request, participant_id):
   input = json.loads(request.body)
   change_request = ChangeMedicationRequest(participant_id, input['message'])
@@ -146,7 +149,7 @@ def create_change_medication_request(request, participant_id):
 
 @user_passes_test(is_researcher)
 def cohort_summary(request):
-  participants = Participant.objects.all()
+  participants = Participant.objects.filter(clinician_id__isnull=False)
   today = datetime.date.today()
   dates = [today - datetime.timedelta(days=x) for x in range(1, 8)]
   params = {
@@ -157,7 +160,7 @@ def cohort_summary(request):
 
   return render(request, 'cohort_summary.html', params)
 
-@user_passes_test(is_clinician)
+@user_passes_test(is_clinician, login_url=LOGIN_URL)
 def contact_research_staff(request):
   from django.core.mail import send_mail
   from django.conf import settings
@@ -167,7 +170,7 @@ def contact_research_staff(request):
 
   return HttpResponse(status=200)
 
-@user_passes_test(is_clinician)
+@user_passes_test(is_clinician, login_url=LOGIN_URL)
 def log_clinician_view(request, participant_id):
   participant = Participant.objects.get(participant_id=participant_id)
   participant.save()

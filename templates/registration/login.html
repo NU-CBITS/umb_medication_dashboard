@@ -7,7 +7,7 @@
   <div class="alert alert-danger">Your username and password didn't match. Please try again.</div>
   {% endif %}
 
-  <form method="post" action="{% url 'django.contrib.auth.views.login' %}">
+  <form method="post" action="{{ next }}/login/">
     {% csrf_token %}
     <div class="form-group">
       <label for="id_username">{{ form.username.label_tag }}</label>

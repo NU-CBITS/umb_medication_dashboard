@@ -3,12 +3,68 @@ define(["lib/hash"], function(Hash) {
     name: "symptoms",
     pages: {
       index: {
-        question: "Over the last 24 hours, did you think you were being watched or talked about by others?",
+        question: "Over the last 24 hours, did you hear things (such as voices) or see things that other people could not hear or see?",
+        summary: "Voices or visions",
+        responses: [
+          {
+            label: "No",
+            next_page: "confused_thinking",
+            is_positive: true
+          },
+          {
+            label: "Yes",
+            next_page: "hallucinations_frequency",
+            is_positive: false
+          }
+        ]
+      },
+      hallucinations_frequency: {
+        question: "Did this happen...?",
+        responses: [
+          {
+            label: "Only some of the time"
+          },
+          {
+            label: "Almost all of the time"
+          }
+        ],
+        next_page: "confused_thinking"
+      },
+      confused_thinking: {
+        question: "Over the last 24 hours, <%= Math.random() > 0.5 ? 'was your thinking extemely confused or disorganized for some reason' : 'did you have difficulty with your thoughts disappearing or your mind suddenly going blank' %>?",
+        summary: "Confused thinking",
+        responses: [
+          {
+            label: "No",
+            next_page: "paranoia",
+            is_positive: true
+          },
+          {
+            label: "Yes",
+            next_page: "confused_thinking_frequency",
+            is_positive: false
+          }
+        ]
+      },
+      confused_thinking_frequency: {
+        question: "Did this happen...?",
+        responses: [
+          {
+            label: "Only some of the time"
+          },
+          {
+            label: "Almost all of the time"
+          }
+        ],
+        next_page: "paranoia"
+      },
+      paranoia: {
+        question: "Over the last 24 hours, <%= Math.random() > 0.5 ? 'did you think you were being watched or talked about by others' : 'did you think people were out to get you or to cause you harm' %>?",
         summary: "Paranoia",
         responses: [
           {
             label: "No",
-            next_page: "media_communication",
+            next_page: "special_mission",
             is_positive: true
           },
           {
@@ -28,66 +84,10 @@ define(["lib/hash"], function(Hash) {
             label: "Almost all of the time"
           }
         ],
-        next_page: "media_communication"
-      },
-      media_communication: {
-        question: "Over the last 24 hours, did you think someone or something could communicate with you through the TV or through music?",
-        summary: "Communication through TV / music",
-        responses: [
-          {
-            label: "No",
-            next_page: "thought_insertion",
-            is_positive: true
-          },
-          {
-            label: "Yes",
-            next_page: "media_communication_frequency",
-            is_positive: false
-          }
-        ]
-      },
-      media_communication_frequency: {
-        question: "Did this happen...?",
-        responses: [
-          {
-            label: "Only some of the time"
-          },
-          {
-            label: "Almost all of the time"
-          }
-        ],
-        next_page: "thought_insertion"
-      },
-      thought_insertion: {
-        question: "Over the last 24 hours, did you think someone or something was putting thoughts in your head?",
-        summary: "Thought insertion",
-        responses: [
-          {
-            label: "No",
-            next_page: "special_mission",
-            is_positive: true
-          },
-          {
-            label: "Yes",
-            next_page: "thought_insertion_frequency",
-            is_positive: false
-          }
-        ]
-      },
-      thought_insertion_frequency: {
-        question: "Did this happen...?",
-        responses: [
-          {
-            label: "Only some of the time"
-          },
-          {
-            label: "Almost all of the time"
-          }
-        ],
         next_page: "special_mission"
       },
       special_mission: {
-        question: "Over the last 24 hours, did you think you had a special mission or were chosen for a special purpose in life?",
+        question: "Over the last 24 hours, <%= Math.random() > 0.5 ? 'did you think that you had special powers to do something nobody else could do' : 'did you think you had a special mission or were chosen for a special purpose in life' %>?",
         summary: "Special powers / mission",
         responses: [
           {
@@ -115,12 +115,12 @@ define(["lib/hash"], function(Hash) {
         next_page: "thought_broadcasting"
       },
       thought_broadcasting: {
-        question: "Over the last 24 hours, did you think that people could read your thoughts or that you could read theirs?",
+        question: "Over the last 24 hours, <%= Math.random() > 0.5 ? 'did you think that people could read your thoughts or that you could read theirs' : 'did you feel your thoughts left your mind and that everyone around you knew what you were thinking' %>?",
         summary: "Thought broadcasting",
         responses: [
           {
             label: "No",
-            next_page: "hallucinations",
+            next_page: "thought_insertion",
             is_positive: true
           },
           {
@@ -140,25 +140,25 @@ define(["lib/hash"], function(Hash) {
             label: "Almost all of the time"
           }
         ],
-        next_page: "hallucinations"
+        next_page: "thought_insertion"
       },
-      hallucinations: {
-        question: "Over the last 24 hours, did you hear things (such as voices) or see things that other people could not hear or see?",
-        summary: "Hallucinations",
+      thought_insertion: {
+        question: "Did you think someone or something was putting thoughts in your head?",
+        summary: "Thought insertion",
         responses: [
           {
             label: "No",
-            next_page: "confused",
+            next_page: "media_communication",
             is_positive: true
           },
           {
             label: "Yes",
-            next_page: "hallucinations_frequency",
+            next_page: "thought_insertion_frequency",
             is_positive: false
           }
         ]
       },
-      hallucinations_frequency: {
+      thought_insertion_frequency: {
         question: "Did this happen...?",
         responses: [
           {
@@ -168,54 +168,36 @@ define(["lib/hash"], function(Hash) {
             label: "Almost all of the time"
           }
         ],
-        next_page: "confused"
+        next_page: "media_communication"
       },
-      confused: {
-        question: "Over the last 24 hours, was your thinking extremely confused or disorganized for no reason?",
-        summary: "Disorganized / confused thinking",
+      media_communication: {
+        question: "Over the last 24 hours, <%= Math.random() > 0.5 ? 'did you think someone or something could communicate with you through the TV or through music' : 'did you think someone on TV was making comments about you or your family' %>?",
+        summary: "TV or music communicating",
         responses: [
           {
             label: "No",
-            next_page: "thought_disorders",
+            next_page: {
+              any: [
+                { index: "Yes" },
+                { confused_thinking: "Yes" },
+                { paranoia: "Yes" },
+                { special_mission: "Yes" },
+                { thought_broadcasting: "Yes" },
+                { thought_insertion: "Yes" }
+              ],
+              then: "level_of_distress",
+              else: "pre_incentive"
+            },
             is_positive: true
           },
           {
             label: "Yes",
-            next_page: "confused_frequency",
+            next_page: "media_communication_frequency",
             is_positive: false
           }
         ]
       },
-      confused_frequency: {
-        question: "Did this happen...?",
-        responses: [
-          {
-            label: "Only some of the time"
-          },
-          {
-            label: "Almost all of the time"
-          }
-        ],
-        next_page: "thought_disorders"
-      },
-      thought_disorders: {
-        question: "Over the last 24 hours, did you have difficulty with your thoughts disappearing or your mind suddenly going blank?",
-        summary: "Thought disorders",
-        responses: [
-          {
-            label: "No",
-            next_page: "pre_incentive",
-            is_positive: true,
-            completes_survey: true
-          },
-          {
-            label: "Yes",
-            next_page: "thought_disorders_frequency",
-            is_positive: false
-          }
-        ]
-      },
-      thought_disorders_frequency: {
+      media_communication_frequency: {
         question: "Did this happen...?",
         responses: [
           {
@@ -268,7 +250,7 @@ define(["lib/hash"], function(Hash) {
         ]
       },
       offer_information: {
-        question: "Would you like to see some information on common side effects of HIV medications?",
+        question: "Would you like to see some information on common symptoms of schizophrenia?",
         responses: [
           {
             label: "Yes, view information now",
