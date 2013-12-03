@@ -1,7 +1,8 @@
 define([
   "backbone",
-  "models/calendar"
-], function(Backbone, Calendar) {
+  "models/calendar",
+  "lib/date_formatter"
+], function(Backbone, Calendar, DateFormatter) {
   var Participant = Backbone.Model.extend({
     initialize: function(attributes, options) {
       this.latestAction = null;
@@ -13,7 +14,7 @@ define([
     },
 
     patientName: function() {
-      return (this.get('first_name') || '').slice(0, 1) + ' ' + (this.get('last_name') || '');
+      return (this.get('first_name') || '') + ' ' + (this.get('last_name') || '').slice(0, 1);
     },
 
     lastMissedDoseDueToSideEffects: function() {
@@ -61,9 +62,17 @@ define([
 
     previousSpanAdherencePct: function(days) {
       var self = this,
-          dates = (new Calendar()).dates("iso8601", { days: Math.min(days, this.daysEnrolled()) });
+          dates = (new Calendar()).dates("iso8601", { days: Math.min(days, this.daysEnrolled()) }),
+          dateToday = DateFormatter.iso8601(new Date),
+          timeNow = DateFormatter.rawTimeString(new Date);
+
       var doses = _.flatten(_.map(dates, function(d) {
-        return _.map(self.getAssignedDoses().getValuesOnDate(d).doses, function(dose) {
+        var valuesOnDate = self.getAssignedDoses().getValuesOnDate(d) || { doses: [] };
+        var pastDoses = _.select(valuesOnDate.doses, function(dose) {
+          return d < dateToday || (d == dateToday && dose.rawTime <= timeNow);
+        });
+
+        return _.map(pastDoses, function(dose) {
           return self.medPromptSurveys.responseStatus(dose, d).status === "positive"
         })
       }));

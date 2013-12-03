@@ -37,6 +37,14 @@ define(function() {
       } else {
         return DateFormatter.monthSlashDate(new Date(timeStampStr)) + " " + DateFormatter.timeStringToMeridian(timeStampStr);
       }
+    },
+
+    rawTimeString: function(date) {
+      var hours = date.getHours();
+      var minutes = date.getMinutes();
+      var seconds = date.getSeconds();
+
+      return hours + ":" + padLeft2(minutes, "0") + ":" + padLeft2(seconds, "0");
     }
   };
 

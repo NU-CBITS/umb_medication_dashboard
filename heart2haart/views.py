@@ -36,18 +36,27 @@ def participants(request):
 
 @user_passes_test(is_clinician)
 def side_effects_survey_responses(request, participant_id):
-  responses = SideEffectsSurveyResponse.objects.all_for_participant(participant_id)
-  return respond_with_json(responses)
+  try:
+    responses = SideEffectsSurveyResponse.objects.all_for_participant(participant_id)
+    return respond_with_json(responses)
+  except Exception:
+    return HttpResponse("[]", content_type="application/json")
 
 @user_passes_test(is_clinician)
 def mood_survey_responses(request, participant_id):
-  responses = MoodSurveyResponse.objects.all_for_participant(participant_id)
-  return respond_with_json(responses)
+  try:
+    responses = MoodSurveyResponse.objects.all_for_participant(participant_id)
+    return respond_with_json(responses)
+  except Exception:
+    return HttpResponse("[]", content_type="application/json")
 
 @user_passes_test(is_clinician)
 def cravings_survey_responses(request, participant_id):
-  responses = CravingsSurveyResponse.objects.all_for_participant(participant_id)
-  return respond_with_json(responses)
+  try:
+    responses = CravingsSurveyResponse.objects.all_for_participant(participant_id)
+    return respond_with_json(responses)
+  except Exception:
+    return HttpResponse("[]", content_type="application/json")
 
 @user_passes_test(is_clinician)
 def update_clinician_alert(request, participant_id, alert_id):
@@ -58,14 +67,17 @@ def update_clinician_alert(request, participant_id, alert_id):
 
 @user_passes_test(is_clinician)
 def uncleared_clinician_alerts(request, participant_id):
-  alerts = []
-  alert_types = ["non_adherence", "side_effects", "mood", "cravings"]
-  participant = Participant.objects.get(participant_id=participant_id)
-  for alert_type in alert_types:
-    alert = find_uncleared_alert(request.user.id, participant, alert_type)
-    if alert != None:
-      alerts.append(alert)
-  return respond_with_json(alerts)
+  try:
+    alerts = []
+    alert_types = ["non_adherence", "side_effects", "mood", "cravings"]
+    participant = Participant.objects.get(participant_id=participant_id)
+    for alert_type in alert_types:
+      alert = find_uncleared_alert(request.user.id, participant, alert_type)
+      if alert != None:
+        alerts.append(alert)
+    return respond_with_json(alerts)
+  except Exception:
+    return HttpResponse("[]", content_type="application/json")
 
 def find_uncleared_alert(clinician_id, participant, alert_type):
   import datetime

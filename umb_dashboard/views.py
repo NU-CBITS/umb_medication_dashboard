@@ -14,14 +14,23 @@ def respond_with_json(query_set):
 
 @user_passes_test(is_clinician)
 def dose_history(request, participant_id):
-  return respond_with_json(DoseHistory.objects.all_for_participant(participant_id))
+  try:
+    return respond_with_json(DoseHistory.objects.all_for_participant(participant_id))
+  except Exception:
+    return HttpResponse("[]", content_type="application/json")
 
 @user_passes_test(is_clinician)
 def med_prompt_survey_responses(request, participant_id):
-  responses = MedPromptResponse.objects.all_for_participant(participant_id)
-  return respond_with_json(responses)
+  try:
+    responses = MedPromptResponse.objects.all_for_participant(participant_id)
+    return respond_with_json(responses)
+  except Exception:
+    return HttpResponse("[]", content_type="application/json")
 
 @user_passes_test(is_clinician)
 def sent_messages(request, participant_id):
-  messages = SentMessage.objects.all_for_participant(participant_id)
-  return respond_with_json(messages)
+  try:
+    messages = SentMessage.objects.all_for_participant(participant_id)
+    return respond_with_json(messages)
+  except Exception:
+    return HttpResponse("[]", content_type="application/json")
