@@ -1,6 +1,6 @@
 requirejs.config({
   baseUrl: "assets/js",
-  urlArgs: "bust=" +  (new Date()).getTime(),
+  //urlArgs: "bust=" +  (new Date()).getTime(),
   shim: {
     "backbone": {
       deps: ["lodash", "jquery"],
@@ -16,7 +16,8 @@ requirejs.config({
     backbone: "vendor/backbone-1.0.0.min",
     jquery: "vendor/jquery-2.0.3.min",
     lodash: "vendor/lodash-1.3.1.min",
-    text: "vendor/text-2.0.7"
+    text: "vendor/text-2.0.7",
+    moment: "vendor/moment-2.4.0.min"
   }
 });
 

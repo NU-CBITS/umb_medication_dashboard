@@ -77,7 +77,7 @@ define([
         })
       }));
 
-      return Math.round(100 * _.select(doses).length / doses.length);
+      return doses.length === 0 ? 0 : Math.round(100 * _.select(doses).length / doses.length);
     }
   });
 

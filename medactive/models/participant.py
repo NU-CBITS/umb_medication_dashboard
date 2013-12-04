@@ -26,7 +26,7 @@ class Participant(models.Model):
         return action[0].eventDateTime if action else None
 
     def end_of_trial(self):
-        return self.earliest_action() + datetime.timedelta(days=14)
+        return self.enrollment_date + datetime.timedelta(days=14)
 
     def latest_action(self):
         return ParticipantAction.objects.latest(self.participant_id)[0].eventDateTime

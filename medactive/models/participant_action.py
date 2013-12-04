@@ -3,8 +3,7 @@ from django.db import models
 from umb_dashboard.models import ParticipantModelManager
 
 class ParticipantActionManager(ParticipantModelManager):
-    TABLES = ['medication_survey_responses', 'side_effects_survey_responses',
-        'symptoms_survey_responses', 'sent_messages']
+    TABLES = ['app_action']
 
     def earliest(self, participant_id):
         cursor = self.participant_db_cursor(participant_id)

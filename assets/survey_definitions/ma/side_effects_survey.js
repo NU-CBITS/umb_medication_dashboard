@@ -362,7 +362,8 @@ define(["lib/hash"], function(Hash) {
           },
           {
             label: "Yes",
-            next_page: "trembling_distress"
+            next_page: "trembling_distress",
+            is_positive: false
           }
         ]
       },

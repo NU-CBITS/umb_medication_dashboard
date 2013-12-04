@@ -5,7 +5,7 @@ from django.shortcuts import render
 from umb_dashboard.views import respond_with_json
 from umb_dashboard.models import ChangeMedicationRequest, MedPromptResponse, \
   SentMessage
-from heart2haart.models import SideEffectsSurveyResponse, \
+from heart2haart.models import HhSideEffectsSurveyResponse, \
   MoodSurveyResponse, CravingsSurveyResponse, ClinicianAlert, ClinicianProfile, Participant, \
   DoseChangeRequest
 from heart2haart.models.hh_participant_action import HhParticipantAction
@@ -37,7 +37,7 @@ def participants(request):
 @user_passes_test(is_clinician)
 def side_effects_survey_responses(request, participant_id):
   try:
-    responses = SideEffectsSurveyResponse.objects.all_for_participant(participant_id)
+    responses = HhSideEffectsSurveyResponse.objects.all_for_participant(participant_id)
     return respond_with_json(responses)
   except Exception:
     return HttpResponse("[]", content_type="application/json")
@@ -115,7 +115,7 @@ def pending_negative_med_prompt_responses(last_alert_timestamp, participant):
   return filter(None, details)
 
 def pending_negative_side_effects_responses(last_alert_timestamp, participant):
-  responses = SideEffectsSurveyResponse.objects.negative_responses(participant.participant_id, last_alert_timestamp)
+  responses = HhSideEffectsSurveyResponse.objects.negative_responses(participant.participant_id, last_alert_timestamp)
   details = []
   if len(responses):
     details.append('index')

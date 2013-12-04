@@ -2,7 +2,8 @@ define([
   "backbone",
   "../../config/resource_locations",
   "lib/date_formatter",
-  "models/completed_med_prompt"
+  "models/completed_med_prompt",
+  "moment"
 ], function(Backbone, Resources, DateFormatter, CompletedMedPrompt) {
   var CompletedMedPrompts = Backbone.Collection.extend({
     model: CompletedMedPrompt,
@@ -52,7 +53,7 @@ define([
     _surveysForDoseOnDate: function(dose, date) {
       return this.select(function(survey) {
         return survey.get("date") === date &&
-          DateFormatter.timeStringToMeridian(survey.doseTime()) === dose.time();
+          (DateFormatter.timeStringToMeridian(survey.doseTime()) === dose.time() || DateFormatter.timeStringToMeridian(moment(survey.doseTime()).add('hours', 1)) === dose.time() || DateFormatter.timeStringToMeridian(moment(survey.doseTime()).subtract('hours', 1)) === dose.time());
       });
     },
 

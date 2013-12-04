@@ -17,7 +17,7 @@ class SideEffectsSurveyResponseManager(ParticipantModelManager):
   def _negative_conditions(self, cursor, start_time):
     return '"eventDateTime" >= \'%s\' AND "FEATURE_VALUE_DT_index"=\'Yes\'' %  start_time
 
-class SideEffectsSurveyResponse(models.Model):
+class HhSideEffectsSurveyResponse(models.Model):
   id = models.TextField(primary_key=True)
   eventDateTime = models.DateTimeField()
   surveyVersion = models.BigIntegerField()
