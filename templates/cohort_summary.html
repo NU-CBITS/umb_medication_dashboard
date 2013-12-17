@@ -75,7 +75,8 @@
     </div>
   </div>
 </div>
-              <td class="app-use" data-timestamp="{{ participant.dates_with_actions_last_week|last|date:'c' }}" data-message="It has been longer than 48 hours since the patient used the app">{{ participant.dates_with_actions_last_week|last }}</td>
+            {% load tz %}
+              <td class="app-use" data-timestamp="{{ participant.latest_action|date:'c' }}" data-message="It has been longer than 48 hours since the patient used the app">{{ participant.latest_action|localtime|default_if_none:"" }}</td>
 <div class="modal fade" id="{{ participant.id }}app-use">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -87,7 +88,7 @@
         <p>It has been longer than 48 hours since the patient used the app</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" onclick="javascript:clearAlert({{ participant.id }}, 'app-use', '{{ participant.dates_with_actions_last_week|last }}'); $('#{{ participant.id }}app-use').modal('hide');">Clear</button>
+        <button type="button" class="btn btn-primary" onclick="javascript:clearAlert({{ participant.id }}, 'app-use', '{{ participant.latest_action }}'); $('#{{ participant.id }}app-use').modal('hide');">Clear</button>
       </div>
     </div>
   </div>

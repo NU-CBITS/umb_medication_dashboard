@@ -1,4 +1,5 @@
 import datetime, json
+from django.utils.timezone import utc
 from django.db import models
 from django.contrib.auth.models import User
 from .participant_action import ParticipantAction
@@ -23,37 +24,38 @@ class Participant(models.Model):
     def earliest_action(self):
         action = ParticipantAction.objects.earliest(self.participant_id)
 
-        return action[0].eventDateTime if action else None
+        return action[0].eventDateTime.replace(tzinfo=utc) if action else None
 
     def end_of_trial(self):
         return self.enrollment_date + datetime.timedelta(days=14)
 
     def latest_action(self):
-        return ParticipantAction.objects.latest(self.participant_id)[0].eventDateTime
+        action = ParticipantAction.objects.latest(self.participant_id)
+        return action[0].eventDateTime.replace(tzinfo=utc) if action else None
 
     def latest_contact_page_message(self):
         message = ParticipantAction.objects.latest_contact_page_message(self.participant_id)
 
-        return message[0].eventDateTime if message else None
+        return message[0].eventDateTime.replace(tzinfo=utc) if message else None
 
     def dates_with_data_last_week(self):
         if not hasattr(self, 'dates_with_data_last_week_memo'):
             data = ParticipantDatum.objects.dates_with_data_last_week(self.participant_id)
-            self.dates_with_data_last_week_memo = [d.eventDateTime for d in data]
+            self.dates_with_data_last_week_memo = [d.eventDateTime.replace(tzinfo=utc) for d in data]
 
         return self.dates_with_data_last_week_memo
 
     def dates_with_actions_last_week(self):
         if not hasattr(self, 'dates_with_actions_last_week_memo'):
             actions = ParticipantAction.objects.dates_with_actions_last_week(self.participant_id)
-            self.dates_with_actions_last_week_memo = [a.eventDateTime for a in actions]
+            self.dates_with_actions_last_week_memo = [a.eventDateTime.replace(tzinfo=utc) for a in actions]
 
         return self.dates_with_actions_last_week_memo
 
     def dates_with_check_ins_last_week(self):
         if not hasattr(self, 'dates_with_check_ins_last_week_memo'):
             check_ins = ParticipantCheckIn.objects.dates_with_check_ins_last_week(self.participant_id)
-            self.dates_with_check_ins_last_week_memo = [c.eventDateTime for c in check_ins]
+            self.dates_with_check_ins_last_week_memo = [c.eventDateTime.replace(tzinfo=utc) for c in check_ins]
 
         return self.dates_with_check_ins_last_week_memo
 

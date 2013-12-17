@@ -43,7 +43,7 @@ class ParticipantActionManager(ParticipantModelManager):
             'FROM (SELECT ROW_NUMBER() OVER (PARTITION BY "eventDateTime"::date) AS row, '\
             '"t"."eventDateTime"::date FROM (%s) t) x '\
             'WHERE x.row = 1 AND "x"."eventDateTime" < \'%s\' AND "x"."eventDateTime" >= \'%s\';' % \
-            (selects, today, today - datetime.timedelta(days=7))
+            (selects, today, today - datetime.timedelta(days=28))
 
     def __select_actions_sql(self, cursor):
         all_tables = self.all_table_names(cursor)
