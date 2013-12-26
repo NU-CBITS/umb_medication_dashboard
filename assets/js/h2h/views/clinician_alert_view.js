@@ -75,13 +75,14 @@ define([
       var self = this;
 
       this.model.save({ is_cleared: true })
-      .always(function(response) {
-        if (response.status === 200) {
-          self.trigger("alert", "success", "Saved.");
-          self.trigger("cleared");
-        } else {
-          self.trigger("alert", "danger", "Error saving.");
-        }
+      .done(function() {
+        self.trigger("alert", "success", "Saved.");
+        self.trigger("cleared");
+      })
+      .fail(function() {
+        self.trigger("alert", "danger", "Error saving.");
+      })
+      .always(function() {
         self._hideAlert(event);
       });
     }

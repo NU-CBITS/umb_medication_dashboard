@@ -65,20 +65,23 @@ def uncleared_clinician_alerts(request, participant_id):
 
 def find_uncleared_alert(clinician_id, participant, alert_type):
   alert_manager = ClinicianAlert.objects
-  alerts = alert_manager.filter(participant_id=participant.id, type=alert_type, is_cleared=False) or []
-  if len(alerts) == 0:
-    last_cleared_alerts = alert_manager.filter(participant_id=participant.id, type=alert_type, is_cleared=True).order_by('-created_at')[:1]
-    last_alert_timestamp = datetime.datetime.min
-    if len(last_cleared_alerts) == 1:
-      last_alert_timestamp = last_cleared_alerts[0].updated_at
-    details = pending_alert_details(last_alert_timestamp, participant, alert_type)
-    if len(details) > 0:
-      participant_requests_contact = any_contact_requests(last_alert_timestamp, participant, alert_type)
-      alert = alert_manager.create(clinician_id=clinician_id, participant_id=participant.id, type=alert_type,
-        problem_details=details, participant_requests_contact=participant_requests_contact)
-      alerts.append(alert)
-  if len(alerts) == 1:
-    return alerts[0]
+  alerts = alert_manager.filter(participant_id=participant.id, type=alert_type, is_cleared=False).order_by('-created_at') or []
+  if len(alerts) >= 1:
+    alerts = [alerts[0]]
+
+  last_cleared_alerts = alert_manager.filter(participant_id=participant.id, type=alert_type, is_cleared=True).order_by('-created_at')[:1]
+  last_alert_timestamp = datetime.datetime.min
+  if len(last_cleared_alerts) == 1:
+    last_alert_timestamp = last_cleared_alerts[0].updated_at
+  details = pending_alert_details(last_alert_timestamp, participant, alert_type)
+  if len(details) > 0:
+    participant_requests_contact = any_contact_requests(last_alert_timestamp, participant, alert_type)
+    alert = alert_manager.create(clinician_id=clinician_id, participant_id=participant.id, type=alert_type,
+      problem_details=details, participant_requests_contact=participant_requests_contact)
+    alerts.append(alert)
+
+  if len(alerts) >= 1:
+    return alerts[-1]
   return None
 
 def pending_alert_details(last_alert_timestamp, participant, alert_type):
