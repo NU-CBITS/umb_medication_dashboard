@@ -49,9 +49,12 @@ class ParticipantModelManager(models.Manager):
   def raw_column_names(self, cursor):
     col_name_query = 'SELECT column_name FROM information_schema.columns WHERE table_name=\'%s\';' % \
       self.model._meta.db_table
-    cursor.execute(col_name_query)
-
-    return list(name[0] for name in cursor.fetchall())
+    try:
+      cursor.execute(col_name_query)
+    except Exception:
+      return []
+    else:
+      return list(name[0] for name in cursor.fetchall())
 
   def all_table_names(self, cursor):
     if cursor:

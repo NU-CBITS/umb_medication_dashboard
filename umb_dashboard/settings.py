@@ -23,7 +23,7 @@ DATABASES = {
 PARTICIPANT_DB = {
     'USER': 'postgres',
     'PASSWORD': 'mohrLab1',
-    'HOST': 'db2.cbits.northwestern.edu'
+    'HOST': '10.80.111.61'
 }
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
