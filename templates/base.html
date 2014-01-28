@@ -11,9 +11,15 @@
         <div class="pull-left">
           {% if app == 'medactive' %}
           <img src="/umb/assets/img/medactive-icon.png">
+          {% else %}
+          <img src="/umb/assets/img/heart2haart-icon.png">
           {% endif %}
         </div>
+        {% if app == 'medactive' %}
         <a class="navbar-brand" href="">MedActive</a>
+        {% else %}
+        <a class="navbar-brand" href="">Heart2HAART</a>
+        {% endif %}
       </div>
     </div>
     <div class="container">

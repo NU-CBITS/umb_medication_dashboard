@@ -15,7 +15,10 @@ define([
       render: function() {
         var self = this;
         this.$el.html(this.template({
-          dosesOnDate: function(date) { return self.model.getAssignedDoses().getValuesOnDate(date).doses; },
+          dosesOnDate: function(date) {
+            var values = self.model.getAssignedDoses().getValuesOnDate(date) || { doses: [] };
+            return values.doses;
+          },
           dates: this.options.calendar.dates("iso8601"),
           statusIndicator: this._statusIndicator,
           DateFormatter: DateFormatter,

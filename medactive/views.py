@@ -9,7 +9,7 @@ from medactive.models import SideEffectsSurveyResponse, \
   SymptomsSurveyResponse, ClinicianAlert, ClinicianProfile, Participant, \
   ParticipantAction, DoseChangeRequest
 
-LOGIN_URL = '/umb/accounts/login/?next=/umb/medactive'
+LOGIN_URL = '/umb/medactive/login/?next=/umb/medactive'
 
 def is_clinician(user):
   return user.is_superuser or user.groups.filter(name='MedActive Clinicians').exists()
@@ -65,10 +65,13 @@ def uncleared_clinician_alerts(request, participant_id):
 
 def find_uncleared_alert(clinician_id, participant, alert_type):
   alert_manager = ClinicianAlert.objects
+
+  # find the most recent uncleared alert
   alerts = alert_manager.filter(participant_id=participant.id, type=alert_type, is_cleared=False).order_by('-created_at') or []
   if len(alerts) >= 1:
     alerts = [alerts[0]]
 
+  # find the timestamp of the last cleared alert as a frame of reference
   last_cleared_alerts = alert_manager.filter(participant_id=participant.id, type=alert_type, is_cleared=True).order_by('-created_at')[:1]
   last_alert_timestamp = datetime.datetime.min
   if len(last_cleared_alerts) == 1:
@@ -80,10 +83,19 @@ def find_uncleared_alert(clinician_id, participant, alert_type):
       problem_details=details, participant_requests_contact=participant_requests_contact)
     alerts.append(alert)
 
-  if len(alerts) >= 1:
+  if len(alerts) >= 1 and latest_response_value_is_negative(participant, alert_type):
     return alerts[-1]
   return None
 
+def latest_response_value_is_negative(participant, alert_type):
+  if alert_type == "non_adherence":
+    return MedPromptResponse.objects.latest_value_is_negative(participant.participant_id)
+  elif alert_type == "side_effects":
+    return SideEffectsSurveyResponse.objects.latest_value_is_negative(participant.participant_id)
+  elif alert_type == "symptoms":
+    return SymptomsSurveyResponse.objects.latest_value_is_negative(participant.participant_id)
+
+# return the frequency for the alert
 def pending_alert_details(last_alert_timestamp, participant, alert_type):
   if alert_type == "non_adherence":
     return pending_negative_med_prompt_responses(last_alert_timestamp, participant)

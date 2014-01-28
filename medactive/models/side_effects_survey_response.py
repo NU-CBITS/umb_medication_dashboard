@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 from umb_dashboard.models import ParticipantModelManager
 
@@ -9,6 +10,12 @@ class SideEffectsSurveyResponseManager(ParticipantModelManager):
     sql = self._select_negative_sql(cursor, start_time)
 
     return self.fetch_results(cursor, sql)
+
+  def latest_value_is_negative(self, participant_id):
+    cursor = self.participant_db_cursor(participant_id)
+    sql = self._select_latest_if_negative_sql(cursor)
+
+    return len(self.fetch_raw_results(cursor, sql)) >= 1
 
   def _select_negative_sql(self, cursor, start_time):
     columns = self.all_column_names(cursor)
@@ -27,6 +34,21 @@ class SideEffectsSurveyResponseManager(ParticipantModelManager):
 
     return '"eventDateTime" >= \'%s\' AND (%s)' %  \
       (start_time, ' OR '.join(distress_conditions) or False)
+
+  def _select_latest_if_negative_sql(self, cursor):
+    return 'WITH last_response AS (SELECT "%s" FROM "%s" ORDER BY "eventDateTime" DESC LIMIT(1)) SELECT * FROM last_response WHERE (%s);' % \
+      ('", "'.join(self.raw_column_names(cursor)), self.model._meta.db_table, self._negative_conditions_simple_column_names_no_time(cursor))
+
+  def _negative_conditions_simple_column_names_no_time(self, cursor):
+    import re
+    columns = self.raw_column_names(cursor)
+    distress_conditions = (
+      '"%s"=\'%s\'' % (c, self.HIGH_FREQ)
+      for c in columns
+      if re.match('.*_distress$', c)
+    )
+
+    return '(%s)' %  (' OR '.join(distress_conditions) or False)
 
 class SideEffectsSurveyResponse(models.Model):
   id = models.TextField(primary_key=True)

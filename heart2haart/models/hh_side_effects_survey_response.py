@@ -1,7 +1,7 @@
 from django.db import models
 from umb_dashboard.models import ParticipantModelManager
 
-class SideEffectsSurveyResponseManager(ParticipantModelManager):
+class HhSideEffectsSurveyResponseManager(ParticipantModelManager):
   def negative_responses(self, participant_id, start_time):
     cursor = self.participant_db_cursor(participant_id)
     sql = self._select_negative_sql(cursor, start_time)
@@ -27,7 +27,7 @@ class HhSideEffectsSurveyResponse(models.Model):
   severity = models.TextField()
   date = models.TextField()
 
-  objects = SideEffectsSurveyResponseManager()
+  objects = HhSideEffectsSurveyResponseManager()
 
   class Meta:
     db_table = 'side_effects_survey_responses'

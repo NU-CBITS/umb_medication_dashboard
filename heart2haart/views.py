@@ -76,7 +76,7 @@ def uncleared_clinician_alerts(request, participant_id):
       if alert != None:
         alerts.append(alert)
     return respond_with_json(alerts)
-  except Exception:
+  except Exception as e:
     return HttpResponse("[]", content_type="application/json")
 
 def find_uncleared_alert(clinician_id, participant, alert_type):

@@ -64,12 +64,19 @@ define([
       });
 
       if (negativeSurvey) {
-        var nextPage = response.next_page;
+        var nextPage = response.next_page,
+            detail = true;
 
         if (nextPage && nextPage.match(/_frequency$|_distress$/)) {
-          return negativeSurvey.get(nextPage);
+          detail = negativeSurvey.get(nextPage);
+        } else if (negativeSurvey.get('frequency')) {
+          detail = negativeSurvey.get('frequency');
+          if (negativeSurvey.get('severity')) {
+            detail += (', ' + negativeSurvey.get('severity'));
+          }
         }
-        return true;
+
+        return detail;
       }
     },
 

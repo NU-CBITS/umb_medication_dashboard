@@ -35,6 +35,14 @@ class ParticipantModelManager(models.Manager):
 
       return result_list
 
+  def fetch_raw_results(self, cursor, sql):
+    try:
+      cursor.execute(sql)
+    except Exception:
+      return []
+    else:
+      return cursor.fetchall()
+
   def all_column_names(self, cursor):
     db_col_names = self.raw_column_names(cursor)
     def alias(name):
@@ -51,7 +59,7 @@ class ParticipantModelManager(models.Manager):
       self.model._meta.db_table
     try:
       cursor.execute(col_name_query)
-    except Exception:
+    except Exception as e:
       return []
     else:
       return list(name[0] for name in cursor.fetchall())

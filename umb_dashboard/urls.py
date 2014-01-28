@@ -5,9 +5,9 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^accounts/login/$', 'django.contrib.auth.views.login'),
     url(r'^medactive/login/$', 'django.contrib.auth.views.login', { 'template_name': 'medactive_login.html' }),
     url(r'^heart2haart/login/$', 'django.contrib.auth.views.login', { 'template_name': 'heart2haart_login.html' }),
+    url(r'^accounts/login/$', 'django.contrib.auth.views.login'),
 
     # MedActive
     url(r'^medactive/logout$', 'django.contrib.auth.views.logout', { 'next_page': '/umb/medactive/login/?next=/umb/medactive' }),
