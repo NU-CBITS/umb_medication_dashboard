@@ -1,5 +1,6 @@
 import datetime, json
 from django.utils.timezone import utc
+from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import User
 from .hh_participant_action import HhParticipantAction
@@ -30,7 +31,7 @@ class Participant(models.Model):
 
     def latest_action(self):
         action = HhParticipantAction.objects.latest(self.participant_id)
-        return action[0].eventDateTime.replace(tzinfo=utc) if action else None
+        return action[0].eventDateTime.replace(tzinfo=timezone.get_current_timezone()) if action else None
 
     def latest_contact_page_message(self):
         message = HhParticipantAction.objects.latest_contact_page_message(self.participant_id)
@@ -40,21 +41,21 @@ class Participant(models.Model):
     def dates_with_data_last_week(self):
         if not hasattr(self, 'dates_with_data_last_week_memo'):
             data = ParticipantDatum.objects.dates_with_data_last_week(self.participant_id)
-            self.dates_with_data_last_week_memo = [d.eventDateTime.replace(tzinfo=utc) for d in data]
+            self.dates_with_data_last_week_memo = [d.eventDateTime.replace(tzinfo=timezone.get_current_timezone()) for d in data]
 
         return self.dates_with_data_last_week_memo
 
     def dates_with_actions_last_week(self):
         if not hasattr(self, 'dates_with_actions_last_week_memo'):
             actions = HhParticipantAction.objects.dates_with_actions_last_week(self.participant_id)
-            self.dates_with_actions_last_week_memo = [a.eventDateTime.replace(tzinfo=utc) for a in actions]
+            self.dates_with_actions_last_week_memo = [a.eventDateTime.replace(tzinfo=timezone.get_current_timezone()) for a in actions]
 
         return self.dates_with_actions_last_week_memo
 
     def dates_with_check_ins_last_week(self):
         if not hasattr(self, 'dates_with_check_ins_last_week_memo'):
             check_ins = ParticipantCheckIn.objects.dates_with_check_ins_last_week(self.participant_id)
-            self.dates_with_check_ins_last_week_memo = [c.eventDateTime.replace(tzinfo=utc) for c in check_ins]
+            self.dates_with_check_ins_last_week_memo = [c.eventDateTime.replace(tzinfo=timezone.get_current_timezone()) for c in check_ins]
 
         return self.dates_with_check_ins_last_week_memo
 

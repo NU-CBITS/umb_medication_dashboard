@@ -10,6 +10,7 @@ from medactive.models import SideEffectsSurveyResponse, \
   ParticipantAction, DoseChangeRequest
 
 LOGIN_URL = '/umb/medactive/login/?next=/umb/medactive'
+RESEARCHER_LOGIN_URL = '/umb/medactive/cohort_summary/login/?next=/umb/medactive/cohort_summary'
 
 def is_clinician(user):
   return user.is_superuser or user.groups.filter(name='MedActive Clinicians').exists()
@@ -162,7 +163,7 @@ def create_change_medication_request(request, participant_id):
 
   return HttpResponse(json.dumps(status), content_type="application/json")
 
-@user_passes_test(is_researcher)
+@user_passes_test(is_researcher, login_url=RESEARCHER_LOGIN_URL)
 def cohort_summary(request):
   participants = Participant.objects.filter(clinician_id__isnull=False)
   today = datetime.date.today()

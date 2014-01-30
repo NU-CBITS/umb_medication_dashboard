@@ -21,6 +21,7 @@ define([
       return Resources[this.environment].urlRoot + this.appCode + "/participants/" + this.user.id + "/" + this.survey.name + "_survey_responses";
     },
 
+    // select the latest response for the calendar date
     responseStatus: function(pageName, date) {
       var self = this, negative, surveys;
 
@@ -53,15 +54,16 @@ define([
     },
 
     _negativeDetail: function(takenSurveys, pageName) {
-      var self = this,
-          response = null;
-
-      var negativeSurvey = _.find(takenSurveys, function(survey) {
+      var survey = _.last(takenSurveys),
+          negativeSurvey = null;
+      if (typeof survey !== 'undefined') {
         var responseLabel = survey.get(pageName);
-        response = self._findResponse(self.survey, pageName, responseLabel);
+        var response = this._findResponse(this.survey, pageName, responseLabel);
 
-        return response && response.is_positive === false;
-      });
+        if (negativeSurvey = response && response.is_positive === false) {
+          negativeSurvey = survey;
+        }
+      }
 
       if (negativeSurvey) {
         var nextPage = response.next_page,

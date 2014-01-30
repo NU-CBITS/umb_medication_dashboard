@@ -19,8 +19,8 @@ class ParticipantActionManager(ParticipantModelManager):
 
     def latest_contact_page_message(self, participant_id):
         cursor = self.participant_db_cursor(participant_id)
-        #sql = 'SELECT "eventDateTime" AT TIME ZONE \'UTC\' AS "eventDateTime" FROM sent_messages WHERE "FEATURE_VALUE_DT_context" = \'contact_page\' ORDER BY "eventDateTime" DESC;'
-        sql = 'SELECT "eventDateTime" AT TIME ZONE \'UTC\' AS "eventDateTime" FROM sent_messages ORDER BY "eventDateTime" DESC;'
+        sql = 'SELECT "eventDateTime" AT TIME ZONE \'UTC\' AS "eventDateTime" FROM sent_messages WHERE "FEATURE_VALUE_DT_context" = \'contact_page\' ORDER BY "eventDateTime" DESC;'
+        #sql = 'SELECT "eventDateTime" AT TIME ZONE \'UTC\' AS "eventDateTime" FROM sent_messages ORDER BY "eventDateTime" DESC;'
 
         return self.fetch_results(cursor, sql)
 
