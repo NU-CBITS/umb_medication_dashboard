@@ -41,7 +41,7 @@
               <td>{{ participant.participant_id }}</td>
               <td>{{ participant.last_viewed_at }}</td>
               <td>{{ participant.latest_clinician_login }}</td>
-              <td class="clinician-help-req" data-timestamp="{{ participant.latest_clinician_help_request|date:'c' }}"></td>
+              <td class="clinician-help-req" data-timestamp="{{ participant.latest_clinician_help_request|date:'c' }}" data-clinician-id="{{ participant.clinician_id }}"></td>
 <div class="modal fade" id="{{ participant.id }}clinician-help-req">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -53,7 +53,7 @@
         <p>{{ participant.latest_clinician_help_request }}</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" onclick="javascript:clearAlert({{ participant.id }}, 'clinician-help-req', '{{ participant.latest_clinician_help_request }}'); $('#{{ participant.id }}clinician-help-req').modal('hide');">Clear</button>
+        <button type="button" class="btn btn-primary" onclick="javascript:clearClinicianAlert({{ participant.clinician_id }}, '{{ participant.latest_clinician_help_request|date:'c' }}'); $('#{{ participant.id }}clinician-help-req').modal('hide');">Clear</button>
       </div>
     </div>
   </div>
@@ -144,7 +144,7 @@
   function renderAlerts() {
     $(".participant").each(function(i, p) {
       var participantId = $(p).data("participantId");
-      _.each(['clinician-help-req', 'phone-connect', 'app-use', 'med-change', 'pt-support'], function(item) {
+      _.each(['phone-connect', 'app-use', 'med-change', 'pt-support'], function(item) {
         var timestamp = $(p).find("." + item).data("timestamp");
         var message = $(p).find("." + item).data("message");
         if (requiresAlert(participantId, item, timestamp)) {
@@ -152,6 +152,14 @@
           setUncleared(participantId, item, timestamp);
         }
       });
+
+      var item = 'clinician-help-req';
+      var timestamp = $(p).find("." + item).data("timestamp");
+      var clinicianId = $(p).find("." + item).data("clinicianId");
+      if (requiresClinicianAlert(clinicianId, timestamp)) {
+        renderAlert(participantId, item, timestamp, '');
+        setClinicianAlertUncleared(clinicianId, timestamp);
+      }
     });
   }
 
@@ -173,21 +181,34 @@
     return timestamp && timestamp !== "None" && (localStorage[key(participantId, item)] !== (timestamp + "=cleared"));
   }
 
+  function requiresClinicianAlert(clinicianId, timestamp) {
+    return timestamp && timestamp !== "None" && (localStorage[key(clinicianId, 'clinician-help-req')] !== (timestamp + "=cleared"));
+  }
+
   function timeElapsed(timestamp) {
     return new Date() - new Date(timestamp);
   }
 
-  function key(participantId, item) {
-    return item + '--' + participantId;
+  function key(id, item) {
+    return item + '--' + id;
   }
 
   function setUncleared(participantId, item, timestamp) {
     localStorage[key(participantId, item)] = (timestamp + "=uncleared");
   }
 
+  function setClinicianAlertUncleared(clinicianId, timestamp) {
+    localStorage[key(clinicianId, 'clinician-help-req')] = (timestamp + "=uncleared");
+  }
+
   function clearAlert(participantId, item, timestamp) {
     localStorage[key(participantId, item)] = (timestamp + "=cleared");
     $(".participant[data-participant-id=" + participantId + "] ." + item).html('');
+  }
+
+  function clearClinicianAlert(clinicianId, timestamp) {
+    localStorage[key(clinicianId, 'clinician-help-req')] = (timestamp + "=cleared");
+    $("[data-clinician-id=" + clinicianId + "]").html('');
   }
 
   function renderAlert(participantId, item, timestamp, message) {
