@@ -27,6 +27,7 @@ urlpatterns = patterns('',
     url(r'^medactive/participants/([^/]+)/change_medication_requests$', 'medactive.views.create_change_medication_request'),
     url(r'^medactive/participants/([^/]+)/log_view', 'medactive.views.log_clinician_view'),
     url(r'^medactive/contact_research_staff$', 'medactive.views.contact_research_staff'),
+    url(r'^medactive/participants/([^/]+)/tab_click$', 'medactive.views.log_tab_click'),
 
     # Heart2HAART
     url(r'^heart2haart/logout$', 'django.contrib.auth.views.logout', { 'next_page': '/umb/heart2haart/login/?next=/umb/heart2haart' }),
@@ -45,6 +46,7 @@ urlpatterns = patterns('',
     url(r'^heart2haart/participants/([^/]+)/change_medication_requests$', 'heart2haart.views.create_change_medication_request'),
     url(r'^heart2haart/participants/([^/]+)/log_view', 'heart2haart.views.log_clinician_view'),
     url(r'^heart2haart/contact_research_staff$', 'heart2haart.views.contact_research_staff'),
+    url(r'^heart2haart/participants/([^/]+)/tab_click$', 'heart2haart.views.log_tab_click'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

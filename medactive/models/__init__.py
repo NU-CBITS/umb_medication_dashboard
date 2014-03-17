@@ -6,3 +6,5 @@ from .participant import Participant
 from .participant_action import ParticipantAction
 from .side_effects_survey_response import SideEffectsSurveyResponse
 from .symptoms_survey_response import SymptomsSurveyResponse
+from .user_login import UserLogin
+from .tab_click import TabClick

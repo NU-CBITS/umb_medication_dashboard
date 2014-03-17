@@ -90,6 +90,17 @@ define([
       this.$el.html(this.templates[this.options.appCode]());
       this._renderNavigation();
       this._renderHeader();
+      var self = this;
+      $(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
+        var tabName = e.target.href.split('#')[1];
+        var app = self.options.appCode.toLowerCase();
+        $.ajax({
+          url: '/umb/' + app + '/participants/' + self.model.id + '/tab_click',
+          data: JSON.stringify({ name: tabName }),
+          type: 'POST',
+          dataType: 'json'
+        });
+      });
 
       return this;
     },

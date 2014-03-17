@@ -7,3 +7,5 @@ from .hh_participant_action import HhParticipantAction
 from .hh_side_effects_survey_response import HhSideEffectsSurveyResponse
 from .mood_survey_response import MoodSurveyResponse
 from .cravings_survey_response import CravingsSurveyResponse
+from .hh_user_login import HhUserLogin
+from .tab_click import TabClick

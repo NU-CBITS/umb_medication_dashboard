@@ -2,12 +2,13 @@ import datetime, json
 from django.http import HttpResponse
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render
+from django.core import serializers
 from umb_dashboard.views import respond_with_json
 from umb_dashboard.models import ChangeMedicationRequest, MedPromptResponse, \
   SentMessage
 from heart2haart.models import HhSideEffectsSurveyResponse, \
   MoodSurveyResponse, CravingsSurveyResponse, ClinicianAlert, ClinicianProfile, Participant, \
-  DoseChangeRequest
+  DoseChangeRequest, TabClick
 from heart2haart.models.hh_participant_action import HhParticipantAction
 
 def is_clinician(user):
@@ -60,7 +61,6 @@ def cravings_survey_responses(request, participant_id):
 
 @user_passes_test(is_clinician)
 def update_clinician_alert(request, participant_id, alert_id):
-  from django.core import serializers
   for alert in serializers.deserialize("json", request.body):
     alert.save()
   return HttpResponse("{}", content_type="application/json")
@@ -187,5 +187,13 @@ def contact_research_staff(request):
 def log_clinician_view(request, participant_id):
   participant = Participant.objects.get(participant_id=participant_id)
   participant.save()
+
+  return HttpResponse(status=200)
+
+@user_passes_test(is_clinician)
+def log_tab_click(request, participant_id):
+  participant = Participant.objects.get(participant_id=participant_id)
+  attributes = json.loads(request.body)
+  TabClick.objects.create(clinician=request.user, participant=participant, name=attributes['name'])
 
   return HttpResponse(status=200)

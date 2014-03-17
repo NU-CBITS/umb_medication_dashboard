@@ -61,9 +61,12 @@ define([
       var self = this;
 
       return _.find(surveys, function(response) {
-        return (_.find(self.surveyPages[pageName].responses, {
+        var r = (_.find(self.surveyPages[pageName].responses, {
           label: response.get(pageName)
-        }).is_positive === false);
+        }));
+        if (typeof r === "undefined") r = {};
+
+        return r.is_positive === false;
       });
     }
   });
