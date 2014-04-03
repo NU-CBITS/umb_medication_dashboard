@@ -88,11 +88,11 @@ def find_uncleared_alert(clinician_id, participant, alert_type):
     last_alert_timestamp = datetime.datetime.min
     if len(last_cleared_alerts) == 1:
       last_alert_timestamp = last_cleared_alerts[0].updated_at
-    details = pending_alert_details(last_alert_timestamp, participant, alert_type)
+    details, eventDateTime = pending_alert_details(last_alert_timestamp, participant, alert_type)
     if len(details) > 0:
       participant_requests_contact = any_contact_requests(last_alert_timestamp, participant, alert_type)
       alert = alert_manager.create(clinician_id=clinician_id, participant_id=participant.id, type=alert_type,
-        problem_details=details, participant_requests_contact=participant_requests_contact)
+        problem_details=details, participant_requests_contact=participant_requests_contact, event_date_time=eventDateTime)
       alerts.append(alert)
   if len(alerts) == 1:
     return alerts[0]
@@ -112,7 +112,7 @@ def pending_negative_med_prompt_responses(last_alert_timestamp, participant):
   responses = MedPromptResponse.objects.negative_responses(participant.participant_id, start_time=last_alert_timestamp)
   details = (r.doseTime for r in responses)
 
-  return filter(None, details)
+  return (filter(None, details), responses[-1].eventDateTime if len(responses) > 0 else None)
 
 def pending_negative_side_effects_responses(last_alert_timestamp, participant):
   responses = HhSideEffectsSurveyResponse.objects.negative_responses(participant.participant_id, last_alert_timestamp)
@@ -120,7 +120,7 @@ def pending_negative_side_effects_responses(last_alert_timestamp, participant):
   if len(responses):
     details.append('index')
 
-  return details
+  return (details, responses[-1].eventDateTime if len(responses) > 0 else None)
 
 def pending_negative_mood_responses(last_alert_timestamp, participant):
   NO_PROBLEMS = 'Not at all'
@@ -129,7 +129,7 @@ def pending_negative_mood_responses(last_alert_timestamp, participant):
   details.append(next(("index" for r in responses if r.index != NO_PROBLEMS), None))
   details.append(next(("frequency" for r in responses if r.index != NO_PROBLEMS), None))
 
-  return filter(None, details)
+  return (filter(None, details), responses[-1].eventDateTime if len(responses) > 0 else None)
 
 def pending_negative_cravings_responses(last_alert_timestamp, participant):
   responses = CravingsSurveyResponse.objects.negative_responses(participant.participant_id, last_alert_timestamp)
@@ -137,7 +137,7 @@ def pending_negative_cravings_responses(last_alert_timestamp, participant):
   if len(responses):
     details.append('index')
 
-  return details
+  return (details, responses[-1].eventDateTime if len(responses) > 0 else None)
 
 def any_contact_requests(last_alert_timestamp, participant, alert_type):
   messages = SentMessage.objects.all_in_context(participant.participant_id, alert_type, last_alert_timestamp)

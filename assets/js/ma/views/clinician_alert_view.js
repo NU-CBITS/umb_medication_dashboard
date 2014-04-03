@@ -8,7 +8,8 @@ define([
   "text!templates/clinician_alerts/_symptoms.tpl.html",
   "text!templates/clinician_alerts/_side_effects.tpl.html",
   "text!templates/clinician_alerts/_cravings.tpl.html",
-  "text!templates/clinician_alerts/_mood.tpl.html"
+  "text!templates/clinician_alerts/_mood.tpl.html",
+  "moment"
 ], function(Backbone, maMedPromptSurvey, maSideEffectsSurvey, maSymptomsSurvey,
             DateFormatter, nonAdherenceTpl, symptomsTpl, sideEffectsTpl, cravingsTpl, moodTpl) {
   var ClinicianAlertView = Backbone.View.extend({

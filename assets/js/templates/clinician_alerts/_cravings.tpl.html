@@ -21,7 +21,7 @@
         </fieldset>
       </form>
       <hr>
-      <p><strong>Alert transmitted: </strong><%= DateFormatter.dateTimeString(alert.createdAt()) %></p>
+      <p><strong>Alert transmitted: </strong><%= moment(alert.createdAt()).format("M/D h:mmA") %></p>
     </div>
     <div class="modal-footer">
       <a href="#" class="btn btn-default hide-alert" data-target="#side_effects-alert"><i class="glyphicon glyphicon-ok"></i> Save &amp; Do Not Clear</a>

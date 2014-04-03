@@ -9,7 +9,8 @@ define([
   "text!templates/clinician_alerts/_symptoms.tpl.html",
   "text!templates/clinician_alerts/_side_effects.tpl.html",
   "text!templates/clinician_alerts/_cravings.tpl.html",
-  "text!templates/clinician_alerts/_mood.tpl.html"
+  "text!templates/clinician_alerts/_mood.tpl.html",
+  "moment"
 ], function(Backbone,
             h2hCravingsSurvey, h2hMedPromptSurvey, h2hMoodSurvey, h2hSideEffectsSurvey,
             DateFormatter, nonAdherenceTpl, symptomsTpl, sideEffectsTpl, cravingsTpl, moodTpl) {

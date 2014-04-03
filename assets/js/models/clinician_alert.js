@@ -20,7 +20,7 @@ define([
     },
 
     createdAt: function() {
-      return this.get("created_at");
+      return this.get("event_date_time");
     },
 
     contactedPatient: function() {

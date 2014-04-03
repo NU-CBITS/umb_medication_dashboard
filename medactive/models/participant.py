@@ -37,7 +37,8 @@ class Participant(models.Model):
     def latest_contact_page_message(self):
         message = ParticipantAction.objects.latest_contact_page_message(self.participant_id)
 
-        return message[0].eventDateTime.replace(tzinfo=timezone.get_current_timezone()) if message else None
+        #return message[0].eventDateTime.replace(tzinfo=timezone.get_current_timezone()) if message else None
+        return message[0].eventDateTime.replace(tzinfo=utc) if message else None
 
     def dates_with_data_last_week(self):
         if not hasattr(self, 'dates_with_data_last_week_memo'):

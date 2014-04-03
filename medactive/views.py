@@ -77,11 +77,11 @@ def find_uncleared_alert(clinician_id, participant, alert_type):
   last_alert_timestamp = datetime.datetime.min
   if len(last_cleared_alerts) == 1:
     last_alert_timestamp = last_cleared_alerts[0].updated_at
-  details = pending_alert_details(last_alert_timestamp, participant, alert_type)
+  details, eventDateTime = pending_alert_details(last_alert_timestamp, participant, alert_type)
   if len(details) > 0:
     participant_requests_contact = any_contact_requests(last_alert_timestamp, participant, alert_type)
     alert = alert_manager.create(clinician_id=clinician_id, participant_id=participant.id, type=alert_type,
-      problem_details=details, participant_requests_contact=participant_requests_contact)
+      problem_details=details, participant_requests_contact=participant_requests_contact, event_date_time=eventDateTime)
     alerts.append(alert)
 
   if len(alerts) >= 1 and latest_response_value_is_negative(participant, alert_type):
@@ -109,7 +109,7 @@ def pending_negative_med_prompt_responses(last_alert_timestamp, participant):
   responses = MedPromptResponse.objects.negative_responses(participant.participant_id, start_time=last_alert_timestamp)
   details = (r.doseTime for r in responses)
 
-  return filter(None, details)
+  return (filter(None, details), responses[-1].eventDateTime if len(responses) > 0 else None)
 
 def pending_negative_side_effects_responses(last_alert_timestamp, participant):
   HIGH_FREQ = 'Always'
@@ -125,7 +125,7 @@ def pending_negative_side_effects_responses(last_alert_timestamp, participant):
   details.append(next(("poor_concentration" for r in responses if r.poor_concentration_distress == HIGH_FREQ), None))
   details.append(next(("trembling" for r in responses if r.trembling_distress == HIGH_FREQ), None))
 
-  return filter(None, details)
+  return (filter(None, details), responses[-1].eventDateTime if len(responses) > 0 else None)
 
 def pending_negative_symptoms_responses(last_alert_timestamp, participant):
   HIGH_FREQ = 'Almost all of the time'
@@ -141,7 +141,7 @@ def pending_negative_symptoms_responses(last_alert_timestamp, participant):
   details.append(next(("paranoia" for r in responses if r.paranoia_frequency == HIGH_FREQ), None))
   details.append(next(("thought_disorders" for r in responses if r.thought_disorders_frequency == HIGH_FREQ), None))
 
-  return filter(None, details)
+  return (filter(None, details), responses[-1].eventDateTime if len(responses) > 0 else None)
 
 def any_contact_requests(last_alert_timestamp, participant, alert_type):
   messages = SentMessage.objects.all_in_context(participant.participant_id, alert_type, last_alert_timestamp)
