@@ -72,7 +72,7 @@
         <p>{{ participant.dates_with_data_last_week|last }}</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" onclick="javascript:clearAlert({{ participant.id }}, 'phone-connect', '{{ participant.dates_with_data_last_week|last }}'); $('#{{ participant.id }}phone-connect').modal('hide');">Clear</button>
+        <button type="button" class="btn btn-primary" data-timestamp="{{ participant.dates_with_data_last_week|last|date:'c' }}" onclick="javascript:clearAlert({{ participant.id }}, 'phone-connect', $(this).data('timestamp')); $('#{{ participant.id }}phone-connect').modal('hide');">Clear</button>
       </div>
     </div>
   </div>
@@ -90,7 +90,7 @@
         <p>It has been longer than 48 hours since the patient used the app</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" onclick="javascript:clearAlert({{ participant.id }}, 'app-use', '{{ participant.latest_action }}'); $('#{{ participant.id }}app-use').modal('hide');">Clear</button>
+        <button type="button" class="btn btn-primary" data-timestamp="{{ participant.latest_action|date:'c' }}" onclick="javascript:clearAlert({{ participant.id }}, 'app-use', $(this).data('timestamp')); $('#{{ participant.id }}app-use').modal('hide');">Clear</button>
       </div>
     </div>
   </div>
@@ -109,7 +109,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Save</button>
-        <button type="button" class="btn btn-primary" onclick="javascript:clearAlert({{ participant.id }}, 'med-change', '{{ participant.latest_dose_change.created_at }}'); $('#{{ participant.id }}med-change').modal('hide');">Clear</button>
+        <button type="button" class="btn btn-primary" data-timestamp="{{ participant.latest_dose_change.created_at|date:'c' }}" onclick="javascript:clearAlert({{ participant.id }}, 'med-change', $(this).data('timestamp')); $('#{{ participant.id }}med-change').modal('hide');">Clear</button>
       </div>
     </div>
   </div>
@@ -128,7 +128,7 @@
         {% endfor %}
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" onclick="javascript:clearAlert({{ participant.id }}, 'pt-support', '{{ participant.latest_contact_page_message }}'); $('#{{ participant.id }}pt-support').modal('hide');">Clear</button>
+        <button type="button" class="btn btn-primary" data-timestamp="{{ participant.latest_contact_page_message|date:'c' }}" onclick="javascript:clearAlert({{ participant.id }}, 'pt-support', $(this).data('timestamp')); $('#{{ participant.id }}pt-support').modal('hide');">Clear</button>
       </div>
     </div>
   </div>
