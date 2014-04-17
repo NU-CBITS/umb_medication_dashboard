@@ -38,6 +38,11 @@ class Participant(models.Model):
 
         return message[0].eventDateTime.replace(tzinfo=utc) if message else None
 
+    def latest_contact_page_messages(self):
+        messages = ParticipantAction.objects.latest_contact_page_message(self.participant_id)
+
+        return (m.eventDateTime.replace(tzinfo=utc) for m in messages) if messages else []
+
     def dates_with_data_last_week(self):
         if not hasattr(self, 'dates_with_data_last_week_memo'):
             data = ParticipantDatum.objects.dates_with_data_last_week(self.participant_id)
@@ -82,6 +87,14 @@ class Participant(models.Model):
             help_request = None
 
         return help_request and help_request.created_at
+
+    def latest_clinician_help_requests(self):
+        try:
+            help_requests = self.clinician.heart2haart_help_request.order_by('-created_at')
+        except IndexError:
+            help_requests = []
+
+        return (help_request.created_at for help_request in help_requests)
 
     class Meta:
         app_label = 'heart2haart'
