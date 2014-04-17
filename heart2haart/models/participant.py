@@ -39,7 +39,7 @@ class Participant(models.Model):
         return message[0].eventDateTime.replace(tzinfo=utc) if message else None
 
     def latest_contact_page_messages(self):
-        messages = ParticipantAction.objects.latest_contact_page_message(self.participant_id)
+        messages = HhParticipantAction.objects.latest_contact_page_message(self.participant_id)
 
         return (m.eventDateTime.replace(tzinfo=utc) for m in messages) if messages else []
 
