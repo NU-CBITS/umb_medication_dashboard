@@ -24,6 +24,23 @@
       <p><strong>Alert transmitted: </strong><%= moment(alert.createdAt()).format("M/D h:mmA") %></p>
     </div>
     <div class="modal-footer">
+      <div id="previous-alerts" style="text-align: left;">
+        <h4>Previous Alerts</h4>
+        <% participant.surveys.side_effects.models.reverse() %>
+        <table>
+          <% participant.surveys.side_effects.each(function(s) { %>
+            <% if (s.get("timeStarted").substr(0, 10) !== moment(alert.createdAt()).toISOString().substr(0, 10)) { %>
+              <% var problems; if ((problems = _.map(_.compact(_.map(s.attributes, function(v, k) { return (s.attributes[k + "_distress"] === "Always") ? k : null })), function(r) { return survey.pages[r].summary }).join(", ")) !== "") { %>
+                <tr>
+                  <td style="padding-right: 20px;"><%= problems %></td>
+                  <td style="width: 20%;"><%= moment(s.get("timeStarted")).format("M/D h:mmA") %></td>
+                </tr>
+              <% } %>
+            <% } %>
+          <% }) %>
+        </table>
+        <% participant.surveys.side_effects.models.reverse() %>
+      </div>
       <a href="#" class="btn btn-default hide-alert" data-target="#side_effects-alert"><i class="glyphicon glyphicon-ok"></i> Save &amp; Do Not Clear</a>
       <a href="#" class="btn btn-default clear-alert" data-target="#side_effects-alert"><i class="glyphicon glyphicon-remove"></i> Clear Alert</a>
     </div>

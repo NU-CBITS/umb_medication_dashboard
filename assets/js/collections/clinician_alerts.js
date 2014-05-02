@@ -16,9 +16,9 @@ define([
       return Resources[this.environment].urlRoot + this.appCode + "/participants/" + this.user.id + "/clinician_alerts";
     },
 
-    getType: function(type) {
+    getTypeUncleared: function(type) {
       return this.find(function(a) {
-        return a.get("type") === type;
+        return a.get("type") === type && a.get("is_cleared") === false;
       });
     }
   });

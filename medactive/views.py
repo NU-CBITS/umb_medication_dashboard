@@ -54,10 +54,10 @@ def update_clinician_alert(request, participant_id, alert_id):
   return HttpResponse("{}", content_type="application/json")
 
 @user_passes_test(is_clinician, login_url=LOGIN_URL)
-def uncleared_clinician_alerts(request, participant_id):
-  alerts = []
+def clinician_alerts(request, participant_id):
   alert_types = ["non_adherence", "side_effects", "symptoms"]
   participant = Participant.objects.get(participant_id=participant_id)
+  alerts = []
   for alert_type in alert_types:
     alert = find_uncleared_alert(request.user.id, participant, alert_type)
     if alert != None:

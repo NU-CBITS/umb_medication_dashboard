@@ -20,7 +20,7 @@ class SideEffectsSurveyResponseManager(ParticipantModelManager):
   def _select_negative_sql(self, cursor, start_time):
     columns = self.all_column_names(cursor)
 
-    return 'SELECT %s FROM "%s" WHERE (%s);' % \
+    return 'SELECT %s FROM "%s" ORDER BY "eventDateTime" DESC LIMIT(1) WHERE (%s);' % \
       (columns, self.model._meta.db_table, self._negative_conditions(cursor, start_time))
 
   def _negative_conditions(self, cursor, start_time):

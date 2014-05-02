@@ -74,17 +74,17 @@ define([
     },
 
     _nonadherenceDueToSideEffects: function(participant) {
-      return participant.clinicianAlerts.getType("non_adherence");
+      return participant.clinicianAlerts.getTypeUncleared("non_adherence");
     },
 
     _alwaysBotheredBy: function(participant, surveyName) {
-      return participant.clinicianAlerts.getType(surveyName);
+      return participant.clinicianAlerts.getTypeUncleared(surveyName);
     },
 
     _attachAlert: function(event) {
       var options = $(event.currentTarget).data();
       var participant = this.collection.get(options.participantId);
-      var alert = participant.clinicianAlerts.getType(options.alertType);
+      var alert = participant.clinicianAlerts.getTypeUncleared(options.alertType);
       this.alertViews[options.alertType].set(participant, alert);
       var self = this;
       this.alertViews[options.alertType].on("cleared", function() {
