@@ -66,7 +66,8 @@ define([
       }
 
       if (negativeSurvey) {
-        if (survey.get("model") === "heart2haart.moodsurveyresponse") {
+        if (survey.get("model") === "heart2haart.moodsurveyresponse" ||
+            survey.get("model") === "models.moodsurveyresponse") {
           return responseLabel;
         }
 
