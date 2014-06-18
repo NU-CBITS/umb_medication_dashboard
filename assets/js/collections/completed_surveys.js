@@ -66,6 +66,10 @@ define([
       }
 
       if (negativeSurvey) {
+        if (survey.get("model") === "heart2haart.moodsurveyresponse") {
+          return responseLabel;
+        }
+
         var nextPage = response.next_page,
             detail = true;
 
